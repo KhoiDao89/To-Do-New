@@ -24,7 +24,7 @@ class CategoryViewModel(
     private val getTaskListUseCase: GetTaskListUseCase,
     private val saveCategoryUseCase: SaveCategoryUseCase,
     private val saveTaskUseCase: SaveTaskUseCase,
-    private val updateTaskUseCase: UpdateTaskUseCase
+    //private val updateTaskUseCase: UpdateTaskUseCase
 ) : BaseViewModel() {
 
   val itemList: LiveData<List<TaskModel>> get() = _itemList
