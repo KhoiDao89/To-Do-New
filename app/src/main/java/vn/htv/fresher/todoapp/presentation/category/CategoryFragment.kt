@@ -23,7 +23,9 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding>() {
   override fun init() {
     super.init()
     viewModel.insertTask()
-    viewModel.insertCategory()
+    viewModel.insertTask()
+    viewModel.insertTask()
+//    viewModel.insertCategory()
     viewModel.loadData()
   }
   override fun initUi() {

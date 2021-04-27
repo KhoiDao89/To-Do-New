@@ -10,17 +10,21 @@ import timber.log.Timber
 import vn.htv.fresher.todoapp.data.db.entity.Task
 import vn.htv.fresher.todoapp.domain.model.CategoryModel
 import vn.htv.fresher.todoapp.domain.model.TaskModel
+import vn.htv.fresher.todoapp.domain.usecase.category.DeleteCategoryUseCase
 import vn.htv.fresher.todoapp.domain.usecase.category.GetCategoryListUseCase
 import vn.htv.fresher.todoapp.domain.usecase.category.SaveCategoryUseCase
+import vn.htv.fresher.todoapp.domain.usecase.task.DeleteTaskUseCase
 import vn.htv.fresher.todoapp.domain.usecase.task.GetTaskListUseCase
 import vn.htv.fresher.todoapp.domain.usecase.task.SaveTaskUseCase
+import vn.htv.fresher.todoapp.domain.usecase.task.UpdateTaskUseCase
 import vn.htv.fresher.todoapp.presentation.common.BaseViewModel
 
 class CategoryViewModel(
     //private val getCategoryListUseCase: GetCategoryListUseCase,
     private val getTaskListUseCase: GetTaskListUseCase,
     private val saveCategoryUseCase: SaveCategoryUseCase,
-    private val saveTaskUseCase: SaveTaskUseCase
+    private val saveTaskUseCase: SaveTaskUseCase,
+    private val updateTaskUseCase: UpdateTaskUseCase
 ) : BaseViewModel() {
 
   val itemList: LiveData<List<TaskModel>> get() = _itemList
@@ -48,6 +52,30 @@ class CategoryViewModel(
 //            Timber.e("error")
 //          }
 //      )
+  }
+
+  fun updateTask() {
+    val model = TaskModel(
+        name = "task",
+        catId = 1,
+        finished = false,
+        deadline = LocalDateTime.now(),
+        myDay = true,
+        important = true,
+        reminder = LocalDateTime.now(),
+        repeat = 1,
+        createdAt = LocalDateTime.now(),
+        note = ""
+    )
+    disposables += updateTaskUseCase(model)
+        .subscribeBy(
+            onComplete = {
+              Timber.i("update task success")
+            },
+            onError = {
+              Timber.e("error")
+            }
+        )
   }
 //  fun saveTaskList(): List<TaskModel>{
 //    var list = ArrayList<TaskModel>()

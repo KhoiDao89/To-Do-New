@@ -7,43 +7,37 @@
       name="taskModel"
       type="vn.htv.fresher.todoapp.domain.model.TaskModel" />
   </data>
-  <androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:layout_marginBottom="3dp"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp">
+  <LinearLayout
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:orientation="horizontal"
+     android:weightSum="6"
+     android:gravity="center_vertical"
+     android:background="@color/white"
+     android:layout_marginBottom="3dp"
+     android:layout_marginLeft="8dp"
+     android:layout_marginRight="8dp">
 
-    <LinearLayout
-      android:layout_width="match_parent"
+    <RadioButton
+      android:id="@+id/radioButton"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"/>
+
+    <TextView
+      android:id="@+id/textView"
+      android:layout_width="wrap_content"
       android:layout_height="match_parent"
-      android:weightSum="14"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent">
+      android:layout_weight="4"
+      android:text="@{taskModel.name}"
+      android:textAppearance="@android:style/TextAppearance.Medium"
+      tools:text="TaskName"/>
 
-      <RadioButton
-        android:id="@+id/radioButton"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:text="" />
-
-      <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="10"
-        android:text="@{taskModel.name}"
-        android:textSize="30dp" />
-
-      <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        app:srcCompat="@drawable/ic_baseline_star_outline_24" />
-    </LinearLayout>
-  </androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageView
+      android:id="@+id/imageView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      app:srcCompat="@drawable/ic_baseline_star_outline_24" />
+  </LinearLayout>
 </layout>
