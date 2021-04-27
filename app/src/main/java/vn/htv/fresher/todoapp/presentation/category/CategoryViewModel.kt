@@ -54,29 +54,29 @@ class CategoryViewModel(
 //      )
   }
 
-  fun updateTask() {
-    val model = TaskModel(
-        name = "task",
-        catId = 1,
-        finished = false,
-        deadline = LocalDateTime.now(),
-        myDay = true,
-        important = true,
-        reminder = LocalDateTime.now(),
-        repeat = 1,
-        createdAt = LocalDateTime.now(),
-        note = ""
-    )
-    disposables += updateTaskUseCase(model)
-        .subscribeBy(
-            onComplete = {
-              Timber.i("update task success")
-            },
-            onError = {
-              Timber.e("error")
-            }
-        )
-  }
+//  fun updateTask() {
+//    val model = TaskModel(
+//        name = "task",
+//        catId = 1,
+//        finished = false,
+//        deadline = LocalDateTime.now(),
+//        myDay = true,
+//        important = true,
+//        reminder = LocalDateTime.now(),
+//        repeat = 1,
+//        createdAt = LocalDateTime.now(),
+//        note = ""
+//    )
+//    disposables += updateTaskUseCase(model)
+//        .subscribeBy(
+//            onComplete = {
+//              Timber.i("update task success")
+//            },
+//            onError = {
+//              Timber.e("error")
+//            }
+//        )
+//  }
 //  fun saveTaskList(): List<TaskModel>{
 //    var list = ArrayList<TaskModel>()
 //    list.add(TaskModel(
