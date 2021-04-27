@@ -15,6 +15,9 @@ interface SubTaskDao {
   @Insert
   fun insert(entity: SubTask): Completable
 
+  @Query("SELECT * FROM ${SubTask.NAME} WHERE ${SubTask.COLUMN_ID} = :id")
+  fun get(id: Int): Single<SubTask>
+
   @Query("SELECT * FROM ${SubTask.NAME}")
   fun getAll(): Single<List<SubTask>>
 

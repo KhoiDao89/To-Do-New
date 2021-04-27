@@ -8,6 +8,6 @@ class GetSubTaskListUseCase(
   private val subTaskRepository: SubTaskRepository
 ) {
   operator fun invoke(id: Int? = null): Single<List<SubTaskModel>> {
-    return subTaskRepository.getByTaskId(id)
+    return subTaskRepository.getSubTaskList(id)
   }
 }

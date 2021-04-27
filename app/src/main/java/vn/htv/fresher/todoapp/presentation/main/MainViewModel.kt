@@ -17,6 +17,8 @@ import vn.htv.fresher.todoapp.domain.model.TaskModel
 import vn.htv.fresher.todoapp.domain.usecase.category.GetCategoryListUseCase
 import vn.htv.fresher.todoapp.domain.usecase.category.SaveCategoryUseCase
 import vn.htv.fresher.todoapp.domain.usecase.task.*
+import vn.htv.fresher.todoapp.domain.repository.TaskRepository
+import vn.htv.fresher.todoapp.domain.usecase.task.GetTaskListUseCase
 
 enum class TaskGroup {
   MY_DAY,
@@ -80,7 +82,7 @@ class MainViewModel(
   private val _addCategoryCompleted = MutableLiveData<Long>()
 
   fun loadData() {
-    val getTaskObservable     = getTaskListUseCase()
+    val getTaskObservable = getTaskListUseCase()
     val getCategoryObservable = getCategoryListUseCase()
     val zipper = BiFunction<List<TaskModel>, List<CategoryModel>, List<MainItem>> { tasks, categories ->
       val list = mutableListOf<MainItem>()
