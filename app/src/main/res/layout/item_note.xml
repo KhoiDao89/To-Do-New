@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+  <data>
+
+  </data>
+    <TextView
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/note_textview_height"
+      android:padding="@dimen/medium_margin"
+      android:textAppearance="@style/TextAppearance.AppCompat.Small"
+      android:text="@string/task_attribute_note" />
+</layout>

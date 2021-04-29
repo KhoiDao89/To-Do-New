@@ -15,6 +15,7 @@ import vn.htv.fresher.todoapp.databinding.FragmentMainBinding
 import vn.htv.fresher.todoapp.domain.model.CategoryModel
 import vn.htv.fresher.todoapp.presentation.common.BaseFragment
 import vn.htv.fresher.todoapp.presentation.common.decoration.DefaultItemDecoration
+import vn.htv.fresher.todoapp.presentation.taskdetail.TaskDetailActivity
 
 class MainFragment : BaseFragment<FragmentMainBinding>() {
 
@@ -65,7 +66,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
     viewModel.addCategoryCompleted.observe(this@MainFragment,
       Observer {
-        // navigate to Category Screen
+        TaskDetailActivity.start(safeActivity)
       })
   }
 

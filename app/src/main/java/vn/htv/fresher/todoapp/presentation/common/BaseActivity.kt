@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import vn.htv.fresher.todoapp.presentation.taskdetail.TaskDetailActivity
 import vn.htv.fresher.todoapp.util.ext.replaceFragment
 
 abstract class BaseActivity : AppCompatActivity() {
