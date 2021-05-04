@@ -2,42 +2,51 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools">
+
   <data>
+
     <variable
-      name="taskModel"
+      name="model"
       type="vn.htv.fresher.todoapp.domain.model.TaskModel" />
   </data>
-  <LinearLayout
-     android:layout_width="match_parent"
-     android:layout_height="wrap_content"
-     android:orientation="horizontal"
-     android:weightSum="6"
-     android:gravity="center_vertical"
-     android:background="@color/white"
-     android:layout_marginBottom="3dp"
-     android:layout_marginLeft="8dp"
-     android:layout_marginRight="8dp">
 
-    <RadioButton
-      android:id="@+id/radioButton"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_weight="1"/>
+  <androidx.cardview.widget.CardView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="8dp"
+    android:layout_marginTop="3dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginBottom="3dp"
+    app:cardBackgroundColor="@color/white">
 
-    <TextView
-      android:id="@+id/textView"
-      android:layout_width="wrap_content"
-      android:layout_height="match_parent"
-      android:layout_weight="4"
-      android:text="@{taskModel.name}"
-      android:textAppearance="@android:style/TextAppearance.Medium"
-      tools:text="TaskName"/>
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="65dp"
+      android:background="@color/white"
+      android:gravity="center_vertical"
+      android:orientation="horizontal">
 
-    <ImageView
-      android:id="@+id/imageView"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_weight="1"
-      app:srcCompat="@drawable/ic_baseline_star_outline_24" />
-  </LinearLayout>
+      <RadioButton
+        android:id="@+id/radioButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_margin" />
+
+      <TextView
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@{model.name}"
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        tools:text="TaskName" />
+
+      <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/large_margin"
+        tools:src="@drawable/ic_baseline_star_outline_24" />
+    </LinearLayout>
+  </androidx.cardview.widget.CardView>
 </layout>
