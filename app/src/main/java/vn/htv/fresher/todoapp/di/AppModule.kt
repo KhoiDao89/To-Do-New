@@ -57,7 +57,7 @@ val appModule = module {
   // ViewModel
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  viewModel { CategoryViewModel(get(), get(), get(), get()) }
+  viewModel { CategoryViewModel(get(), get(), get()) }
   viewModel { MainViewModel(get(), get(), get(), get()) }
   viewModel { NoteViewModel() }
   viewModel { TaskDetailViewModel(get(), get(), get(), get(), get(), get(), get()) }
