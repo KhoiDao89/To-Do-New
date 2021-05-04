@@ -15,6 +15,8 @@ import vn.htv.fresher.todoapp.domain.usecase.subtask.SaveSubTaskUseCase
 import vn.htv.fresher.todoapp.domain.usecase.task.GetTaskUseCase
 import vn.htv.fresher.todoapp.presentation.common.BaseViewModel
 import io.reactivex.functions.BiFunction
+import vn.htv.fresher.todoapp.data.db.entity.Task
+import vn.htv.fresher.todoapp.domain.usecase.task.SaveTaskUseCase
 
 enum class TaskAttributeEnum {
   MY_DAY,
@@ -33,10 +35,8 @@ sealed class TaskDetailItem {
 }
 
 class TaskDetailViewModel(
-  private val context               : Context,
   private val getTaskUseCase        : GetTaskUseCase,
   private val getSubTaskListUseCase : GetSubTaskListUseCase,
-  private val saveSubTaskUseCase    : SaveSubTaskUseCase
 ) : BaseViewModel() {
 
   val taskDetailItem: LiveData<List<TaskDetailItem>> get() = _taskDetailItem
@@ -62,25 +62,7 @@ class TaskDetailViewModel(
           _taskDetailItem.postValue(it)
         },
         onError = {
-
-        }
-      )
-  }
-
-  fun insertDummySubTask(){
-    val model = SubTaskModel(
-      name = "Dummy task name",
-      taskId = 1,
-      finished = false,
-      createdAt = LocalDateTime.now()
-    )
-    disposables += saveSubTaskUseCase(model)
-      .subscribeBy(
-        onComplete = {
-          Timber.i("Saved subtask [$model] to Room database successful.")
-        },
-        onError = {
-          Timber.e("Has an error occurred when save [$model] to Room database.")
+          Timber.e(it.toString())
         }
       )
   }

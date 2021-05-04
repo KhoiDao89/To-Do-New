@@ -4,18 +4,16 @@ import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.fragment_task_detail.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import vn.htv.fresher.todoapp.R
-import vn.htv.fresher.todoapp.databinding.FragmentMainBinding
+import vn.htv.fresher.todoapp.databinding.FragmentTaskDetailBinding
 import vn.htv.fresher.todoapp.presentation.common.BaseFragment
 import vn.htv.fresher.todoapp.presentation.common.decoration.DefaultItemDecoration
-import vn.htv.fresher.todoapp.presentation.main.CategoryAdapter
 
-class TaskDetailFragment : BaseFragment<FragmentMainBinding>() {
+class TaskDetailFragment : BaseFragment<FragmentTaskDetailBinding>() {
 
   // MainFragment class variables
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  override val layoutId: Int
-    get() = R.layout.fragment_task_detail
+  override val layoutId = R.layout.fragment_task_detail
 
   private val viewModel by viewModel<TaskDetailViewModel>()
 
@@ -24,14 +22,16 @@ class TaskDetailFragment : BaseFragment<FragmentMainBinding>() {
   }
 
   override fun init() {
-    binding.viewModel = viewModel
     super.init()
+    binding.subTaskViewModel = viewModel
+    viewModel.loadData()
   }
 
   override fun initUi() {
     super.initUi()
+
     subtaskRecyclerView.apply {
-      adapter = SubTaskAdapter()
+      adapter = subTaskAdapter
       addItemDecoration(DefaultItemDecoration(
         resources.getDimensionPixelSize(R.dimen.recyclerview_item_horizontal_margin),
         resources.getDimensionPixelSize(R.dimen.small_margin)))
@@ -40,6 +40,7 @@ class TaskDetailFragment : BaseFragment<FragmentMainBinding>() {
 
   override fun registerLiveDataListener() {
     super.registerLiveDataListener()
+
     viewModel.taskDetailItem.observe(this, Observer {
       subTaskAdapter.setItems(it)
     })

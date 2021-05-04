@@ -18,7 +18,7 @@ interface SubTaskDao {
   @Query("SELECT * FROM ${SubTask.NAME}")
   fun getAll(): Single<List<SubTask>>
 
-  @Query("SELECT * FROM ${SubTask.NAME} WHERE ${SubTask.COLUMN_ID} = :taskId")
+  @Query("SELECT * FROM ${SubTask.NAME} WHERE ${SubTask.COLUMN_TASK_ID} = :taskId")
   fun getByTaskId(taskId: Int): Single<List<SubTask>>
 
   @Update

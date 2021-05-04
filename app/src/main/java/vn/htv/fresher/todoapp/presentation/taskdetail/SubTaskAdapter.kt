@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import vn.htv.fresher.todoapp.databinding.ItemSubtaskBinding
 import vn.htv.fresher.todoapp.domain.model.SubTaskModel
 
-class SubTaskAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SubTaskAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
   private val subTaskItemList = mutableListOf<TaskDetailItem>()
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -14,8 +14,9 @@ class SubTaskAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
   }
 
   override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-    val item = subTaskItemList[position]
-    (holder as? SubTaskViewHolder)?.bind(item.model)
+    when(val item = subTaskItemList[position]){
+      is TaskDetailItem.SubTask -> (holder as? SubTaskViewHolder)?.bind(item.model)
+    }
   }
 
   override fun getItemCount(): Int {
@@ -29,7 +30,7 @@ class SubTaskAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
   }
 
   inner class SubTaskViewHolder(itemView: ItemSubtaskBinding) : RecyclerView.ViewHolder(itemView.root) {
-    val bindingSubTask: ItemSubtaskBinding = itemView
+    private val bindingSubTask: ItemSubtaskBinding = itemView
 
     fun bind(model: SubTaskModel) {
       bindingSubTask.model = model
