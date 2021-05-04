@@ -12,10 +12,17 @@
   <string name="task_group_deadline">Đã lập kế hoạch</string>
   <string name="task_group_action">Tác vụ</string>
 
-  <!-- Task Atribute  -->
+  <!-- Task Attribute  -->
   <string name="task_attribute_my_day">Thêm vào Ngày của tôi</string>
   <string name="task_attribute_reminder">Nhắc tôi</string>
   <string name="task_attribute_deadline">Thêm ngày đến hạn</string>
   <string name="task_attribute_repeat">Lặp lại</string>
   <string name="task_attribute_note">Thêm ghi chú</string>
+
+  <!-- Task Attribute Set -->
+  <string name="task_attribute_set_my_day">Đã thêm vào Ngày của tôi</string>
+  <string name="task_attribute_set_reminder">Nhắc tôi lúc %s</string>
+  <string name="task_attribute_set_deadline">Thêm ngày đến hạn</string>
+  <string name="task_attribute_set_repeat">Lặp lại</string>
+  <string name="task_attribute_set_note">Thêm ghi chú</string>
 </resources>
