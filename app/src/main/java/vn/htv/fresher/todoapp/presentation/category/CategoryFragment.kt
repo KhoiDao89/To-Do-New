@@ -75,8 +75,8 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding>() {
         viewModel.addTaskCompleted.observe(
             this@CategoryFragment,
             Observer {
-              if (!it) return@Observer
-              viewModel.loadData()
+                if (!it) return@Observer
+                viewModel.loadData()
             }
         )
     }
