@@ -10,6 +10,10 @@
       name="subTaskViewModel"
       type="vn.htv.fresher.todoapp.presentation.taskdetail.TaskDetailViewModel" />
 
+    <variable
+      name="deleteEventListeners"
+      type="vn.htv.fresher.todoapp.presentation.taskdetail.TaskDetailFragment.DeleteEventListeners" />
+
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout
@@ -87,8 +91,8 @@
         android:id="@+id/createdAtTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Created At"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:text="@{subTaskViewModel.createdAt}"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -99,6 +103,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_trash"
+        android:onClick="@{() -> deleteEventListeners.deleteTask()}"
         app:layout_constraintBottom_toBottomOf="@id/createdAtTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/createdAtTextView" />

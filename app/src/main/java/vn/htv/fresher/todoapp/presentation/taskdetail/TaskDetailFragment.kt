@@ -1,12 +1,14 @@
 package vn.htv.fresher.todoapp.presentation.taskdetail
 
-import androidx.lifecycle.Observer
+import android.widget.Toast
+import com.afollestad.materialdialogs.MaterialDialog
 import kotlinx.android.synthetic.main.fragment_task_detail.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import vn.htv.fresher.todoapp.R
 import vn.htv.fresher.todoapp.databinding.FragmentTaskDetailBinding
 import vn.htv.fresher.todoapp.presentation.common.BaseFragment
 import vn.htv.fresher.todoapp.presentation.common.decoration.DefaultItemDecoration
+import vn.htv.fresher.todoapp.util.ext.timeString
 
 class TaskDetailFragment : BaseFragment<FragmentTaskDetailBinding>() {
 
@@ -17,6 +19,8 @@ class TaskDetailFragment : BaseFragment<FragmentTaskDetailBinding>() {
 
   private val viewModel by viewModel<TaskDetailViewModel>()
 
+  private var taskName: String? = null
+
   private val subTaskAdapter by lazy {
     SubTaskAdapter()
   }
@@ -24,6 +28,7 @@ class TaskDetailFragment : BaseFragment<FragmentTaskDetailBinding>() {
   override fun init() {
     super.init()
     binding.subTaskViewModel = viewModel
+    binding.deleteEventListeners = DeleteEventListeners()
     viewModel.loadData()
   }
 
@@ -46,8 +51,26 @@ class TaskDetailFragment : BaseFragment<FragmentTaskDetailBinding>() {
     })
 
     viewModel.task.observe(this, {
-
+      taskName = it.name
     })
+  }
+
+  inner class DeleteEventListeners {
+    fun deleteTask() {
+      MaterialDialog(safeContext).show {
+        title(R.string.delete_task_title)
+        message(text = safeContext.getString(R.string.delete_task_message, taskName))
+        positiveButton(R.string.delete_task_ok){
+          viewModel.deleteTask()
+          // navigate to Task List Screen
+          Toast.makeText(safeContext, "Xoa", Toast.LENGTH_SHORT).show()
+        }
+        negativeButton(R.string.delete_task_cancel){
+          // do nothing
+          Toast.makeText(safeContext, "Huy bo", Toast.LENGTH_SHORT).show()
+        }
+      }
+    }
   }
 
   /**

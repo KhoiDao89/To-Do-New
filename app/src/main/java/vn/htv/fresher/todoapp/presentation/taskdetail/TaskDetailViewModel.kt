@@ -7,6 +7,10 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.callbacks.onCancel
+import com.afollestad.materialdialogs.callbacks.onDismiss
+import com.afollestad.materialdialogs.callbacks.onShow
 import io.reactivex.Single
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
@@ -15,14 +19,13 @@ import timber.log.Timber
 import vn.htv.fresher.todoapp.domain.model.SubTaskModel
 import vn.htv.fresher.todoapp.domain.model.TaskModel
 import vn.htv.fresher.todoapp.domain.usecase.subtask.GetSubTaskListUseCase
-import vn.htv.fresher.todoapp.domain.usecase.subtask.SaveSubTaskUseCase
 import vn.htv.fresher.todoapp.domain.usecase.task.GetTaskUseCase
 import vn.htv.fresher.todoapp.presentation.common.BaseViewModel
 import io.reactivex.functions.BiFunction
 import vn.htv.fresher.todoapp.R
-import vn.htv.fresher.todoapp.data.db.entity.Task
-import vn.htv.fresher.todoapp.domain.usecase.task.SaveTaskUseCase
+import vn.htv.fresher.todoapp.domain.usecase.task.DeleteTaskUseCase
 import vn.htv.fresher.todoapp.domain.usecase.task.UpdateTaskUseCase
+import vn.htv.fresher.todoapp.util.ext.dayString
 import vn.htv.fresher.todoapp.util.ext.timeString
 
 enum class TaskAttributeEnum {
@@ -87,17 +90,11 @@ sealed class TaskDetailItem(val type: SubItemType) {
   object Note: TaskDetailItem(SubItemType.NOTE)
 }
 
-data class TaskModelDetail(
-  val id: Int,
-  val name: String,
-  val finished: Boolean,
-  val important: Boolean
-)
-
 class TaskDetailViewModel(
   private val getTaskUseCase        : GetTaskUseCase,
   private val getSubTaskListUseCase : GetSubTaskListUseCase,
-  private val updateTaskUseCase     : UpdateTaskUseCase
+  private val updateTaskUseCase     : UpdateTaskUseCase,
+  private val deleteTaskUseCase     : DeleteTaskUseCase
 ) : BaseViewModel() {
 
   val taskDetailItem: LiveData<List<TaskDetailItem>> get() = _taskDetailItem
@@ -112,6 +109,10 @@ class TaskDetailViewModel(
 
   val taskImportantIcon : LiveData<Int> get() = Transformations.map(_task) {
     if (it.important) R.drawable.ic_important_blue else R.drawable.ic_important_gray
+  }
+
+  val createdAt : LiveData<String> get() = Transformations.map(_task) {
+    it.createdAt.dayString
   }
 
   fun loadData() {
@@ -186,6 +187,20 @@ class TaskDetailViewModel(
       .subscribeBy (
         onComplete = {
           _task.postValue(updatedImportantTask)
+        },
+        onError = {
+          Timber.e(it.toString())
+        }
+      )
+  }
+
+  fun deleteTask(){
+    val task = _task.value ?: return
+
+    disposables += deleteTaskUseCase(task)
+      .subscribeBy (
+        onComplete = {
+          Timber.i("Deleted ${task} from Database")
         },
         onError = {
           Timber.e(it.toString())
