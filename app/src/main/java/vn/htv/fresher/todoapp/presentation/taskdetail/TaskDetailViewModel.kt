@@ -111,13 +111,17 @@ class TaskDetailViewModel(
     if (it.important) R.drawable.ic_important_blue else R.drawable.ic_important_gray
   }
 
-  val createdAt : LiveData<String> get() = Transformations.map(_task) {
+  val taskCreatedAt : LiveData<String> get() = Transformations.map(_task) {
     it.createdAt.dayString
   }
 
+  var taskId: Int? = null
+
   fun loadData() {
-    val getTaskObserable    = getTaskUseCase(1)
-    val getSubTaskObserable = getSubTaskListUseCase(1)
+    val id = taskId ?: return
+
+    val getTaskObserable    = getTaskUseCase(id)
+    val getSubTaskObserable = getSubTaskListUseCase(id)
 
     val zipper = BiFunction<TaskModel, List<SubTaskModel>, List<TaskDetailItem>>{ task, subtasks ->
 

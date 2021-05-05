@@ -66,11 +66,11 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
     viewModel.addCategoryCompleted.observe(this@MainFragment,
       Observer {
-        TaskDetailActivity.start(safeActivity)
+        TaskDetailActivity.start(safeActivity, 1)
       })
   }
 
-  inner class EventListeners() {
+  inner class EventListeners {
     fun onNewCategory() {
       MaterialDialog(safeContext).show {
         title(R.string.new_category)

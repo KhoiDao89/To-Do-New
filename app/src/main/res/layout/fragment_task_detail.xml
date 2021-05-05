@@ -91,7 +91,7 @@
         android:id="@+id/createdAtTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@{subTaskViewModel.createdAt}"
+        android:text="@{subTaskViewModel.taskCreatedAt}"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

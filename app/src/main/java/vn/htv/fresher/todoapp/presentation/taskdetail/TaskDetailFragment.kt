@@ -61,7 +61,8 @@ class TaskDetailFragment : BaseFragment<FragmentTaskDetailBinding>() {
         title(R.string.delete_task_title)
         message(text = safeContext.getString(R.string.delete_task_message, taskName))
         positiveButton(R.string.delete_task_ok){
-          viewModel.deleteTask()
+//          viewModel.deleteTask()
+          safeActivity.onBackPressed()
           // navigate to Task List Screen
           Toast.makeText(safeContext, "Xoa", Toast.LENGTH_SHORT).show()
         }
