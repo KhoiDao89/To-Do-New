@@ -22,7 +22,7 @@ import vn.htv.fresher.todoapp.presentation.main.MainItemModel
 
 class TaskAdapter(
   private val importantCallback: ((model: TaskModel) -> Unit),
-  //private val finishedCallback:  ((model: TaskModel) -> Unit)
+  private val finishedCallback:  ((model: TaskModel) -> Unit)
 ): RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
   private val taskList = mutableListOf<TaskModel>()
 
