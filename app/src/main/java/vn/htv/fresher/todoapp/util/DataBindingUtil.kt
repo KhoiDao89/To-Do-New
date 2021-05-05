@@ -1,11 +1,13 @@
 package vn.htv.fresher.todoapp.util
 
+import android.annotation.SuppressLint
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.databinding.BindingAdapter
+import vn.htv.fresher.todoapp.R
 import vn.htv.fresher.todoapp.util.ext.show
 
 @BindingAdapter("bind:imageResource")

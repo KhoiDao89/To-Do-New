@@ -25,17 +25,19 @@
 
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="50dp">
+    android:layout_height="@dimen/task_attribute_height">
 
     <ImageView
       android:id="@+id/taskAttributeImageView"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginStart="@dimen/large_margin"
+      bind:setIconColor="@{set}"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
-      bind:imageResource="@{attribute.attributeIcon}" />
+      bind:imageResource="@{attribute.attributeIcon}"
+      tools:src="@drawable/ic_reminder" />
 
     <LinearLayout
       android:layout_width="0dp"
@@ -53,18 +55,17 @@
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         bind:text="@{attribute.getName(set, model, context)}"
+        bind:textColor="@{set}"
         tools:text="Nhắc tôi" />
 
       <TextView
         android:id="@+id/setAttribute"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nhắc tôi"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:visibility="gone"
         tools:text="Nhắc tôi" />
     </LinearLayout>
-
 
     <ImageView
       android:id="@+id/importantImageView"

@@ -1,10 +1,12 @@
 package vn.htv.fresher.todoapp.presentation.taskdetail
 
 import android.content.Context
+import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import io.reactivex.Single
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
@@ -20,6 +22,7 @@ import io.reactivex.functions.BiFunction
 import vn.htv.fresher.todoapp.R
 import vn.htv.fresher.todoapp.data.db.entity.Task
 import vn.htv.fresher.todoapp.domain.usecase.task.SaveTaskUseCase
+import vn.htv.fresher.todoapp.domain.usecase.task.UpdateTaskUseCase
 import vn.htv.fresher.todoapp.util.ext.timeString
 
 enum class TaskAttributeEnum {
@@ -36,19 +39,11 @@ enum class TaskAttributeEnum {
       REPEAT    -> R.string.task_attribute_repeat
     }
 
-//  val attributeNameSet: Int
-//    @StringRes get() = when (this) {
-//      MY_DAY    -> R.string.task_attribute_set_my_day
-//      REMINDER  -> R.string.task_attribute_set_reminder
-//      DEADLINE  -> R.string.task_attribute_set_deadline
-//      REPEAT    -> R.string.task_attribute_set_repeat
-//    }
-
   val attributeIcon: Int
     @DrawableRes get() = when (this) {
       MY_DAY    -> R.drawable.ic_my_day
       REMINDER  -> R.drawable.ic_reminder
-      DEADLINE  -> R.drawable.ic_deadline
+      DEADLINE  -> R.drawable.ic_deadline_sub
       REPEAT    -> R.drawable.ic_repeat
     }
 
@@ -62,8 +57,8 @@ enum class TaskAttributeEnum {
     return when(this) {
       MY_DAY    -> context.getString(R.string.task_attribute_set_my_day)
       REMINDER  -> context.getString(R.string.task_attribute_set_reminder, model.reminder?.timeString)
-      DEADLINE  -> context.getString(R.string.task_attribute_set_my_day)
-      REPEAT    -> context.getString(R.string.task_attribute_set_my_day)
+      DEADLINE  -> context.getString(R.string.task_attribute_set_deadline)
+      REPEAT    -> context.getString(R.string.task_attribute_set_repeat)
     }
   }
 }
@@ -92,19 +87,41 @@ sealed class TaskDetailItem(val type: SubItemType) {
   object Note: TaskDetailItem(SubItemType.NOTE)
 }
 
+data class TaskModelDetail(
+  val id: Int,
+  val name: String,
+  val finished: Boolean,
+  val important: Boolean
+)
+
 class TaskDetailViewModel(
   private val getTaskUseCase        : GetTaskUseCase,
   private val getSubTaskListUseCase : GetSubTaskListUseCase,
+  private val updateTaskUseCase     : UpdateTaskUseCase
 ) : BaseViewModel() {
 
   val taskDetailItem: LiveData<List<TaskDetailItem>> get() = _taskDetailItem
   private val _taskDetailItem = MutableLiveData<List<TaskDetailItem>>()
+
+  val task : LiveData<TaskModel> get() = _task
+  private val _task = MutableLiveData<TaskModel>()
+
+  val taskFinishIcon : LiveData<Int> get() = Transformations.map(_task) {
+    if (it.finished) R.drawable.ic_finished else R.drawable.ic_not_finish
+  }
+
+  val taskImportantIcon : LiveData<Int> get() = Transformations.map(_task) {
+    if (it.important) R.drawable.ic_important_blue else R.drawable.ic_important_gray
+  }
 
   fun loadData() {
     val getTaskObserable    = getTaskUseCase(1)
     val getSubTaskObserable = getSubTaskListUseCase(1)
 
     val zipper = BiFunction<TaskModel, List<SubTaskModel>, List<TaskDetailItem>>{ task, subtasks ->
+
+      _task.postValue(task)
+
       val list = mutableListOf<TaskDetailItem>()
 
       val subTaskItems = subtasks.map { subtask ->
@@ -138,5 +155,41 @@ class TaskDetailViewModel(
     }
     list.addAll(items)
     return list
+  }
+
+  fun finishedTask(){
+    val task = _task.value ?: return
+
+    val updatedFinishTask = task.copy(
+      finished = !task.finished
+    )
+
+    disposables += updateTaskUseCase(updatedFinishTask)
+      .subscribeBy (
+        onComplete = {
+          _task.postValue(updatedFinishTask)
+        },
+        onError = {
+          Timber.e(it.toString())
+        }
+      )
+  }
+
+  fun importantTask(){
+    val task = _task.value ?: return
+
+    val updatedImportantTask = task.copy(
+      important = !task.important
+    )
+
+    disposables += updateTaskUseCase(updatedImportantTask)
+      .subscribeBy (
+        onComplete = {
+          _task.postValue(updatedImportantTask)
+        },
+        onError = {
+          Timber.e(it.toString())
+        }
+      )
   }
 }

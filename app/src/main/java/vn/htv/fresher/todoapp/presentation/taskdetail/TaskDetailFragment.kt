@@ -10,7 +10,7 @@ import vn.htv.fresher.todoapp.presentation.common.decoration.DefaultItemDecorati
 
 class TaskDetailFragment : BaseFragment<FragmentTaskDetailBinding>() {
 
-  // MainFragment class variables
+  // TaskDetailFragment class variables
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   override val layoutId = R.layout.fragment_task_detail
@@ -41,8 +41,12 @@ class TaskDetailFragment : BaseFragment<FragmentTaskDetailBinding>() {
   override fun registerLiveDataListener() {
     super.registerLiveDataListener()
 
-    viewModel.taskDetailItem.observe(this, Observer {
+    viewModel.taskDetailItem.observe(this, {
       subTaskAdapter.setItems(it)
+    })
+
+    viewModel.task.observe(this, {
+
     })
   }
 

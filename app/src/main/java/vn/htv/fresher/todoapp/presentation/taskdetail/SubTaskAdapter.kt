@@ -1,10 +1,16 @@
 package vn.htv.fresher.todoapp.presentation.taskdetail
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_task_attribute.view.*
+import vn.htv.fresher.todoapp.R
 import vn.htv.fresher.todoapp.databinding.ItemNextStepBinding
 import vn.htv.fresher.todoapp.databinding.ItemNoteBinding
 import vn.htv.fresher.todoapp.databinding.ItemSubtaskBinding
@@ -68,4 +74,16 @@ class SubTaskAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
   }
 
   inner class NoteViewHolder(itemView: ItemNoteBinding) : RecyclerView.ViewHolder(itemView.root)
+}
+
+@BindingAdapter("bind:textColor")
+fun setTextColor(textView: TextView, isSet: Boolean){
+  val color = ContextCompat.getColor(textView.context, R.color.dark_blue)
+  if (isSet) textView.setTextColor(color)
+}
+
+@BindingAdapter("bind:setIconColor")
+fun setIconColor(imageView: ImageView, isSet: Boolean){
+  val color = ContextCompat.getColor(imageView.context, R.color.dark_blue)
+  if (isSet) imageView.setColorFilter(color)
 }

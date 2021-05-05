@@ -2,14 +2,18 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools">
+
   <data>
+
     <variable
       name="model"
       type="vn.htv.fresher.todoapp.domain.model.SubTaskModel" />
   </data>
+
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
     <RadioButton
       android:id="@+id/finisedRadioButton"
       android:layout_width="wrap_content"
@@ -18,6 +22,7 @@
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
       android:id="@+id/taskNameTextView"
       android:layout_width="wrap_content"
@@ -29,10 +34,12 @@
       app:layout_constraintStart_toEndOf="@id/finisedRadioButton"
       app:layout_constraintTop_toTopOf="@id/finisedRadioButton"
       tools:text="Task Name" />
+
     <ImageView
       android:id="@+id/importantImageView"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_marginEnd="@dimen/large_margin"
       android:src="@drawable/ic_clear"
       app:layout_constraintBottom_toBottomOf="@id/taskNameTextView"
       app:layout_constraintEnd_toEndOf="parent"

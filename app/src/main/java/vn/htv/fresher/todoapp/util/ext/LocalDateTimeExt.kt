@@ -5,5 +5,5 @@ import org.threeten.bp.LocalDateTime
 
 val LocalDateTime.timeString: String
   get() {
-    return "09:00"
+    return "${hour}:${minute}"
   }

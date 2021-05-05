@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:bind="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools">
 
   <data>
+
     <variable
       name="subTaskViewModel"
       type="vn.htv.fresher.todoapp.presentation.taskdetail.TaskDetailViewModel" />
+
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,40 +20,47 @@
       android:id="@+id/showTaskGroup"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:padding="@dimen/small_margin"
+      android:padding="@dimen/medium_margin"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent">
 
-      <RadioButton
-        android:id="@+id/finisedRadioButton"
+      <ImageView
+        android:id="@+id/finisedImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="@{() -> subTaskViewModel.finishedTask()}"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        bind:imageResource="@{subTaskViewModel.taskFinishIcon}"
+        tools:src="@drawable/ic_finished" />
 
       <TextView
         android:id="@+id/taskNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Task Name"
+        android:layout_marginStart="@dimen/large_margin"
+        android:text="@{subTaskViewModel.task.name}"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@color/black"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/finisedRadioButton"
-        app:layout_constraintStart_toEndOf="@id/finisedRadioButton"
-        app:layout_constraintTop_toTopOf="@id/finisedRadioButton"
+        app:layout_constraintBottom_toBottomOf="@id/finisedImageView"
+        app:layout_constraintStart_toEndOf="@id/finisedImageView"
+        app:layout_constraintTop_toTopOf="@id/finisedImageView"
         tools:text="Task Name" />
 
       <ImageView
         android:id="@+id/importantImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_important_gray"
+        android:layout_marginEnd="@dimen/medium_margin"
+        bind:imageResource="@{subTaskViewModel.taskImportantIcon}"
+        android:onClick="@{() -> subTaskViewModel.importantTask()}"
         app:layout_constraintBottom_toBottomOf="@id/taskNameTextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/taskNameTextView" />
+        app:layout_constraintTop_toTopOf="@id/taskNameTextView"
+        tools:src="@drawable/ic_important_gray"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
