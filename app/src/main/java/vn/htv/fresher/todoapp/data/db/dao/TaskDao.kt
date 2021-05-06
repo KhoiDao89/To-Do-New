@@ -17,7 +17,7 @@ interface TaskDao {
   @Query("SELECT * FROM ${Task.NAME}")
   fun getAll(): Single<List<Task>>
 
-  @Query("SELECT * FROM ${Task.NAME} WHERE ${Task.COLUMN_ID} = :catId")
+  @Query("SELECT * FROM ${Task.NAME} WHERE ${Task.COLUMN_CAT_ID} = :catId")
   fun getByCatId(catId: Int): Single<List<Task>>
 
   @Insert
