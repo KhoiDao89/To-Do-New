@@ -1,7 +1,5 @@
 package vn.htv.fresher.todoapp.di
 
-import android.content.Context
-import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import vn.htv.fresher.todoapp.data.repository.CategoryRepositoryImpl
@@ -58,5 +56,5 @@ val appModule = module {
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   viewModel { MainViewModel(get(), get(), get(), get()) }
-  viewModel { TaskDetailViewModel(get(), get(), get(), get()) }
+  viewModel { TaskDetailViewModel(get(), get(), get(), get(), get(), get()) }
 }

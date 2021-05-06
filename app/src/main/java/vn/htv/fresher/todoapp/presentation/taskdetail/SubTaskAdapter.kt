@@ -9,6 +9,8 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.fragment_task_detail.view.*
+import kotlinx.android.synthetic.main.item_subtask.view.*
 import kotlinx.android.synthetic.main.item_task_attribute.view.*
 import vn.htv.fresher.todoapp.R
 import vn.htv.fresher.todoapp.databinding.ItemNextStepBinding
@@ -18,7 +20,17 @@ import vn.htv.fresher.todoapp.databinding.ItemTaskAttributeBinding
 import vn.htv.fresher.todoapp.domain.model.SubTaskModel
 import vn.htv.fresher.todoapp.domain.model.TaskModel
 
-class SubTaskAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SubTaskAdapter(
+  private val finishedSubTaskCallback     : ((model: SubTaskModel)  -> Unit),
+  private val deleteSubTaskCallback       : ((model: SubTaskModel)  -> Unit),
+  private val updateMyDayTaskCallback     : ((model: TaskModel)     -> Unit),
+  private val updateReminderTaskCallback  : ((model: TaskModel)     -> Unit),
+  private val removeReminderTaskCallback  : ((model: TaskModel)     -> Unit),
+  private val updateDeadlineTaskCallback  : ((model: TaskModel)     -> Unit),
+  private val removeDeadlineTaskCallback  : ((model: TaskModel)     -> Unit),
+  private val updateRepeatTaskCallback    : ((model: TaskModel)     -> Unit),
+  private val removeRepeatTaskCallback    : ((model: TaskModel)     -> Unit)
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
   private val subTaskItemList = mutableListOf<TaskDetailItem>()
 
   override fun getItemViewType(position: Int): Int {
@@ -57,19 +69,45 @@ class SubTaskAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     fun bind(model: SubTaskModel) {
       bindingSubTask.model = model
+
+      bindingSubTask.root.finisedSubTaskImageView.setOnClickListener {
+        finishedSubTaskCallback.invoke(model)
+      }
+      bindingSubTask.root.deleteSubTaskImageView.setOnClickListener {
+        deleteSubTaskCallback.invoke(model)
+      }
     }
   }
 
   inner class NextStepViewHolder(itemView: ItemNextStepBinding) : RecyclerView.ViewHolder(itemView.root)
 
   inner class TaskAttributeViewHolder(itemView: ItemTaskAttributeBinding) : RecyclerView.ViewHolder(itemView.root) {
-    private val binding: ItemTaskAttributeBinding = itemView
+    private val bindingAttribute: ItemTaskAttributeBinding = itemView
 
     fun bind(attribute: TaskAttributeEnum, model: TaskModel) {
-      binding.attribute = attribute
-      binding.set       = model.getAttributeState(attribute)
-      binding.context   = binding.root.context
-      binding.model     = model
+      bindingAttribute.attribute = attribute
+      bindingAttribute.set       = model.getAttributeState(attribute)
+      bindingAttribute.context   = bindingAttribute.root.context
+      bindingAttribute.model     = model
+
+      when (attribute) {
+        TaskAttributeEnum.MY_DAY -> {
+          bindingAttribute.root.setOnClickListener { updateMyDayTaskCallback(model) }
+          bindingAttribute.root.removeTaskAttributeImageView.setOnClickListener { updateMyDayTaskCallback(model) }
+        }
+        TaskAttributeEnum.REMINDER -> {
+          bindingAttribute.root.setOnClickListener { updateReminderTaskCallback(model) }
+          bindingAttribute.root.removeTaskAttributeImageView.setOnClickListener { removeReminderTaskCallback(model) }
+        }
+        TaskAttributeEnum.DEADLINE -> {
+          bindingAttribute.root.setOnClickListener { updateDeadlineTaskCallback(model) }
+          bindingAttribute.root.removeTaskAttributeImageView.setOnClickListener { removeDeadlineTaskCallback(model) }
+        }
+        TaskAttributeEnum.REPEAT -> {
+          bindingAttribute.root.setOnClickListener { updateRepeatTaskCallback(model) }
+          bindingAttribute.root.removeTaskAttributeImageView.setOnClickListener { removeRepeatTaskCallback(model) }
+        }
+      }
     }
   }
 
@@ -78,12 +116,14 @@ class SubTaskAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 @BindingAdapter("bind:textColor")
 fun setTextColor(textView: TextView, isSet: Boolean){
-  val color = ContextCompat.getColor(textView.context, R.color.dark_blue)
-  if (isSet) textView.setTextColor(color)
+  val colorBLue = ContextCompat.getColor(textView.context, R.color.dark_blue)
+  val colorGray = ContextCompat.getColor(textView.context, R.color.dark_gray)
+  if (isSet) textView.setTextColor(colorBLue) else textView.setTextColor(colorGray)
 }
 
 @BindingAdapter("bind:setIconColor")
 fun setIconColor(imageView: ImageView, isSet: Boolean){
-  val color = ContextCompat.getColor(imageView.context, R.color.dark_blue)
-  if (isSet) imageView.setColorFilter(color)
+  val colorBLue = ContextCompat.getColor(imageView.context, R.color.dark_blue)
+  val colorGray = ContextCompat.getColor(imageView.context, R.color.dark_gray)
+  if (isSet) imageView.setColorFilter(colorBLue) else imageView.setColorFilter(colorGray)
 }

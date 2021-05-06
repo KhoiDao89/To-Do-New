@@ -1,16 +1,11 @@
 package vn.htv.fresher.todoapp.presentation.taskdetail
 
 import android.content.Context
-import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.callbacks.onCancel
-import com.afollestad.materialdialogs.callbacks.onDismiss
-import com.afollestad.materialdialogs.callbacks.onShow
 import io.reactivex.Single
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
@@ -23,6 +18,9 @@ import vn.htv.fresher.todoapp.domain.usecase.task.GetTaskUseCase
 import vn.htv.fresher.todoapp.presentation.common.BaseViewModel
 import io.reactivex.functions.BiFunction
 import vn.htv.fresher.todoapp.R
+import vn.htv.fresher.todoapp.domain.usecase.subtask.DeleteSubTaskUseCase
+import vn.htv.fresher.todoapp.domain.usecase.subtask.SaveSubTaskUseCase
+import vn.htv.fresher.todoapp.domain.usecase.subtask.UpdateSubTaskUseCase
 import vn.htv.fresher.todoapp.domain.usecase.task.DeleteTaskUseCase
 import vn.htv.fresher.todoapp.domain.usecase.task.UpdateTaskUseCase
 import vn.htv.fresher.todoapp.util.ext.dayString
@@ -94,7 +92,9 @@ class TaskDetailViewModel(
   private val getTaskUseCase        : GetTaskUseCase,
   private val getSubTaskListUseCase : GetSubTaskListUseCase,
   private val updateTaskUseCase     : UpdateTaskUseCase,
-  private val deleteTaskUseCase     : DeleteTaskUseCase
+  private val deleteTaskUseCase     : DeleteTaskUseCase,
+  private val updateSubTaskUseCase  : UpdateSubTaskUseCase,
+  private val deleteSubTaskUseCase  : DeleteSubTaskUseCase
 ) : BaseViewModel() {
 
   val taskDetailItem: LiveData<List<TaskDetailItem>> get() = _taskDetailItem
@@ -205,6 +205,157 @@ class TaskDetailViewModel(
       .subscribeBy (
         onComplete = {
           Timber.i("Deleted ${task} from Database")
+        },
+        onError = {
+          Timber.e(it.toString())
+        }
+      )
+  }
+
+  fun myDayTask(model: TaskModel){
+    val updateMyDayTask = model.copy(
+      myDay = !model.myDay
+    )
+
+    disposables += updateTaskUseCase(updateMyDayTask)
+      .subscribeBy(
+        onComplete = {
+          loadData()
+          Timber.i("Updated myday ${model}")
+        },
+        onError = {
+          Timber.e(it.toString())
+        }
+      )
+  }
+
+  fun reminderTask(model: TaskModel, reminder: LocalDateTime){
+    val updateReminderTask = model.copy(
+      reminder = reminder
+    )
+
+    disposables += updateTaskUseCase(updateReminderTask)
+      .subscribeBy(
+        onComplete = {
+          loadData()
+          Timber.i("Updated reminder ${model}")
+        },
+        onError = {
+          Timber.e(it.toString())
+        }
+      )
+  }
+
+  fun removeReminderTask(model: TaskModel){
+    val removeReminderTask = model.copy(
+      reminder = null
+    )
+
+    disposables += updateTaskUseCase(removeReminderTask)
+      .subscribeBy(
+        onComplete = {
+          loadData()
+          Timber.i("Remove reminder ${model}")
+        },
+        onError = {
+          Timber.e(it.toString())
+        }
+      )
+  }
+
+  fun deadlineTask(model: TaskModel, deadline: LocalDateTime){
+    val updateDeadlineTask = model.copy(
+      deadline = deadline
+    )
+
+    disposables += updateTaskUseCase(updateDeadlineTask)
+      .subscribeBy(
+        onComplete = {
+          loadData()
+          Timber.i("Updated deadline ${model}")
+        },
+        onError = {
+          Timber.e(it.toString())
+        }
+      )
+  }
+
+  fun removeDeadlineTask(model: TaskModel){
+    val removeDeadlineTask = model.copy(
+      deadline = null,
+      repeat = null
+    )
+
+    disposables += updateTaskUseCase(removeDeadlineTask)
+      .subscribeBy(
+        onComplete = {
+          loadData()
+          Timber.i("Remove deadline ${model}")
+        },
+        onError = {
+          Timber.e(it.toString())
+        }
+      )
+  }
+
+  fun repeatTask(model: TaskModel, repeat: Int, deadline: LocalDateTime){
+    val updateRepeatTask = model.copy(
+      repeat = repeat,
+      deadline = deadline
+    )
+
+    disposables += updateTaskUseCase(updateRepeatTask)
+      .subscribeBy(
+        onComplete = {
+          loadData()
+          Timber.i("Updated repeat ${model}")
+        },
+        onError = {
+          Timber.e(it.toString())
+        }
+      )
+  }
+
+  fun removeRepeatTask(model: TaskModel){
+    val removeRepeatTask = model.copy(
+      repeat = null
+    )
+
+    disposables += updateTaskUseCase(removeRepeatTask)
+      .subscribeBy(
+        onComplete = {
+          loadData()
+          Timber.i("Remove repeat ${model}")
+        },
+        onError = {
+          Timber.e(it.toString())
+        }
+      )
+  }
+
+  fun finishedSubTask(model: SubTaskModel){
+    val updatedFinishedSubTask = model.copy(
+      finished = !model.finished
+    )
+
+    disposables += updateSubTaskUseCase(updatedFinishedSubTask)
+      .subscribeBy (
+        onComplete = {
+          loadData()
+          Timber.i("Updated finished ${model}")
+        },
+        onError = {
+          Timber.e(it.toString())
+        }
+      )
+  }
+
+  fun deleteSubTask(model: SubTaskModel){
+    disposables += deleteSubTaskUseCase(model)
+      .subscribeBy (
+        onComplete = {
+          loadData()
+          Timber.i("Deleted ${model}")
         },
         onError = {
           Timber.e(it.toString())

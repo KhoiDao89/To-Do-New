@@ -45,7 +45,7 @@
       android:layout_marginStart="@dimen/large_margin"
       android:orientation="vertical"
       app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toStartOf="@+id/importantImageView"
+      app:layout_constraintEnd_toStartOf="@+id/removeTaskAttributeImageView"
       app:layout_constraintStart_toEndOf="@id/taskAttributeImageView"
       app:layout_constraintTop_toTopOf="parent">
 
@@ -68,7 +68,7 @@
     </LinearLayout>
 
     <ImageView
-      android:id="@+id/importantImageView"
+      android:id="@+id/removeTaskAttributeImageView"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginEnd="@dimen/large_margin"

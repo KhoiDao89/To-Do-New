@@ -13,10 +13,10 @@
 
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="@dimen/task_attribute_height">
 
     <ImageView
-      android:id="@+id/finisedSubTaskRadioButton"
+      android:id="@+id/finisedSubTaskImageView"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       bind:imageResource="@{model.finishedSubTask}"
@@ -34,13 +34,13 @@
       android:layout_marginStart="@dimen/large_margin"
       android:textAppearance="@style/TextAppearance.AppCompat.Medium"
       android:textColor="@color/black"
-      app:layout_constraintBottom_toBottomOf="@id/finisedSubTaskRadioButton"
-      app:layout_constraintStart_toEndOf="@id/finisedSubTaskRadioButton"
-      app:layout_constraintTop_toTopOf="@id/finisedSubTaskRadioButton"
+      app:layout_constraintBottom_toBottomOf="@id/finisedSubTaskImageView"
+      app:layout_constraintStart_toEndOf="@id/finisedSubTaskImageView"
+      app:layout_constraintTop_toTopOf="@id/finisedSubTaskImageView"
       tools:text="Task Name" />
 
     <ImageView
-      android:id="@+id/importantSubTaskImageView"
+      android:id="@+id/deleteSubTaskImageView"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginEnd="@dimen/large_margin"

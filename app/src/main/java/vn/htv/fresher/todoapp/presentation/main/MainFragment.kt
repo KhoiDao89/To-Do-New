@@ -30,7 +30,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
   private val categoryAdapter by lazy {
     CategoryAdapter(
         categoryCallback = {
-          // navigate to Category Screen with Category Id
+          TaskDetailActivity.start(safeActivity, 1)
         },
         taskGroupCallback = {
           // navigate to Category Screen with TaskGroup

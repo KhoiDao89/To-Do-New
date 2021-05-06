@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string-array name="reminder">
+    <item>Cuối ngày (18:00)</item>
+    <item>Ngày mai (09:00)</item>
+    <item>Tuần tới (09:00)</item>
+    <item>Chọn ngày và giờ</item>
+  </string-array>
+
+  <string-array name="repeat">
+    <item>Mỗi 1 ngày</item>
+    <item>Mỗi 1 tuần</item>
+    <item>Mỗi 1 tháng</item>
+    <item>Mỗi 1 năm</item>
+  </string-array>
+</resources>
