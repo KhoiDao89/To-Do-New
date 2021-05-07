@@ -1,7 +1,9 @@
 package vn.htv.fresher.todoapp.presentation.taskdetail
 
+import android.app.Activity
 import android.content.Intent
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -24,16 +26,19 @@ class TaskDetailActivity : BaseActivity() {
   override fun init() {
     super.init()
     val taskId = intent.getIntExtra(PARAM_TASK_ID, 0)
+
     if (taskId == 0) onBackPressed()
     viewModel.taskId = taskId
   }
 
   override fun initUi() {
     super.initUi()
-    // hiển thị nút back trên toolbar
-    supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    supportActionBar?.setDisplayShowHomeEnabled(true)
-    supportActionBar?.title = "Khoi Dao"
+
+    supportActionBar?.apply {
+      setDisplayHomeAsUpEnabled(true)
+      setDisplayShowHomeEnabled(true)
+      title = "Khoi Dao"
+    }
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -45,9 +50,17 @@ class TaskDetailActivity : BaseActivity() {
     return super.onOptionsItemSelected(item)
   }
 
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    super.onActivityResult(requestCode, resultCode, data)
+    if (requestCode == NoteActivity.PARAM_REQUEST_CODE && resultCode == NoteActivity.PARAM_RESULT_CODE){
+      val note = data?.getStringExtra(NoteActivity.PARAM_NOTE)
+      viewModel.noteTask(note.toString())
+    }
+  }
+
   companion object {
 
-    private const val PARAM_TASK_ID = "taskId"
+    private const val PARAM_TASK_ID = "TASKID"
 
     fun start(activity: AppCompatActivity, taskId: Int) {
       val intent = Intent(activity, TaskDetailActivity::class.java)

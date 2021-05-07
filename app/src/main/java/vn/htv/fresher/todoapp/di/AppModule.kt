@@ -18,6 +18,7 @@ import vn.htv.fresher.todoapp.domain.usecase.subtask.SaveSubTaskUseCase
 import vn.htv.fresher.todoapp.domain.usecase.subtask.UpdateSubTaskUseCase
 import vn.htv.fresher.todoapp.domain.usecase.task.*
 import vn.htv.fresher.todoapp.presentation.main.MainViewModel
+import vn.htv.fresher.todoapp.presentation.note.NoteViewModel
 import vn.htv.fresher.todoapp.presentation.taskdetail.TaskDetailViewModel
 import vn.htv.fresher.todoapp.util.rx.AppSchedulerProvider
 import vn.htv.fresher.todoapp.util.rx.SchedulerProvider
@@ -56,5 +57,6 @@ val appModule = module {
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   viewModel { MainViewModel(get(), get(), get(), get()) }
-  viewModel { TaskDetailViewModel(get(), get(), get(), get(), get(), get()) }
+  viewModel { TaskDetailViewModel(get(), get(), get(), get(), get(), get(), get()) }
+  viewModel { NoteViewModel()}
 }

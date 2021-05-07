@@ -2,13 +2,19 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
   <data>
-
+    <variable
+      name="model"
+      type="vn.htv.fresher.todoapp.domain.model.TaskModel" />
   </data>
 
   <TextView
+    android:id="@+id/noteTextView"
     android:layout_width="match_parent"
     android:layout_height="@dimen/note_textview_height"
     android:padding="@dimen/medium_margin"
-    android:text="@string/task_attribute_note"
+    android:text="@{model.note}"
+    android:hint="@string/note"
+    android:ellipsize="end"
+    android:maxLines="5"
     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 </layout>

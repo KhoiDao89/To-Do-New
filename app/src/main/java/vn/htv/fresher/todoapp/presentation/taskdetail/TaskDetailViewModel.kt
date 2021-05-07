@@ -85,7 +85,7 @@ sealed class TaskDetailItem(val type: SubItemType) {
     val attribute : TaskAttributeEnum
     ): TaskDetailItem(SubItemType.ATTRIBUTE)
 
-  object Note: TaskDetailItem(SubItemType.NOTE)
+  data class Note(val model: TaskModel): TaskDetailItem(SubItemType.NOTE)
 }
 
 class TaskDetailViewModel(
@@ -94,7 +94,8 @@ class TaskDetailViewModel(
   private val updateTaskUseCase     : UpdateTaskUseCase,
   private val deleteTaskUseCase     : DeleteTaskUseCase,
   private val updateSubTaskUseCase  : UpdateSubTaskUseCase,
-  private val deleteSubTaskUseCase  : DeleteSubTaskUseCase
+  private val deleteSubTaskUseCase  : DeleteSubTaskUseCase,
+  private val saveSubTaskUseCase    : SaveSubTaskUseCase
 ) : BaseViewModel() {
 
   val taskDetailItem: LiveData<List<TaskDetailItem>> get() = _taskDetailItem
@@ -138,7 +139,7 @@ class TaskDetailViewModel(
 
       val listAttributes = generateTaskAttribute(task)
       list.addAll(listAttributes)
-      list.add(TaskDetailItem.Note)
+      list.add(TaskDetailItem.Note(task))
       list
     }
 
@@ -160,6 +161,19 @@ class TaskDetailViewModel(
     }
     list.addAll(items)
     return list
+  }
+
+  fun saveNewSubTask(model: SubTaskModel){
+    disposables += saveSubTaskUseCase(model)
+      .subscribeBy(
+        onComplete = {
+          loadData()
+          Timber.i("Saved ${model} from Database")
+        },
+        onError = {
+          Timber.e(it.toString())
+        }
+      )
   }
 
   fun finishedTask(){
@@ -326,6 +340,25 @@ class TaskDetailViewModel(
         onComplete = {
           loadData()
           Timber.i("Remove repeat ${model}")
+        },
+        onError = {
+          Timber.e(it.toString())
+        }
+      )
+  }
+
+  fun noteTask(note: String){
+    val model = _task.value ?: return
+
+    val updateNoteTask = model.copy(
+      note = note
+    )
+
+    disposables += updateTaskUseCase(updateNoteTask)
+      .subscribeBy(
+        onComplete = {
+          loadData()
+          Timber.i("Updated note ${model}")
         },
         onError = {
           Timber.e(it.toString())

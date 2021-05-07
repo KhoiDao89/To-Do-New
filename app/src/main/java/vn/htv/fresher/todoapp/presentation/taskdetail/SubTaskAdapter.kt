@@ -1,15 +1,13 @@
 package vn.htv.fresher.todoapp.presentation.taskdetail
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.fragment_task_detail.view.*
+import kotlinx.android.synthetic.main.item_note.view.*
 import kotlinx.android.synthetic.main.item_subtask.view.*
 import kotlinx.android.synthetic.main.item_task_attribute.view.*
 import vn.htv.fresher.todoapp.R
@@ -29,7 +27,9 @@ class SubTaskAdapter(
   private val updateDeadlineTaskCallback  : ((model: TaskModel)     -> Unit),
   private val removeDeadlineTaskCallback  : ((model: TaskModel)     -> Unit),
   private val updateRepeatTaskCallback    : ((model: TaskModel)     -> Unit),
-  private val removeRepeatTaskCallback    : ((model: TaskModel)     -> Unit)
+  private val removeRepeatTaskCallback    : ((model: TaskModel)     -> Unit),
+  private val saveNewSubtaskCallback      : (()                     -> Unit),
+  private val updateNoteTaskCallback      : ((model: TaskModel)     -> Unit)
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
   private val subTaskItemList = mutableListOf<TaskDetailItem>()
 
@@ -49,8 +49,10 @@ class SubTaskAdapter(
 
   override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
     when(val item = subTaskItemList[position]){
-      is TaskDetailItem.SubTask -> (holder as? SubTaskViewHolder)?.bind(item.model)
+      is TaskDetailItem.SubTask       -> (holder as? SubTaskViewHolder)?.bind(item.model)
+      is TaskDetailItem.NextStep      -> (holder as? NextStepViewHolder)?.bind()
       is TaskDetailItem.TaskAttribute -> (holder as? TaskAttributeViewHolder)?.bind(item.attribute, item.model)
+      is TaskDetailItem.Note          -> (holder as? NoteViewHolder)?.bind(item.model)
     }
   }
 
@@ -79,7 +81,15 @@ class SubTaskAdapter(
     }
   }
 
-  inner class NextStepViewHolder(itemView: ItemNextStepBinding) : RecyclerView.ViewHolder(itemView.root)
+  inner class NextStepViewHolder(itemView: ItemNextStepBinding) : RecyclerView.ViewHolder(itemView.root) {
+    private val bindingNextStep: ItemNextStepBinding = itemView
+
+    fun bind(){
+      bindingNextStep.root.setOnClickListener {
+        saveNewSubtaskCallback()
+      }
+    }
+  }
 
   inner class TaskAttributeViewHolder(itemView: ItemTaskAttributeBinding) : RecyclerView.ViewHolder(itemView.root) {
     private val bindingAttribute: ItemTaskAttributeBinding = itemView
@@ -111,19 +121,29 @@ class SubTaskAdapter(
     }
   }
 
-  inner class NoteViewHolder(itemView: ItemNoteBinding) : RecyclerView.ViewHolder(itemView.root)
+  inner class NoteViewHolder(itemView: ItemNoteBinding) : RecyclerView.ViewHolder(itemView.root) {
+    private val bindingNote = itemView
+
+    fun bind(model: TaskModel){
+      bindingNote.model = model
+
+      bindingNote.root.noteTextView.setOnClickListener {
+        updateNoteTaskCallback(model)
+      }
+    }
+  }
 }
 
 @BindingAdapter("bind:textColor")
 fun setTextColor(textView: TextView, isSet: Boolean){
-  val colorBLue = ContextCompat.getColor(textView.context, R.color.dark_blue)
+  val colorBlue = ContextCompat.getColor(textView.context, R.color.dark_blue)
   val colorGray = ContextCompat.getColor(textView.context, R.color.dark_gray)
-  if (isSet) textView.setTextColor(colorBLue) else textView.setTextColor(colorGray)
+  if (isSet) textView.setTextColor(colorBlue) else textView.setTextColor(colorGray)
 }
 
 @BindingAdapter("bind:setIconColor")
 fun setIconColor(imageView: ImageView, isSet: Boolean){
-  val colorBLue = ContextCompat.getColor(imageView.context, R.color.dark_blue)
+  val colorBlue = ContextCompat.getColor(imageView.context, R.color.dark_blue)
   val colorGray = ContextCompat.getColor(imageView.context, R.color.dark_gray)
-  if (isSet) imageView.setColorFilter(colorBLue) else imageView.setColorFilter(colorGray)
+  if (isSet) imageView.setColorFilter(colorBlue) else imageView.setColorFilter(colorGray)
 }

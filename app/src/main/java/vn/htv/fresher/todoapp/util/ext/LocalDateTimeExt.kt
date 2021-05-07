@@ -23,3 +23,8 @@ val LocalDateTime.dayString: String
       else if (hours >= 24 && hours <= 48) "Đã tạo hôm qua"
       else "Đã tạo vào ${dayOfMonth} thg ${monthValue}"
   }
+
+val LocalDateTime.isOverTime: Boolean
+get() {
+  return this < LocalDateTime.now()
+}
