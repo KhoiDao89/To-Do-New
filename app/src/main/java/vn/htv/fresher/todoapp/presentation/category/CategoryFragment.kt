@@ -20,7 +20,7 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding>() {
     override val layoutId: Int
         get() = R.layout.fragment_category
 
-    //private lateinit var viewModel: CategoryViewModel
+    // private lateinit var viewModel: CategoryViewModel
 
     private val taskAdapter by lazy {
         TaskAdapter(
@@ -29,7 +29,7 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding>() {
                 viewModel.updateImportant(it)
             },
             finishedCallback = {
-                viewModel.updateComplete(it)
+                viewModel.updateFinished(it)
             }
         )
     }
@@ -71,7 +71,7 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding>() {
 //                taskAdapter.setItem(it)
 //            }
 //        )
-        viewModel.updateImportantCompleted.observe(
+        viewModel.updateCompleted.observe(
             this,
             {
                 viewModel.loadData()
@@ -96,9 +96,7 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding>() {
             }
         )
     }
-    inner class EventMenu() {
-        override fun
-    }
+
     inner class EventAddTask() {
         fun onNewTask() {
             MaterialDialog(safeContext).show {
