@@ -24,6 +24,7 @@ import vn.htv.fresher.todoapp.domain.usecase.subtask.UpdateSubTaskUseCase
 import vn.htv.fresher.todoapp.domain.usecase.task.DeleteTaskUseCase
 import vn.htv.fresher.todoapp.domain.usecase.task.UpdateTaskUseCase
 import vn.htv.fresher.todoapp.util.ext.dayString
+import vn.htv.fresher.todoapp.util.ext.deadlineString
 import vn.htv.fresher.todoapp.util.ext.timeString
 
 enum class TaskAttributeEnum {
@@ -58,13 +59,20 @@ enum class TaskAttributeEnum {
     return when(this) {
       MY_DAY    -> context.getString(R.string.task_attribute_set_my_day)
       REMINDER  -> context.getString(R.string.task_attribute_set_reminder, model.reminder?.timeString)
-      DEADLINE  -> context.getString(R.string.task_attribute_set_deadline)
+      DEADLINE  -> context.getString(R.string.task_attribute_set_deadline, model.deadline?.deadlineString)
       REPEAT    -> context.getString(R.string.task_attribute_set_repeat)
+    }
+  }
+
+  fun getColor(isSet: Boolean, deadline: Boolean? = null): Int {
+    return when(this) {
+      MY_DAY, REMINDER, REPEAT -> if (isSet) R.color.dark_blue else R.color.dark_gray
+      DEADLINE -> if (deadline == true) R.color.dark_red else if (isSet) R.color.dark_blue else R.color.dark_gray
     }
   }
 }
 
-enum class SubItemType(val value: Int){
+enum class SubItemType(val value: Int) {
   SUBTASK_ITEM(0),
   NEXT_STEP(1),
   ATTRIBUTE(2),
@@ -121,10 +129,10 @@ class TaskDetailViewModel(
   fun loadData() {
     val id = taskId ?: return
 
-    val getTaskObserable    = getTaskUseCase(id)
-    val getSubTaskObserable = getSubTaskListUseCase(id)
+    val getTaskObservable    = getTaskUseCase(id)
+    val getSubTaskObservable = getSubTaskListUseCase(id)
 
-    val zipper = BiFunction<TaskModel, List<SubTaskModel>, List<TaskDetailItem>>{ task, subtasks ->
+    val zipper = BiFunction<TaskModel, List<SubTaskModel>, List<TaskDetailItem>> { task, subtasks ->
 
       _task.postValue(task)
 
@@ -143,7 +151,7 @@ class TaskDetailViewModel(
       list
     }
 
-    disposables += Single.zip(getTaskObserable, getSubTaskObserable, zipper)
+    disposables += Single.zip(getTaskObservable, getSubTaskObservable, zipper)
       .subscribeBy (
         onSuccess = {
           _taskDetailItem.postValue(it)
@@ -154,7 +162,7 @@ class TaskDetailViewModel(
       )
   }
 
-  private fun generateTaskAttribute(taskAttribure: TaskModel): List<TaskDetailItem>{
+  private fun generateTaskAttribute(taskAttribure: TaskModel): List<TaskDetailItem> {
     val list = mutableListOf<TaskDetailItem>()
     val items = TaskAttributeEnum.values().map { attribites ->
       TaskDetailItem.TaskAttribute(taskAttribure, attribites)
@@ -163,7 +171,7 @@ class TaskDetailViewModel(
     return list
   }
 
-  fun saveNewSubTask(model: SubTaskModel){
+  fun saveNewSubTask(model: SubTaskModel) {
     disposables += saveSubTaskUseCase(model)
       .subscribeBy(
         onComplete = {
@@ -176,7 +184,7 @@ class TaskDetailViewModel(
       )
   }
 
-  fun finishedTask(){
+  fun finishedTask() {
     val task = _task.value ?: return
 
     val updatedFinishTask = task.copy(
@@ -194,7 +202,7 @@ class TaskDetailViewModel(
       )
   }
 
-  fun importantTask(){
+  fun importantTask() {
     val task = _task.value ?: return
 
     val updatedImportantTask = task.copy(
@@ -212,7 +220,7 @@ class TaskDetailViewModel(
       )
   }
 
-  fun deleteTask(){
+  fun deleteTask() {
     val task = _task.value ?: return
 
     disposables += deleteTaskUseCase(task)
@@ -226,7 +234,7 @@ class TaskDetailViewModel(
       )
   }
 
-  fun myDayTask(model: TaskModel){
+  fun myDayTask(model: TaskModel) {
     val updateMyDayTask = model.copy(
       myDay = !model.myDay
     )
@@ -243,7 +251,7 @@ class TaskDetailViewModel(
       )
   }
 
-  fun reminderTask(model: TaskModel, reminder: LocalDateTime){
+  fun reminderTask(model: TaskModel, reminder: LocalDateTime) {
     val updateReminderTask = model.copy(
       reminder = reminder
     )
@@ -260,7 +268,7 @@ class TaskDetailViewModel(
       )
   }
 
-  fun removeReminderTask(model: TaskModel){
+  fun removeReminderTask(model: TaskModel) {
     val removeReminderTask = model.copy(
       reminder = null
     )
@@ -277,7 +285,7 @@ class TaskDetailViewModel(
       )
   }
 
-  fun deadlineTask(model: TaskModel, deadline: LocalDateTime){
+  fun deadlineTask(model: TaskModel, deadline: LocalDateTime) {
     val updateDeadlineTask = model.copy(
       deadline = deadline
     )
@@ -294,7 +302,7 @@ class TaskDetailViewModel(
       )
   }
 
-  fun removeDeadlineTask(model: TaskModel){
+  fun removeDeadlineTask(model: TaskModel) {
     val removeDeadlineTask = model.copy(
       deadline = null,
       repeat = null
@@ -312,7 +320,7 @@ class TaskDetailViewModel(
       )
   }
 
-  fun repeatTask(model: TaskModel, repeat: Int, deadline: LocalDateTime){
+  fun repeatTask(model: TaskModel, repeat: Int, deadline: LocalDateTime) {
     val updateRepeatTask = model.copy(
       repeat = repeat,
       deadline = deadline
@@ -330,7 +338,7 @@ class TaskDetailViewModel(
       )
   }
 
-  fun removeRepeatTask(model: TaskModel){
+  fun removeRepeatTask(model: TaskModel) {
     val removeRepeatTask = model.copy(
       repeat = null
     )
@@ -347,7 +355,7 @@ class TaskDetailViewModel(
       )
   }
 
-  fun noteTask(note: String){
+  fun noteTask(note: String?) {
     val model = _task.value ?: return
 
     val updateNoteTask = model.copy(
@@ -366,7 +374,7 @@ class TaskDetailViewModel(
       )
   }
 
-  fun finishedSubTask(model: SubTaskModel){
+  fun finishedSubTask(model: SubTaskModel) {
     val updatedFinishedSubTask = model.copy(
       finished = !model.finished
     )
@@ -383,7 +391,7 @@ class TaskDetailViewModel(
       )
   }
 
-  fun deleteSubTask(model: SubTaskModel){
+  fun deleteSubTask(model: SubTaskModel) {
     disposables += deleteSubTaskUseCase(model)
       .subscribeBy (
         onComplete = {

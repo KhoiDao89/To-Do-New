@@ -1,6 +1,5 @@
 package vn.htv.fresher.todoapp.presentation.taskdetail
 
-import android.content.Intent
 import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.datetime.datePicker
@@ -9,11 +8,9 @@ import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.list.listItems
 import kotlinx.android.synthetic.main.fragment_task_detail.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.threeten.bp.LocalDateTime
 import vn.htv.fresher.todoapp.R
 import vn.htv.fresher.todoapp.databinding.FragmentTaskDetailBinding
-import vn.htv.fresher.todoapp.domain.model.CategoryModel
 import vn.htv.fresher.todoapp.domain.model.SubTaskModel
 import vn.htv.fresher.todoapp.domain.model.TaskModel
 import vn.htv.fresher.todoapp.presentation.common.BaseFragment
@@ -65,9 +62,9 @@ class TaskDetailFragment : BaseFragment<FragmentTaskDetailBinding>() {
       updateRepeatTaskCallback    = { task ->
         MaterialDialog(safeContext).show {
           listItems(R.array.repeat) { _, index, text ->
-            Toast.makeText(safeContext, text, Toast.LENGTH_LONG).show()
-            if (task.deadline != null) viewModel.repeatTask(task, 1, task.deadline)
-            else viewModel.repeatTask(task, 1, LocalDateTime.now())
+            Toast.makeText(safeContext, "${index} - ${text}", Toast.LENGTH_LONG).show()
+            if (task.deadline != null) viewModel.repeatTask(task, index, task.deadline)
+            else viewModel.repeatTask(task, index, LocalDateTime.now())
           }
         }
       },
@@ -97,7 +94,7 @@ class TaskDetailFragment : BaseFragment<FragmentTaskDetailBinding>() {
     )
   }
 
-  fun showDateTimePicker(model: TaskModel){
+  fun showDateTimePicker(model: TaskModel) {
     MaterialDialog(safeContext).show {
       title(text = getString(R.string.select_datetime))
       dateTimePicker(requireFutureDateTime = true) { _, dateTime ->

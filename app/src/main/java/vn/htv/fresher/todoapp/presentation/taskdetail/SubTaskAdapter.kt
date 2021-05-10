@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_note.view.*
 import kotlinx.android.synthetic.main.item_subtask.view.*
 import kotlinx.android.synthetic.main.item_task_attribute.view.*
-import vn.htv.fresher.todoapp.R
 import vn.htv.fresher.todoapp.databinding.ItemNextStepBinding
 import vn.htv.fresher.todoapp.databinding.ItemNoteBinding
 import vn.htv.fresher.todoapp.databinding.ItemSubtaskBinding
@@ -44,7 +43,6 @@ class SubTaskAdapter(
       SubItemType.ATTRIBUTE     -> TaskAttributeViewHolder(ItemTaskAttributeBinding.inflate(LayoutInflater.from(parent.context), parent, false))
       SubItemType.NOTE          -> NoteViewHolder(ItemNoteBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
-
   }
 
   override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -60,7 +58,7 @@ class SubTaskAdapter(
     return subTaskItemList.size
   }
 
-  fun setItems(items: List<TaskDetailItem>){
+  fun setItems(items: List<TaskDetailItem>) {
     subTaskItemList.clear()
     subTaskItemList.addAll(items)
     notifyDataSetChanged()
@@ -134,16 +132,18 @@ class SubTaskAdapter(
   }
 }
 
-@BindingAdapter("bind:textColor")
-fun setTextColor(textView: TextView, isSet: Boolean){
-  val colorBlue = ContextCompat.getColor(textView.context, R.color.dark_blue)
-  val colorGray = ContextCompat.getColor(textView.context, R.color.dark_gray)
-  if (isSet) textView.setTextColor(colorBlue) else textView.setTextColor(colorGray)
+@BindingAdapter("bind:textViewColor")
+fun setTextViewColor(textView: TextView, colorId: Int?) {
+  colorId?.let {
+    val color = ContextCompat.getColor(textView.context, it)
+    textView.setTextColor(color)
+  }
 }
 
 @BindingAdapter("bind:setIconColor")
-fun setIconColor(imageView: ImageView, isSet: Boolean){
-  val colorBlue = ContextCompat.getColor(imageView.context, R.color.dark_blue)
-  val colorGray = ContextCompat.getColor(imageView.context, R.color.dark_gray)
-  if (isSet) imageView.setColorFilter(colorBlue) else imageView.setColorFilter(colorGray)
+fun setIconColor(imageView: ImageView, colorId: Int?) {
+  colorId?.let {
+    val color = ContextCompat.getColor(imageView.context, it)
+    imageView.setColorFilter(color)
+  }
 }

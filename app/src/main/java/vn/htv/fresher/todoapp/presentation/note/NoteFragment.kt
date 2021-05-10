@@ -1,12 +1,9 @@
 package vn.htv.fresher.todoapp.presentation.note
 
-import androidx.lifecycle.Observer
-import kotlinx.android.synthetic.main.item_note.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import vn.htv.fresher.todoapp.R
 import vn.htv.fresher.todoapp.databinding.FragmentNoteBinding
 import vn.htv.fresher.todoapp.presentation.common.BaseFragment
-import vn.htv.fresher.todoapp.presentation.taskdetail.NoteActivity
 
 class NoteFragment : BaseFragment<FragmentNoteBinding>() {
 

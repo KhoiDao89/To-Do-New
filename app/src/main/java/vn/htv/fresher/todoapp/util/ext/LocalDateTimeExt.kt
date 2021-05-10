@@ -16,15 +16,26 @@ val LocalDateTime.dayString: String
     val seconds = duration.seconds
     val minutes = duration.toMinutes()
     val hours   = duration.toHours()
+    val day     = duration.toDays()
+
+    val yesterday: Long = 1
 
     return if (seconds <= 59) "Đã tạo ${seconds} giây trước"
       else if (minutes <= 59) "Đã tạo ${minutes} phút trước"
       else if (hours <= 23) "Đã tạo ${hours} giờ trước"
-      else if (hours >= 24 && hours <= 48) "Đã tạo hôm qua"
+      else if (day == yesterday) "Đã tạo hôm qua"
       else "Đã tạo vào ${dayOfMonth} thg ${monthValue}"
   }
 
-val LocalDateTime.isOverTime: Boolean
-get() {
-  return this < LocalDateTime.now()
-}
+val LocalDateTime.deadlineString: String
+  get() {
+    val duration: Duration = Duration.between(this, LocalDateTime.now())
+    val day = duration.toDays()
+
+    val yesterday : Long    = 1
+    val tomorrow  : Long    = -1
+
+    return if (day == yesterday) "Hôm qua"
+      else if (day == tomorrow) "Ngày mai"
+      else "${dayOfMonth} thg ${monthValue}"
+  }

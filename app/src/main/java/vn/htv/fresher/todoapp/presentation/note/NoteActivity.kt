@@ -1,5 +1,6 @@
 package vn.htv.fresher.todoapp.presentation.taskdetail
 
+import android.app.Activity
 import android.content.Intent
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -22,10 +23,6 @@ class NoteActivity : BaseActivity() {
     get() = R.layout.activity_note
 
   private val viewModel by viewModel<NoteViewModel>()
-
-  override fun init() {
-    super.init()
-  }
 
   override fun initUi() {
     super.initUi()
@@ -52,18 +49,17 @@ class NoteActivity : BaseActivity() {
   }
 
   override fun onBackPressed() {
-    super.onBackPressed()
     val note = viewModel.note.value
 
-    intent.putExtra(PARAM_NOTE, note.toString())
-    setResult(PARAM_RESULT_CODE, intent)
-
+    val intentBack = Intent().apply {
+      putExtra(PARAM_NOTE, note.toString())
+    }
+    setResult(Activity.RESULT_OK, intentBack)
+    finish()
   }
 
   companion object {
-
     const val PARAM_REQUEST_CODE  = 100
-    const val PARAM_RESULT_CODE   = 100
     const val PARAM_TASK_NAME     = "TASKNAME"
     const val PARAM_NOTE          = "NOTE"
 

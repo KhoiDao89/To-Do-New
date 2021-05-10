@@ -3,7 +3,6 @@ package vn.htv.fresher.todoapp.presentation.taskdetail
 import android.app.Activity
 import android.content.Intent
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -52,14 +51,14 @@ class TaskDetailActivity : BaseActivity() {
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
-    if (requestCode == NoteActivity.PARAM_REQUEST_CODE && resultCode == NoteActivity.PARAM_RESULT_CODE){
+
+    if (requestCode == NoteActivity.PARAM_REQUEST_CODE && resultCode == Activity.RESULT_OK){
       val note = data?.getStringExtra(NoteActivity.PARAM_NOTE)
-      viewModel.noteTask(note.toString())
+      viewModel.noteTask(note)
     }
   }
 
   companion object {
-
     private const val PARAM_TASK_ID = "TASKID"
 
     fun start(activity: AppCompatActivity, taskId: Int) {

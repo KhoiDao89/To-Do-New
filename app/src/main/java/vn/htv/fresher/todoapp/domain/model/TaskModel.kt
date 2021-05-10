@@ -21,7 +21,9 @@ data class TaskModel(
       TaskAttributeEnum.MY_DAY    -> myDay
       TaskAttributeEnum.REMINDER  -> reminder != null
       TaskAttributeEnum.DEADLINE  -> deadline != null
-      TaskAttributeEnum.REPEAT    -> repeat != null
+      TaskAttributeEnum.REPEAT    -> repeat   != null
     }
   }
+
+  val deadlineState get() = if (deadline == null) false else deadline < LocalDateTime.now()
 }

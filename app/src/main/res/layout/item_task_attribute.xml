@@ -32,7 +32,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginStart="@dimen/large_margin"
-      bind:setIconColor="@{set}"
+      bind:setIconColor="@{attribute.getColor(set,model.deadlineState)}"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
@@ -54,8 +54,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        bind:textViewColor="@{attribute.getColor(set, model.deadlineState)}"
         bind:text="@{attribute.getName(set, model, context)}"
-        bind:textColor="@{set}"
         tools:text="Nhắc tôi" />
 
       <TextView
