@@ -6,8 +6,7 @@
   <string name="new_category_hint">Nhập tiêu đề danh sách</string>
   <string name="next_step">Bước tiếp theo</string>
   <string name="note">Thêm ghi chú</string>
-
-  <string name="new_subtask_hint">Bước tên bước tiếp theo</string>
+  <string name="new_subtask_hint">Nhập tên bước tiếp theo</string>
   <string name="select_datetime">Chọn ngày và giờ</string>
 
   <!-- Task Group -->

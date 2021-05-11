@@ -147,6 +147,7 @@ class TaskDetailViewModel(
 
       val listAttributes = generateTaskAttribute(task)
       list.addAll(listAttributes)
+
       list.add(TaskDetailItem.Note(task))
       list
     }
@@ -164,6 +165,7 @@ class TaskDetailViewModel(
 
   private fun generateTaskAttribute(taskAttribure: TaskModel): List<TaskDetailItem> {
     val list = mutableListOf<TaskDetailItem>()
+
     val items = TaskAttributeEnum.values().map { attribites ->
       TaskDetailItem.TaskAttribute(taskAttribure, attribites)
     }
@@ -194,7 +196,7 @@ class TaskDetailViewModel(
     disposables += updateTaskUseCase(updatedFinishTask)
       .subscribeBy (
         onComplete = {
-          _task.postValue(updatedFinishTask)
+          loadData()
         },
         onError = {
           Timber.e(it.toString())
@@ -212,7 +214,7 @@ class TaskDetailViewModel(
     disposables += updateTaskUseCase(updatedImportantTask)
       .subscribeBy (
         onComplete = {
-          _task.postValue(updatedImportantTask)
+          loadData()
         },
         onError = {
           Timber.e(it.toString())
@@ -304,8 +306,8 @@ class TaskDetailViewModel(
 
   fun removeDeadlineTask(model: TaskModel) {
     val removeDeadlineTask = model.copy(
-      deadline = null,
-      repeat = null
+      deadline  = null,
+      repeat    = null
     )
 
     disposables += updateTaskUseCase(removeDeadlineTask)
@@ -322,8 +324,8 @@ class TaskDetailViewModel(
 
   fun repeatTask(model: TaskModel, repeat: Int, deadline: LocalDateTime) {
     val updateRepeatTask = model.copy(
-      repeat = repeat,
-      deadline = deadline
+      repeat    = repeat,
+      deadline  = deadline
     )
 
     disposables += updateTaskUseCase(updateRepeatTask)

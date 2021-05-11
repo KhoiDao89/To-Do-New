@@ -36,7 +36,6 @@ class TaskDetailActivity : BaseActivity() {
     supportActionBar?.apply {
       setDisplayHomeAsUpEnabled(true)
       setDisplayShowHomeEnabled(true)
-      title = "Khoi Dao"
     }
   }
 
@@ -63,7 +62,11 @@ class TaskDetailActivity : BaseActivity() {
 
     fun start(activity: AppCompatActivity, taskId: Int) {
       val intent = Intent(activity, TaskDetailActivity::class.java)
-      intent.putExtra(PARAM_TASK_ID, taskId)
+
+      intent.apply {
+        putExtra(PARAM_TASK_ID, taskId)
+      }
+
       activity.startActivity(intent)
     }
   }

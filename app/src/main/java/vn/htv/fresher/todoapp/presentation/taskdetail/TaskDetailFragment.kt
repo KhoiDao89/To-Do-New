@@ -26,8 +26,8 @@ class TaskDetailFragment : BaseFragment<FragmentTaskDetailBinding>() {
 
   private val viewModel by sharedViewModel <TaskDetailViewModel>()
 
-  private var taskId: Int?      = null
-  private var taskName: String? = null
+  private var taskId    : Int?    = null
+  private var taskName  : String? = null
 
   private val subTaskAdapter by lazy {
     SubTaskAdapter(
@@ -42,12 +42,7 @@ class TaskDetailFragment : BaseFragment<FragmentTaskDetailBinding>() {
       },
       updateMyDayTaskCallback     = { viewModel.myDayTask(it) },
       updateReminderTaskCallback  = { task ->
-        MaterialDialog(safeContext).show {
-          listItems(R.array.reminder) { _, index, text ->
-            showDateTimePicker(task)
-            dismiss()
-          }
-        }
+        showDateTimePicker(task)
       },
       removeReminderTaskCallback = { viewModel.removeReminderTask(it) },
       updateDeadlineTaskCallback = {
@@ -62,7 +57,6 @@ class TaskDetailFragment : BaseFragment<FragmentTaskDetailBinding>() {
       updateRepeatTaskCallback    = { task ->
         MaterialDialog(safeContext).show {
           listItems(R.array.repeat) { _, index, text ->
-            Toast.makeText(safeContext, "${index} - ${text}", Toast.LENGTH_LONG).show()
             if (task.deadline != null) viewModel.repeatTask(task, index, task.deadline)
             else viewModel.repeatTask(task, index, LocalDateTime.now())
           }
@@ -106,8 +100,10 @@ class TaskDetailFragment : BaseFragment<FragmentTaskDetailBinding>() {
 
   override fun init() {
     super.init()
+
     binding.subTaskViewModel      = viewModel
     binding.deleteEventListeners  = DeleteEventListeners()
+
     viewModel.loadData()
   }
 

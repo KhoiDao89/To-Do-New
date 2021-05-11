@@ -30,10 +30,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
   private val categoryAdapter by lazy {
     CategoryAdapter(
         categoryCallback = {
-          TaskDetailActivity.start(safeActivity, 1)
+
         },
         taskGroupCallback = {
-          // navigate to Category Screen with TaskGroup
+
         }
     )
   }
@@ -66,7 +66,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
     viewModel.addCategoryCompleted.observe(this@MainFragment,
       Observer {
-        TaskDetailActivity.start(safeActivity, 1)
+
       })
   }
 

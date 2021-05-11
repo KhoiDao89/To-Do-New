@@ -46,7 +46,7 @@ class SubTaskAdapter(
   }
 
   override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-    when(val item = subTaskItemList[position]){
+    when (val item = subTaskItemList[position]) {
       is TaskDetailItem.SubTask       -> (holder as? SubTaskViewHolder)?.bind(item.model)
       is TaskDetailItem.NextStep      -> (holder as? NextStepViewHolder)?.bind()
       is TaskDetailItem.TaskAttribute -> (holder as? TaskAttributeViewHolder)?.bind(item.attribute, item.model)
@@ -82,7 +82,7 @@ class SubTaskAdapter(
   inner class NextStepViewHolder(itemView: ItemNextStepBinding) : RecyclerView.ViewHolder(itemView.root) {
     private val bindingNextStep: ItemNextStepBinding = itemView
 
-    fun bind(){
+    fun bind() {
       bindingNextStep.root.setOnClickListener {
         saveNewSubtaskCallback()
       }

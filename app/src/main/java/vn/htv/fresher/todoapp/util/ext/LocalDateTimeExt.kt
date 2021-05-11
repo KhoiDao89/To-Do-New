@@ -32,10 +32,14 @@ val LocalDateTime.deadlineString: String
     val duration: Duration = Duration.between(this, LocalDateTime.now())
     val day = duration.toDays()
 
-    val yesterday : Long    = 1
-    val tomorrow  : Long    = -1
+    val yesterday : Long = 1
+    val today     : Long = 0
+    val tomorrow  : Long = -1
 
-    return if (day == yesterday) "Hôm qua"
-      else if (day == tomorrow) "Ngày mai"
-      else "${dayOfMonth} thg ${monthValue}"
+    return when (day) {
+      yesterday -> "Hôm qua"
+      today     -> "Hôm nay"
+      tomorrow  -> "Ngày mai"
+      else      -> "${dayOfMonth} thg ${monthValue}"
+    }
   }

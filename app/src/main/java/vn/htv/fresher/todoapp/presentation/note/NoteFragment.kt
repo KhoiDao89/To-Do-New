@@ -26,5 +26,4 @@ class NoteFragment : BaseFragment<FragmentNoteBinding>() {
      */
     fun newInstance() = NoteFragment()
   }
-
 }
