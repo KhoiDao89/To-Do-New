@@ -12,9 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.task_item.*
 import kotlinx.android.synthetic.main.task_item.view.*
 import vn.htv.fresher.todoapp.R
-import vn.htv.fresher.todoapp.databinding.ItemCategoryBinding
-import vn.htv.fresher.todoapp.databinding.ItemSepBinding
-import vn.htv.fresher.todoapp.databinding.ItemSeparatorBinding
 import vn.htv.fresher.todoapp.databinding.TaskItemBinding
 import vn.htv.fresher.todoapp.domain.model.TaskModel
 import vn.htv.fresher.todoapp.presentation.main.MainItemModel
