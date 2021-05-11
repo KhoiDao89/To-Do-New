@@ -22,91 +22,93 @@ import vn.htv.fresher.todoapp.util.ext.showInputDialog
 class MainFragment : BaseFragment<FragmentMainBinding>() {
 
   // MainFragment class variables
-  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   override val layoutId: Int
     get() = R.layout.fragment_main
 
   private val viewModel by viewModel<MainViewModel>()
 
-    private val categoryAdapter by lazy {
-        CategoryAdapter(
-            categoryCallback = {
-                CategoryActivity.start(safeActivity, it.toLong())
-            },
-            taskGroupCallback = {
-                // navigate to Category Screen with TaskGroup
-            }
+  private val categoryAdapter by lazy {
+    CategoryAdapter(
+        categoryCallback = {
+          CategoryActivity.start(safeActivity, it.toLong())
+        },
+        taskGroupCallback = {
+          // navigate to Category Screen with TaskGroup
+        }
+    )
+  }
+
+  override fun init() {
+    super.init()
+
+    binding.viewModel = viewModel
+    binding.eventListeners = EventListeners()
+    viewModel.loadData()
+  }
+
+  override fun initUi() {
+    super.initUi()
+    categoryRecyclerView.apply {
+      adapter = categoryAdapter
+      addItemDecoration(DefaultItemDecoration(
+        resources.getDimensionPixelSize(R.dimen.recyclerview_item_horizontal_margin),
+        resources.getDimensionPixelSize(R.dimen.recyclerview_item_vertical_margin)
         )
+      )
     }
+  }
 
-    override fun init() {
-        super.init()
+  override fun registerLiveDataListener() {
+    super.registerLiveDataListener()
+    viewModel.mainItemList.observe(
+      this,
+       Observer {
+         categoryAdapter.setItems(it)
+       }
+    )
 
-        binding.viewModel = viewModel
-        binding.eventListeners = EventListeners()
+    viewModel.addCategoryCompleted.observe(
+      this@MainFragment,
+       Observer {
+         CategoryActivity.start(safeActivity, it)
+       }
+    )
+  }
 
-        viewModel.loadData()
-    }
-
-    override fun initUi() {
-        super.initUi()
-        categoryRecyclerView.apply {
-            adapter = categoryAdapter
-            addItemDecoration(
-                DefaultItemDecoration(
-                    resources.getDimensionPixelSize(R.dimen.recyclerview_item_horizontal_margin),
-                    resources.getDimensionPixelSize(R.dimen.recyclerview_item_vertical_margin)
-                )
+  inner class EventListeners() {
+    fun onNewCategory() {
+      MaterialDialog(safeContext).show {
+        title(R.string.new_category)
+        input(
+          hint = resources.getString(R.string.new_category_hint)
+        ) { _, title ->
+            val model = CategoryModel(
+              name = title.toString(),
+              createdAt = LocalDateTime.now()
             )
-        }
+            viewModel.addNewCategory(model)
+          }
+        positiveButton(R.string.button_create_category)
+        negativeButton(R.string.button_cancel)
+      }
     }
+  }
 
-    override fun registerLiveDataListener() {
-        super.registerLiveDataListener()
+  override fun onResume() {
+    super.onResume()
+    viewModel.loadData()
+  }
 
-        viewModel.mainItemList.observe(
-            this,
-            Observer {
-                categoryAdapter.setItems(it)
-            }
-        )
+  /**
+   * Static definition
+   */
+  companion object {
 
-        viewModel.addCategoryCompleted.observe(
-            this@MainFragment,
-            Observer {
-                CategoryActivity.start(safeActivity, it)
-            }
-        )
-    }
-
-    inner class EventListeners() {
-        fun onNewCategory() {
-            MaterialDialog(safeContext).show {
-                title(R.string.new_category)
-                input(
-                    hint = resources.getString(R.string.new_category_hint)
-                ) { _, title ->
-                    val model = CategoryModel(
-                        name = title.toString(),
-                        createdAt = LocalDateTime.now()
-                    )
-                    viewModel.addNewCategory(model)
-                }
-                positiveButton(R.string.button_create_category)
-                negativeButton(R.string.button_cancel)
-            }
-        }
-    }
-
-    /**
-     * Static definition
-     */
-    companion object {
-
-        /**
-         * Create MainFragment instance pattern
-         */
-        fun newInstance() = MainFragment()
-    }
+  /**
+   * Create MainFragment instance pattern
+   */
+    fun newInstance() = MainFragment()
+  }
 }

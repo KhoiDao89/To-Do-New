@@ -25,9 +25,9 @@ class SubTaskRepositoryImpl(
 
   override fun get(id: Int): Single<SubTaskModel> {
     return subTaskDao.get(id)
-        .map { it.toModel() }
-        .observeOn(schedulerProvider.io())
-        .subscribeOn(schedulerProvider.io())
+      .map { it.toModel() }
+      .observeOn(schedulerProvider.io())
+      .subscribeOn(schedulerProvider.io())
   }
 
   override fun getSubTaskList(taskId: Int?): Single<List<SubTaskModel>> {

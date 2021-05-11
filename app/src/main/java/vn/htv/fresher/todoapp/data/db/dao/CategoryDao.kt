@@ -4,7 +4,6 @@ import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Single
 import vn.htv.fresher.todoapp.data.db.entity.Category
-import vn.htv.fresher.todoapp.data.db.entity.Task
 
 @Dao
 interface CategoryDao {
@@ -23,5 +22,4 @@ interface CategoryDao {
 
   @Update
   fun update(entity: Category): Completable
-
 }

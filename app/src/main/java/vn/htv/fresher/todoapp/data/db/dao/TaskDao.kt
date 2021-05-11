@@ -8,6 +8,7 @@ import java.util.*
 
 @Dao
 interface TaskDao {
+
   @Delete
   fun delete(entity: Task): Completable
 

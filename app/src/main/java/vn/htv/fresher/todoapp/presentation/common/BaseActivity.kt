@@ -14,12 +14,11 @@ abstract class BaseActivity : AppCompatActivity() {
   protected abstract val layoutId: Int
 
   protected abstract val fragment: Fragment
+
   // Open method, these method will be implement on child class
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  open fun init() {
-
-  }
+  open fun init() {}
 
   open fun initUi() {}
 
@@ -49,7 +48,9 @@ abstract class BaseActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(layoutId)
+
     replaceFragment(fragment)
+
     init()
     initUi()
   }
