@@ -9,10 +9,10 @@ import vn.htv.fresher.todoapp.domain.model.CategoryModel
 @Entity(tableName = Category.NAME)
 data class Category(
   @PrimaryKey(autoGenerate = true)
-  @ColumnInfo(name = COLUMN_ID)         val id         : Int? = null,
-  @ColumnInfo(name = COLUMN_NAME)       val name       : String,
-  @ColumnInfo(name = COLUMN_ICON)       val icon       : String? = null,
-  @ColumnInfo(name = COLUMN_CREATED_AT) val createdAt  : LocalDateTime
+  @ColumnInfo(name = COLUMN_ID)          val id         : Int? = null,
+  @ColumnInfo(name = COLUMN_NAME)        val name       : String,
+  @ColumnInfo(name = COLUMN_ICON)        val icon       : String? = null,
+  @ColumnInfo(name = COLUMN_CREATED_AT)  val createdAt  : LocalDateTime
 ) {
   companion object {
     const val NAME               = "category"
@@ -22,10 +22,10 @@ data class Category(
     const val COLUMN_CREATED_AT  = "created_at"
 
     fun fromModel(model: CategoryModel) = Category(
-      name      = model.name,
-      id        = model.id,
-      icon      = model.icon,
-      createdAt = model.createdAt
+      name       = model.name,
+      id         = model.id,
+      icon       = model.icon,
+      createdAt  = model.createdAt
     )
   }
 }
