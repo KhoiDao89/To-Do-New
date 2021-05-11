@@ -47,9 +47,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/large_margin"
         tools:src="@drawable/ic_baseline_star_outline_24" />
-
     </LinearLayout>
-
   </androidx.cardview.widget.CardView>
-
 </layout>
