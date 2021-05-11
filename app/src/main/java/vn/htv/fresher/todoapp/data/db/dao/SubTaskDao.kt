@@ -25,4 +25,5 @@ interface SubTaskDao {
 
   @Update
   fun update(entity: SubTask): Completable
+
 }

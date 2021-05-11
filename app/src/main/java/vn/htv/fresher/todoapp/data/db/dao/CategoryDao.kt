@@ -22,4 +22,5 @@ interface CategoryDao {
 
   @Update
   fun update(entity: Category): Completable
+
 }
