@@ -65,8 +65,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
          categoryAdapter.setItems(it)
        })
 
-    viewModel.addCategoryCompleted.observe(this@MainFragment,
-       Observer {
+    viewModel.addCategoryCompleted.observe(this@MainFragment, Observer {
          // navigate to Category Screen
          CategoryActivity.start(safeActivity, it)
        })
@@ -80,7 +79,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
           hint = resources.getString(R.string.new_category_hint)
         ) { _, title ->
           val model = CategoryModel(
-            name = title.toString(),
+            name      = title.toString(),
             createdAt = LocalDateTime.now()
           )
           viewModel.addNewCategory(model)

@@ -45,6 +45,7 @@
   <string name="reminder">Nhắc tôi</string>
   <string name="repeat">Lặp lại</string>
   <string name="new_name_category">Đổi tên danh sách</string>
+  <string name="delete_category">Xóa danh sách</string>
   <string name="title_delete_category">Bạn có chắc không?</string>
   <string name="button_save">Lưu</string>
   <string name="button_delete_category">Xóa</string>

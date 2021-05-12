@@ -20,20 +20,19 @@
 
     <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/categoryRecyclerView"
-      android:layout_width="0dp"
-      android:layout_height="0dp"
+      android:layout_width="@dimen/layout_width_height"
+      android:layout_height="@dimen/layout_width_height"
       android:orientation="vertical"
       app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
       app:layout_constraintBottom_toTopOf="@+id/newCategoryButton"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.489"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       tools:listitem="@layout/item_category" />
 
     <LinearLayout
       android:id="@+id/newCategoryButton"
-      android:layout_width="0dp"
+      android:layout_width="@dimen/layout_width_height"
       android:layout_height="wrap_content"
       android:gravity="center_vertical"
       android:onClick="@{() -> eventListeners.onNewCategory()}"
