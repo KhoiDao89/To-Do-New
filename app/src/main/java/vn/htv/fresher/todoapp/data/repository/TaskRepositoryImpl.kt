@@ -11,8 +11,8 @@ import vn.htv.fresher.todoapp.util.rx.SchedulerProvider
 import java.util.*
 
 class TaskRepositoryImpl(
-  private val taskDao            : TaskDao,
-  private val schedulerProvider  : SchedulerProvider
+  private val taskDao           : TaskDao,
+  private val schedulerProvider : SchedulerProvider
 ) : TaskRepository {
   override fun deleteTask(model: TaskModel): Completable {
     val entity = Task.fromModel(model)
@@ -37,10 +37,10 @@ class TaskRepositoryImpl(
         .subscribeOn(schedulerProvider.io())
     }
 
-      return taskDao.getAll()
-        .map { list -> list.map { it.toModel() } }
-        .observeOn(schedulerProvider.io())
-        .subscribeOn(schedulerProvider.io())
+    return taskDao.getAll()
+      .map { list -> list.map { it.toModel() } }
+      .observeOn(schedulerProvider.io())
+      .subscribeOn(schedulerProvider.io())
   }
 
   override fun saveTask(model: TaskModel): Completable {
