@@ -1,12 +1,5 @@
 package vn.htv.fresher.todoapp.presentation.main
 
-import android.app.Activity
-import android.content.Intent
-import android.text.InputType
-import android.widget.Toast
-import androidx.lifecycle.Observer
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.input.input
 import kotlinx.android.synthetic.main.fragment_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.threeten.bp.LocalDateTime
@@ -16,6 +9,7 @@ import vn.htv.fresher.todoapp.domain.model.CategoryModel
 import vn.htv.fresher.todoapp.presentation.common.BaseFragment
 import vn.htv.fresher.todoapp.presentation.common.decoration.DefaultItemDecoration
 import vn.htv.fresher.todoapp.presentation.taskdetail.TaskDetailActivity
+import vn.htv.fresher.todoapp.util.ext.showInputDialog
 
 class MainFragment : BaseFragment<FragmentMainBinding>() {
 
@@ -60,32 +54,30 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
   override fun registerLiveDataListener() {
     super.registerLiveDataListener()
 
-    viewModel.mainItemList.observe(this, Observer {
+    viewModel.mainItemList.observe(this, {
       categoryAdapter.setItems(it)
     })
 
-    viewModel.addCategoryCompleted.observe(this@MainFragment,
-      Observer {
+    viewModel.addCategoryCompleted.observe(this@MainFragment, {
 
-      })
+    })
   }
 
   inner class EventListeners {
     fun onNewCategory() {
-      MaterialDialog(safeContext).show {
-        title(R.string.new_category)
-        input(
-          hint = resources.getString(R.string.new_category_hint)
-        ) { _, title ->
+      this@MainFragment.showInputDialog(
+        title                 = R.string.new_category,
+        hint                  = R.string.new_category_hint,
+        positiveName          = R.string.button_create_category,
+        positiveTaskCallback  = {
           val model = CategoryModel(
-            name      = title.toString(),
+            name      = it,
             createdAt = LocalDateTime.now()
           )
+
           viewModel.addNewCategory(model)
         }
-        positiveButton(R.string.button_create_category)
-        negativeButton(R.string.button_cancel)
-      }
+      )
     }
   }
   /**

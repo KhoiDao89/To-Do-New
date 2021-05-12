@@ -23,9 +23,9 @@ import vn.htv.fresher.todoapp.domain.usecase.subtask.SaveSubTaskUseCase
 import vn.htv.fresher.todoapp.domain.usecase.subtask.UpdateSubTaskUseCase
 import vn.htv.fresher.todoapp.domain.usecase.task.DeleteTaskUseCase
 import vn.htv.fresher.todoapp.domain.usecase.task.UpdateTaskUseCase
-import vn.htv.fresher.todoapp.util.ext.dayString
+import vn.htv.fresher.todoapp.util.ext.taskCreatedAtString
 import vn.htv.fresher.todoapp.util.ext.deadlineString
-import vn.htv.fresher.todoapp.util.ext.timeString
+import vn.htv.fresher.todoapp.util.ext.reminderTimeString
 
 enum class TaskAttributeEnum {
   MY_DAY,
@@ -58,7 +58,7 @@ enum class TaskAttributeEnum {
   fun getNameInSetState(model: TaskModel, context: Context): String {
     return when(this) {
       MY_DAY    -> context.getString(R.string.task_attribute_set_my_day)
-      REMINDER  -> context.getString(R.string.task_attribute_set_reminder, model.reminder?.timeString)
+      REMINDER  -> context.getString(R.string.task_attribute_set_reminder, model.reminder?.reminderTimeString)
       DEADLINE  -> context.getString(R.string.task_attribute_set_deadline, model.deadline?.deadlineString)
       REPEAT    -> context.getString(R.string.task_attribute_set_repeat)
     }
@@ -121,7 +121,7 @@ class TaskDetailViewModel(
   }
 
   val taskCreatedAt : LiveData<String> get() = Transformations.map(_task) {
-    it.createdAt.dayString
+    it.createdAt.taskCreatedAtString
   }
 
   var taskId: Int? = null
@@ -173,7 +173,13 @@ class TaskDetailViewModel(
     return list
   }
 
-  fun saveNewSubTask(model: SubTaskModel) {
+  fun saveNewSubTask(taskId: Int, subTaskName: String) {
+    val model = SubTaskModel(
+      taskId    = taskId,
+      name      = subTaskName,
+      createdAt = LocalDateTime.now()
+    )
+
     disposables += saveSubTaskUseCase(model)
       .subscribeBy(
         onComplete = {
@@ -376,7 +382,7 @@ class TaskDetailViewModel(
       )
   }
 
-  fun finishedSubTask(model: SubTaskModel) {
+  fun updateFinishStateSubTask(model: SubTaskModel) {
     val updatedFinishedSubTask = model.copy(
       finished = !model.finished
     )

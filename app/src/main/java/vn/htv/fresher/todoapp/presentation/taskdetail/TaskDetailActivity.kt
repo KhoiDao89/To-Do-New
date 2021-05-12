@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import vn.htv.fresher.todoapp.R
 import vn.htv.fresher.todoapp.presentation.common.BaseActivity
+import vn.htv.fresher.todoapp.presentation.note.NoteActivity
 
 class TaskDetailActivity : BaseActivity() {
 
@@ -24,7 +25,8 @@ class TaskDetailActivity : BaseActivity() {
 
   override fun init() {
     super.init()
-    val taskId = intent.getIntExtra(PARAM_TASK_ID, 0)
+
+    val taskId = intent.getIntExtra(PARAM_EXTRA_TASK_ID, 0)
 
     if (taskId == 0) onBackPressed()
     viewModel.taskId = taskId
@@ -33,38 +35,26 @@ class TaskDetailActivity : BaseActivity() {
   override fun initUi() {
     super.initUi()
 
-    supportActionBar?.apply {
-      setDisplayHomeAsUpEnabled(true)
-      setDisplayShowHomeEnabled(true)
-    }
-  }
-
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    if(item.itemId == android.R.id.home ) {
-      onBackPressed()
-      return true
-    }
-
-    return super.onOptionsItemSelected(item)
+    showBackButton()
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
 
-    if (requestCode == NoteActivity.PARAM_REQUEST_CODE && resultCode == Activity.RESULT_OK){
-      val note = data?.getStringExtra(NoteActivity.PARAM_NOTE)
+    if (requestCode == NoteActivity.PARAM_REQUEST_CODE_TASK_DETAIL_ACTIVITY && resultCode == Activity.RESULT_OK){
+      val note = data?.getStringExtra(NoteActivity.PARAM_EXTRA_NOTE)
       viewModel.noteTask(note)
     }
   }
 
   companion object {
-    private const val PARAM_TASK_ID = "TASKID"
+    private const val PARAM_EXTRA_TASK_ID = "TASKID"
 
     fun start(activity: AppCompatActivity, taskId: Int) {
       val intent = Intent(activity, TaskDetailActivity::class.java)
 
       intent.apply {
-        putExtra(PARAM_TASK_ID, taskId)
+        putExtra(PARAM_EXTRA_TASK_ID, taskId)
       }
 
       activity.startActivity(intent)

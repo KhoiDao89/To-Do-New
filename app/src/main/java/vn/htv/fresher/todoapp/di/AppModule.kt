@@ -57,6 +57,6 @@ val appModule = module {
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   viewModel { MainViewModel(get(), get(), get(), get()) }
-  viewModel { TaskDetailViewModel(get(), get(), get(), get(), get(), get(), get()) }
   viewModel { NoteViewModel()}
+  viewModel { TaskDetailViewModel(get(), get(), get(), get(), get(), get(), get()) }
 }

@@ -1,21 +1,15 @@
 package vn.htv.fresher.todoapp.presentation.taskdetail
 
-import android.widget.Toast
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.datetime.datePicker
-import com.afollestad.materialdialogs.datetime.dateTimePicker
-import com.afollestad.materialdialogs.input.input
-import com.afollestad.materialdialogs.list.listItems
 import kotlinx.android.synthetic.main.fragment_task_detail.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.threeten.bp.LocalDateTime
 import vn.htv.fresher.todoapp.R
 import vn.htv.fresher.todoapp.databinding.FragmentTaskDetailBinding
 import vn.htv.fresher.todoapp.domain.model.SubTaskModel
-import vn.htv.fresher.todoapp.domain.model.TaskModel
 import vn.htv.fresher.todoapp.presentation.common.BaseFragment
 import vn.htv.fresher.todoapp.presentation.common.decoration.DefaultItemDecoration
-import vn.htv.fresher.todoapp.util.ext.toLocalDateTime
+import vn.htv.fresher.todoapp.presentation.note.NoteActivity
+import vn.htv.fresher.todoapp.util.ext.*
 
 class TaskDetailFragment : BaseFragment<FragmentTaskDetailBinding>() {
 
@@ -26,76 +20,63 @@ class TaskDetailFragment : BaseFragment<FragmentTaskDetailBinding>() {
 
   private val viewModel by sharedViewModel <TaskDetailViewModel>()
 
-  private var taskId    : Int?    = null
-  private var taskName  : String? = null
-
   private val subTaskAdapter by lazy {
     SubTaskAdapter(
-      finishedSubTaskCallback = { viewModel.finishedSubTask(it) },
-      deleteSubTaskCallback   = { task ->
-        MaterialDialog(safeContext).show {
-          title(R.string.delete_task_title)
-          message(text = safeContext.getString(R.string.delete_task_message, task.name))
-          positiveButton(R.string.delete_task_ok){ viewModel.deleteSubTask(task) }
-          negativeButton(R.string.delete_task_cancel){}
-        }
+      deleteSubTaskCallback = {
+        this.showConfirmDialog(
+          title            = R.string.delete_task_title,
+          message          = getString(R.string.delete_task_message, it.name),
+          positiveName     = R.string.delete,
+          positiveCallback = { viewModel.deleteSubTask(it) }
+        )
+      },
+      finishedSubTaskCallback     = { viewModel.updateFinishStateSubTask(it) },
+      removeDeadlineTaskCallback  = { viewModel.removeDeadlineTask(it) },
+      removeReminderTaskCallback  = { viewModel.removeReminderTask(it) },
+      removeRepeatTaskCallback    = { viewModel.removeRepeatTask(it) },
+      saveNewSubtaskCallback      = {
+        this.showInputDialog(
+          title                 = R.string.next_step,
+          hint                  = R.string.new_subtask_hint,
+          positiveName          = R.string.next_step,
+          positiveTaskCallback  = { subTaskName ->
+            val taskId = viewModel.task.value?.id ?: return@showInputDialog
+
+            viewModel.saveNewSubTask(taskId, subTaskName)
+          }
+        )
+      },
+      updateDeadlineTaskCallback = { task ->
+        this.showDateDialog (
+          dateCallback = {
+            val deadlineTask = it.toLocalDateTime()
+
+            viewModel.deadlineTask(task, deadlineTask)
+          }
+        )
       },
       updateMyDayTaskCallback     = { viewModel.myDayTask(it) },
+      updateNoteTaskCallback      = { NoteActivity.start(safeActivity, it.name, it.note) },
       updateReminderTaskCallback  = { task ->
-        showDateTimePicker(task)
-      },
-      removeReminderTaskCallback = { viewModel.removeReminderTask(it) },
-      updateDeadlineTaskCallback = {
-        MaterialDialog(safeContext).show {
-          datePicker { _, date ->
-            val localDateTime = date.toLocalDateTime()
-            viewModel.deadlineTask(it, localDateTime)
+        this.showDateTimeDialog(
+          title             = R.string.select_datetime,
+          dateTimeCallback  = {
+            val reminderTask = it.toLocalDateTime()
+
+            viewModel.reminderTask(task, reminderTask)
           }
-        }
+        )
       },
-      removeDeadlineTaskCallback  = { viewModel.removeDeadlineTask(it) },
-      updateRepeatTaskCallback    = { task ->
-        MaterialDialog(safeContext).show {
-          listItems(R.array.repeat) { _, index, text ->
-            if (task.deadline != null) viewModel.repeatTask(task, index, task.deadline)
-            else viewModel.repeatTask(task, index, LocalDateTime.now())
+      updateRepeatTaskCallback = { task ->
+        this.showListDialog(
+          listItems         = R.array.repeat,
+          positionCallback  = {
+            if (task.deadline != null) viewModel.repeatTask(task, it, task.deadline)
+            else viewModel.repeatTask(task, it, LocalDateTime.now())
           }
-        }
-      },
-      removeRepeatTaskCallback  = { viewModel.removeRepeatTask(it) },
-      saveNewSubtaskCallback    = {
-        MaterialDialog(safeContext).show {
-          title(R.string.next_step)
-          input(
-            hint = resources.getString(R.string.new_subtask_hint)
-          ) { _, title ->
-            val model = taskId?.let {
-              SubTaskModel(
-                taskId    = it,
-                name      = title.toString(),
-                createdAt = LocalDateTime.now()
-              )
-            }
-            model?.let { viewModel.saveNewSubTask(it) }
-          }
-          positiveButton(R.string.next_step)
-          negativeButton(R.string.button_cancel)
-        }
-      },
-      updateNoteTaskCallback = {
-        NoteActivity.start(safeActivity, it.name, it.note)
+        )
       }
     )
-  }
-
-  fun showDateTimePicker(model: TaskModel) {
-    MaterialDialog(safeContext).show {
-      title(text = getString(R.string.select_datetime))
-      dateTimePicker(requireFutureDateTime = true) { _, dateTime ->
-        val localDateTime = dateTime.toLocalDateTime()
-        viewModel.reminderTask(model, localDateTime)
-      }
-    }
   }
 
   override fun init() {
@@ -110,7 +91,7 @@ class TaskDetailFragment : BaseFragment<FragmentTaskDetailBinding>() {
   override fun initUi() {
     super.initUi()
 
-    subtaskRecyclerView.apply {
+    subTaskRecyclerView.apply {
       adapter = subTaskAdapter
       addItemDecoration(DefaultItemDecoration(
         resources.getDimensionPixelSize(R.dimen.recyclerview_item_horizontal_margin),
@@ -126,22 +107,21 @@ class TaskDetailFragment : BaseFragment<FragmentTaskDetailBinding>() {
     })
 
     viewModel.task.observe(this, {
-      taskId    = it.id
-      taskName  = it.name
+
     })
   }
 
   inner class DeleteEventListeners {
     fun deleteTask() {
-      MaterialDialog(safeContext).show {
-        title(R.string.delete_task_title)
-        message(text = safeContext.getString(R.string.delete_task_message, taskName))
-        positiveButton(R.string.delete_task_ok){
+      this@TaskDetailFragment.showConfirmDialog(
+        title               = R.string.delete_task_title,
+        message             = getString(R.string.delete_task_message, viewModel.task.value?.name),
+        positiveName        = R.string.delete,
+        positiveCallback    = {
           viewModel.deleteTask()
           safeActivity.onBackPressed()
         }
-        negativeButton(R.string.delete_task_cancel){}
-      }
+      )
     }
   }
 

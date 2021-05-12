@@ -18,17 +18,17 @@ import vn.htv.fresher.todoapp.domain.model.SubTaskModel
 import vn.htv.fresher.todoapp.domain.model.TaskModel
 
 class SubTaskAdapter(
-  private val finishedSubTaskCallback     : ((model: SubTaskModel)  -> Unit),
   private val deleteSubTaskCallback       : ((model: SubTaskModel)  -> Unit),
-  private val updateMyDayTaskCallback     : ((model: TaskModel)     -> Unit),
-  private val updateReminderTaskCallback  : ((model: TaskModel)     -> Unit),
-  private val removeReminderTaskCallback  : ((model: TaskModel)     -> Unit),
-  private val updateDeadlineTaskCallback  : ((model: TaskModel)     -> Unit),
+  private val finishedSubTaskCallback     : ((model: SubTaskModel)  -> Unit),
   private val removeDeadlineTaskCallback  : ((model: TaskModel)     -> Unit),
-  private val updateRepeatTaskCallback    : ((model: TaskModel)     -> Unit),
+  private val removeReminderTaskCallback  : ((model: TaskModel)     -> Unit),
   private val removeRepeatTaskCallback    : ((model: TaskModel)     -> Unit),
   private val saveNewSubtaskCallback      : (()                     -> Unit),
-  private val updateNoteTaskCallback      : ((model: TaskModel)     -> Unit)
+  private val updateDeadlineTaskCallback  : ((model: TaskModel)     -> Unit),
+  private val updateMyDayTaskCallback     : ((model: TaskModel)     -> Unit),
+  private val updateNoteTaskCallback      : ((model: TaskModel)     -> Unit),
+  private val updateReminderTaskCallback  : ((model: TaskModel)     -> Unit),
+  private val updateRepeatTaskCallback    : ((model: TaskModel)     -> Unit)
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
   private val subTaskItemList = mutableListOf<TaskDetailItem>()
 
@@ -133,15 +133,15 @@ class SubTaskAdapter(
 }
 
 @BindingAdapter("bind:textViewColor")
-fun setTextViewColor(textView: TextView, colorId: Int?) {
+fun textViewColor(textView: TextView, colorId: Int?) {
   colorId?.let {
     val color = ContextCompat.getColor(textView.context, it)
     textView.setTextColor(color)
   }
 }
 
-@BindingAdapter("bind:setIconColor")
-fun setIconColor(imageView: ImageView, colorId: Int?) {
+@BindingAdapter("bind:tintColor")
+fun tintColor(imageView: ImageView, colorId: Int?) {
   colorId?.let {
     val color = ContextCompat.getColor(imageView.context, it)
     imageView.setColorFilter(color)

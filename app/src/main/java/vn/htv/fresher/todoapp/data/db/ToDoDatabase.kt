@@ -3,7 +3,7 @@ package vn.htv.fresher.todoapp.data.db
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import vn.htv.fresher.todoapp.data.db.converter.TypeConverter
+import vn.htv.fresher.todoapp.data.db.converter.DateTimeConverter
 import vn.htv.fresher.todoapp.data.db.dao.CategoryDao
 import vn.htv.fresher.todoapp.data.db.dao.SubTaskDao
 import vn.htv.fresher.todoapp.data.db.dao.TaskDao
@@ -20,7 +20,7 @@ import vn.htv.fresher.todoapp.data.db.entity.Task
   version = 1
 )
 
-@TypeConverters(TypeConverter::class)
+@TypeConverters(DateTimeConverter::class)
 abstract class ToDoDatabase: RoomDatabase() {
 
   abstract fun categoryDao(): CategoryDao

@@ -1,13 +1,16 @@
 <resources>
   <string name="app_name">To Do</string>
   <string name="new_category">Danh sách mới</string>
-  <string name="button_cancel">Hủy bỏ</string>
   <string name="button_create_category">Tạo danh sách</string>
   <string name="new_category_hint">Nhập tiêu đề danh sách</string>
   <string name="next_step">Bước tiếp theo</string>
   <string name="note">Thêm ghi chú</string>
   <string name="new_subtask_hint">Nhập tên bước tiếp theo</string>
   <string name="select_datetime">Chọn ngày và giờ</string>
+
+  <!-- Common -->
+  <string name="cancel"><font color="#FF000000">Hủy bỏ</font></string>
+  <string name="delete"><font color="#FFEC0F1E">Xóa</font></string>
 
   <!-- Task Group -->
   <string name="task_group_my_day">Ngày của tôi</string>
@@ -32,8 +35,5 @@
   <!-- Delete Task -->
   <string name="delete_task_title">Bạn có chắc không?</string>
   <string name="delete_task_message">%s sẽ bị xóa vĩnh viễn</string>
-  <string name="delete_task_ok"><font color="#FFEC0F1E">Xóa</font></string>
-  <string name="delete_task_cancel"><font color="#FF000000">Hủy bỏ</font></string>
 
-  <!--  -->
 </resources>

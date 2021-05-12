@@ -4,12 +4,12 @@ import org.threeten.bp.Duration
 import org.threeten.bp.LocalDateTime
 
 
-val LocalDateTime.timeString: String
+val LocalDateTime.reminderTimeString: String
   get() {
-    return "${hour}:${minute}"
+    return "$hour:$minute"
   }
 
-val LocalDateTime.dayString: String
+val LocalDateTime.taskCreatedAtString: String
   get() {
     val duration: Duration = Duration.between(this, LocalDateTime.now())
 
@@ -20,11 +20,11 @@ val LocalDateTime.dayString: String
 
     val yesterday: Long = 1
 
-    return if (seconds <= 59) "Đã tạo ${seconds} giây trước"
-      else if (minutes <= 59) "Đã tạo ${minutes} phút trước"
-      else if (hours <= 23) "Đã tạo ${hours} giờ trước"
+    return if (seconds <= 59) "Đã tạo $seconds giây trước"
+      else if (minutes <= 59) "Đã tạo $minutes phút trước"
+      else if (hours <= 23) "Đã tạo $hours giờ trước"
       else if (day == yesterday) "Đã tạo hôm qua"
-      else "Đã tạo vào ${dayOfMonth} thg ${monthValue}"
+      else "Đã tạo vào $dayOfMonth tháng $monthValue"
   }
 
 val LocalDateTime.deadlineString: String
@@ -40,6 +40,6 @@ val LocalDateTime.deadlineString: String
       yesterday -> "Hôm qua"
       today     -> "Hôm nay"
       tomorrow  -> "Ngày mai"
-      else      -> "${dayOfMonth} thg ${monthValue}"
+      else      -> "$dayOfMonth tháng $monthValue"
     }
   }
