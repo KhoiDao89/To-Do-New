@@ -36,7 +36,6 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding>() {
 
     override fun init() {
         super.init()
-        //       viewModel.insertTask()
 //    viewModel.insertTask()
 //    viewModel.insertTask()
 //        viewModel.insertCategory()
