@@ -82,8 +82,8 @@ class MainViewModel(
   private val _addCategoryCompleted = MutableLiveData<Long>()
 
   fun loadData() {
-    val getTaskObservable      = getTaskListUseCase()
-    val getCategoryObservable  = getCategoryListUseCase()
+    val getTaskObservable     = getTaskListUseCase()
+    val getCategoryObservable = getCategoryListUseCase()
     val zipper = BiFunction<List<TaskModel>, List<CategoryModel>, List<MainItem>> { tasks, categories ->
       val list = mutableListOf<MainItem>()
       val taskGroupList = generateTaskGroup(tasks)

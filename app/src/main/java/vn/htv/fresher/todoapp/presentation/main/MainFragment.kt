@@ -22,7 +22,7 @@ import vn.htv.fresher.todoapp.util.ext.showInputDialog
 class MainFragment : BaseFragment<FragmentMainBinding>() {
 
   // MainFragment class variables
-  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   override val layoutId: Int
     get() = R.layout.fragment_main
@@ -32,6 +32,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
   private val categoryAdapter by lazy {
     CategoryAdapter(
         categoryCallback = {
+          // navigate to Category Screen with Category Id
           CategoryActivity.start(safeActivity, it.toLong())
         },
         taskGroupCallback = {
@@ -43,8 +44,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
   override fun init() {
     super.init()
 
-    binding.viewModel = viewModel
-    binding.eventListeners = EventListeners()
+    binding.viewModel       = viewModel
+    binding.eventListeners  = EventListeners()
     viewModel.loadData()
   }
 
@@ -54,27 +55,21 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
       adapter = categoryAdapter
       addItemDecoration(DefaultItemDecoration(
         resources.getDimensionPixelSize(R.dimen.recyclerview_item_horizontal_margin),
-        resources.getDimensionPixelSize(R.dimen.recyclerview_item_vertical_margin)
-        )
-      )
+        resources.getDimensionPixelSize(R.dimen.recyclerview_item_vertical_margin) ))
     }
   }
 
   override fun registerLiveDataListener() {
     super.registerLiveDataListener()
-    viewModel.mainItemList.observe(
-      this,
-       Observer {
+    viewModel.mainItemList.observe(this, Observer {
          categoryAdapter.setItems(it)
-       }
-    )
+       })
 
-    viewModel.addCategoryCompleted.observe(
-      this@MainFragment,
+    viewModel.addCategoryCompleted.observe(this@MainFragment,
        Observer {
+         // navigate to Category Screen
          CategoryActivity.start(safeActivity, it)
-       }
-    )
+       })
   }
 
   inner class EventListeners() {
@@ -84,12 +79,12 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         input(
           hint = resources.getString(R.string.new_category_hint)
         ) { _, title ->
-            val model = CategoryModel(
-              name = title.toString(),
-              createdAt = LocalDateTime.now()
-            )
-            viewModel.addNewCategory(model)
-          }
+          val model = CategoryModel(
+            name = title.toString(),
+            createdAt = LocalDateTime.now()
+          )
+          viewModel.addNewCategory(model)
+        }
         positiveButton(R.string.button_create_category)
         negativeButton(R.string.button_cancel)
       }
