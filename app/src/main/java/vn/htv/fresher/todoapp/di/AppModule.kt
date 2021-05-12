@@ -1,5 +1,7 @@
 package vn.htv.fresher.todoapp.di
 
+import android.content.Context
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import vn.htv.fresher.todoapp.data.repository.CategoryRepositoryImpl
@@ -12,6 +14,7 @@ import vn.htv.fresher.todoapp.domain.usecase.category.*
 
 import vn.htv.fresher.todoapp.domain.usecase.category.DeleteCategoryUseCase
 import vn.htv.fresher.todoapp.domain.usecase.category.GetCategoryListUseCase
+import vn.htv.fresher.todoapp.domain.usecase.category.GetCategoryUseCase
 import vn.htv.fresher.todoapp.domain.usecase.category.SaveCategoryUseCase
 import vn.htv.fresher.todoapp.domain.usecase.category.UpdateCategoryUseCase
 import vn.htv.fresher.todoapp.domain.usecase.subtask.*
@@ -53,15 +56,11 @@ val appModule = module {
   factory { GetSubTaskListUseCase(get()) }
   factory { SaveSubTaskUseCase(get()) }
   factory { UpdateSubTaskUseCase(get()) }
-
-
-
-
   // ViewModel
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  viewModel { CategoryViewModel(get(), get(), get(), get(), get(), get()) }
   viewModel { MainViewModel(get(), get(), get(), get()) }
   viewModel { NoteViewModel() }
   viewModel { TaskDetailViewModel(get(), get(), get(), get(), get(), get(), get()) }
-  viewModel { MainViewModel(get(), get(), get(), get()) }
-  viewModel { CategoryViewModel(get(), get(), get()) }
 }
