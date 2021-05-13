@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:bind="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
+
+  <data>
+
+    <variable
+      name="subTaskViewModel"
+      type="vn.htv.fresher.todoapp.presentation.taskdetail.TaskDetailViewModel" />
+
+    <variable
+      name="deleteEventListeners"
+      type="vn.htv.fresher.todoapp.presentation.taskdetail.TaskDetailFragment.DeleteEventListeners" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/showTaskGroup"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:padding="@dimen/medium_margin"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent">
+
+      <ImageView
+        android:id="@+id/finisedImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> subTaskViewModel.finishedTask()}"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        bind:imageResource="@{subTaskViewModel.taskFinishIcon}"
+        tools:src="@drawable/ic_finished" />
+
+      <TextView
+        android:id="@+id/taskNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_margin"
+        android:text="@{subTaskViewModel.task.name}"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/finisedImageView"
+        app:layout_constraintStart_toEndOf="@id/finisedImageView"
+        app:layout_constraintTop_toTopOf="@id/finisedImageView"
+        tools:text="Task Name" />
+
+      <ImageView
+        android:id="@+id/importantImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/medium_margin"
+        bind:imageResource="@{subTaskViewModel.taskImportantIcon}"
+        android:onClick="@{() -> subTaskViewModel.importantTask()}"
+        app:layout_constraintBottom_toBottomOf="@id/taskNameTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/taskNameTextView"
+        tools:src="@drawable/ic_important_gray"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/subTaskRecyclerView"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+      app:layout_constraintBottom_toTopOf="@id/bottomBar"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/showTaskGroup"
+      tools:listitem="@layout/item_subtask" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/bottomBar"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:padding="@dimen/medium_margin"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent">
+
+      <TextView
+        android:id="@+id/createdAtTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@{subTaskViewModel.taskCreatedAt}"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Created At" />
+
+      <ImageView
+        android:id="@+id/trashImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_trash"
+        android:onClick="@{() -> deleteEventListeners.deleteTask()}"
+        app:layout_constraintBottom_toBottomOf="@id/createdAtTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/createdAtTextView" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

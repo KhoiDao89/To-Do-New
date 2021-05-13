@@ -1,9 +1,11 @@
 package vn.htv.fresher.todoapp.presentation.common
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import vn.htv.fresher.todoapp.presentation.taskdetail.TaskDetailActivity
 import vn.htv.fresher.todoapp.util.ext.replaceFragment
 
 abstract class BaseActivity : AppCompatActivity() {
@@ -19,6 +21,26 @@ abstract class BaseActivity : AppCompatActivity() {
   open fun init() {}
 
   open fun initUi() {}
+
+  open fun showBackButton() {
+    supportActionBar?.apply {
+      setDisplayHomeAsUpEnabled(true)
+      setDisplayShowHomeEnabled(true)
+    }
+  }
+
+  open fun setToolbarTitle(title: String) {
+    supportActionBar?.apply { this.title = title }
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    if(item.itemId == android.R.id.home ) {
+      onBackPressed()
+      return true
+    }
+
+    return super.onOptionsItemSelected(item)
+  }
 
   // Activity overridden methods
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

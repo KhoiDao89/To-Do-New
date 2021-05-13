@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:bind="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
+
+  <data>
+
+    <variable
+      name="set"
+      type="Boolean" />
+
+    <variable
+      name="attribute"
+      type="vn.htv.fresher.todoapp.presentation.taskdetail.TaskAttributeEnum" />
+
+    <variable
+      name="model"
+      type="vn.htv.fresher.todoapp.domain.model.TaskModel" />
+
+    <variable
+      name="context"
+      type="android.content.Context" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/task_attribute_height">
+
+    <ImageView
+      android:id="@+id/taskAttributeImageView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/large_margin"
+      bind:tintColor="@{attribute.getColor(set,model.deadlineState)}"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      bind:imageResource="@{attribute.attributeIcon}"
+      tools:src="@drawable/ic_reminder" />
+
+    <LinearLayout
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/large_margin"
+      android:orientation="vertical"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toStartOf="@+id/removeTaskAttributeImageView"
+      app:layout_constraintStart_toEndOf="@id/taskAttributeImageView"
+      app:layout_constraintTop_toTopOf="parent">
+
+      <TextView
+        android:id="@+id/taskAttributeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        bind:textViewColor="@{attribute.getColor(set, model.deadlineState)}"
+        bind:text="@{attribute.getName(set, model, context)}"
+        tools:text="Nhắc tôi" />
+
+      <TextView
+        android:id="@+id/setAttribute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:visibility="gone"
+        tools:text="Nhắc tôi" />
+    </LinearLayout>
+
+    <ImageView
+      android:id="@+id/removeTaskAttributeImageView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="@dimen/large_margin"
+      android:src="@drawable/ic_clear"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      bind:goneUnless="@{set}" />
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

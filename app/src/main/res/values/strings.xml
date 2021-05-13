@@ -1,11 +1,39 @@
 <resources>
   <string name="app_name">To Do</string>
   <string name="new_category">Danh sách mới</string>
+  <string name="button_create_category">Tạo danh sách</string>
+  <string name="new_category_hint">Nhập tiêu đề danh sách</string>
+  <string name="next_step">Bước tiếp theo</string>
+  <string name="note">Thêm ghi chú</string>
+  <string name="new_subtask_hint">Nhập tên bước tiếp theo</string>
+  <string name="select_datetime">Chọn ngày và giờ</string>
+
+  <!-- Common -->
+  <string name="cancel"><font color="#FF000000">Hủy bỏ</font></string>
+  <string name="delete"><font color="#FFEC0F1E">Xóa</font></string>
+
+  <!-- Task Group -->
   <string name="task_group_my_day">Ngày của tôi</string>
   <string name="task_group_important">Quan trọng</string>
   <string name="task_group_deadline">Đã lập kế hoạch</string>
   <string name="task_group_action">Tác vụ</string>
-  <string name="button_cancel">Hủy bỏ</string>
-  <string name="button_create_category">Tạo danh sách</string>
-  <string name="new_category_hint">Nhập tiêu đề danh sách</string>
+
+  <!-- Task Attribute  -->
+  <string name="task_attribute_my_day">Thêm vào Ngày của tôi</string>
+  <string name="task_attribute_reminder">Nhắc tôi</string>
+  <string name="task_attribute_deadline">Thêm ngày đến hạn</string>
+  <string name="task_attribute_repeat">Lặp lại</string>
+  <string name="task_attribute_note">Thêm ghi chú</string>
+
+  <!-- Task Attribute Set -->
+  <string name="task_attribute_set_my_day">Đã thêm vào Ngày của tôi</string>
+  <string name="task_attribute_set_reminder">Nhắc tôi lúc %s</string>
+  <string name="task_attribute_set_deadline">Đến hạn %s</string>
+  <string name="task_attribute_set_repeat">Lặp lại</string>
+  <string name="task_attribute_set_note">Thêm ghi chú</string>
+
+  <!-- Delete Task -->
+  <string name="delete_task_title">Bạn có chắc không?</string>
+  <string name="delete_task_message">%s sẽ bị xóa vĩnh viễn</string>
+
 </resources>

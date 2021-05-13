@@ -18,7 +18,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
-      android:id="@+id/categoryImage"
+      android:id="@+id/categoryImageView"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       app:layout_constraintStart_toStartOf="parent"
@@ -37,10 +37,10 @@
       android:textAppearance="@android:style/TextAppearance.Small"
       android:textColor="@color/black"
       android:textStyle="bold"
-      app:layout_constraintBottom_toBottomOf="@id/categoryImage"
+      app:layout_constraintBottom_toBottomOf="@id/categoryImageView"
       app:layout_constraintEnd_toStartOf="@id/numberOfTasksTextView"
-      app:layout_constraintStart_toEndOf="@+id/categoryImage"
-      app:layout_constraintTop_toTopOf="@id/categoryImage"
+      app:layout_constraintStart_toEndOf="@+id/categoryImageView"
+      app:layout_constraintTop_toTopOf="@id/categoryImageView"
       tools:text="My Day" />
 
     <TextView

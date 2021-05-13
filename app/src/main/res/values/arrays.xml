@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string-array name="repeat">
+    <item>Mỗi 1 ngày</item>
+    <item>Mỗi 1 tuần</item>
+    <item>Mỗi 1 tháng</item>
+    <item>Mỗi 1 năm</item>
+  </string-array>
+</resources>
