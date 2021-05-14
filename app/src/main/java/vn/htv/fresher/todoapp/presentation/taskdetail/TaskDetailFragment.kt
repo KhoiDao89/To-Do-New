@@ -24,7 +24,7 @@ class TaskDetailFragment : BaseFragment<FragmentTaskDetailBinding>() {
     SubTaskAdapter(
       deleteSubTaskCallback = {
         this.showConfirmDialog(
-          title            = R.string.delete_task_title,
+          title            = R.string.delete_title,
           message          = getString(R.string.delete_task_message, it.name),
           positiveName     = R.string.delete,
           positiveCallback = { viewModel.deleteSubTask(it) }
@@ -114,7 +114,7 @@ class TaskDetailFragment : BaseFragment<FragmentTaskDetailBinding>() {
   inner class DeleteEventListeners {
     fun deleteTask() {
       this@TaskDetailFragment.showConfirmDialog(
-        title               = R.string.delete_task_title,
+        title               = R.string.delete_title,
         message             = getString(R.string.delete_task_message, viewModel.task.value?.name),
         positiveName        = R.string.delete,
         positiveCallback    = {

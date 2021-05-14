@@ -12,37 +12,38 @@
   <androidx.cardview.widget.CardView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="8dp"
-    android:layout_marginTop="3dp"
-    android:layout_marginRight="8dp"
-    android:layout_marginBottom="3dp"
+    android:layout_marginEnd="@dimen/layout_margin_start_end"
+    android:layout_marginTop="@dimen/layout_margin_top_bottom"
+    android:layout_marginStart="@dimen/layout_margin_start_end"
+    android:layout_marginBottom="@dimen/layout_margin_top_bottom"
     app:cardBackgroundColor="@color/white">
 
     <LinearLayout
       android:layout_width="match_parent"
-      android:layout_height="65dp"
+      android:layout_height="@dimen/layout_height"
       android:background="@color/white"
       android:gravity="center_vertical"
       android:orientation="horizontal">
 
-      <RadioButton
-        android:id="@+id/radioButton"
+      <ImageView
+        android:id="@+id/completeImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/large_margin" />
+        android:layout_marginStart="@dimen/large_margin"
+        tools:src="@drawable/ic_baseline_brightness_1_24" />
 
       <TextView
-        android:id="@+id/textView"
-        android:layout_width="0dp"
+        android:id="@+id/taskTextView"
+        android:layout_width="@dimen/layout_width_height"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="@dimen/large_margin"
         android:layout_weight="1"
         android:text="@{model.name}"
         android:textAppearance="@android:style/TextAppearance.Medium"
         tools:text="TaskName" />
 
       <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/importantImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/large_margin"

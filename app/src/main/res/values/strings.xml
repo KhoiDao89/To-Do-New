@@ -11,6 +11,7 @@
   <!-- Common -->
   <string name="cancel"><font color="#FF000000">Hủy bỏ</font></string>
   <string name="delete"><font color="#FFEC0F1E">Xóa</font></string>
+  <string name="delete_title">Bạn có chắc không?</string>
 
   <!-- Task Group -->
   <string name="task_group_my_day">Ngày của tôi</string>
@@ -33,12 +34,9 @@
   <string name="task_attribute_set_note">Thêm ghi chú</string>
 
   <!-- Delete Task -->
-  <string name="delete_task_title">Bạn có chắc không?</string>
   <string name="delete_task_message">%s sẽ bị xóa vĩnh viễn</string>
 
-  <string name="button_cancel">Hủy bỏ</string>
   <string name="button_create_task">Tạo tác vụ</string>
-  <string name="button_delete">Huy</string>
   <string name="new_task_hint">Nhập tác vụ</string>
   <string name="new_task">Thêm tác vụ</string>
   <string name="deadline">Đặt ngày đến hạn</string>
@@ -48,5 +46,4 @@
   <string name="delete_category">Xóa danh sách</string>
   <string name="title_delete_category">Bạn có chắc không?</string>
   <string name="button_save">Lưu</string>
-  <string name="button_delete_category">Xóa</string>
 </resources>

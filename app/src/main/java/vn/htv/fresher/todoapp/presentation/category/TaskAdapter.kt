@@ -1,40 +1,26 @@
 package vn.htv.fresher.todoapp.presentation.category
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.graphics.Paint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.RadioButton
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.task_item.*
 import kotlinx.android.synthetic.main.task_item.view.*
 import vn.htv.fresher.todoapp.R
 import vn.htv.fresher.todoapp.databinding.TaskItemBinding
 import vn.htv.fresher.todoapp.domain.model.TaskModel
-import vn.htv.fresher.todoapp.presentation.main.MainItemModel
-
 
 class TaskAdapter(
-  private val importantCallback: ((model: TaskModel) -> Unit),
-  private val finishedCallback:  ((model: TaskModel) -> Unit)
-): RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
+  private val finishedCallback   : ((model: TaskModel) -> Unit),
+  private val importantCallback  : ((model: TaskModel) -> Unit),
+  private val taskDetailCallback : ((taskId: Int)      -> Unit)
+) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
+
   private val taskList = mutableListOf<TaskModel>()
 
-
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)
-   : TaskViewHolder {
-      val binding = TaskItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-      return TaskViewHolder(binding)
-//    return when(MainTaskItemType.from(viewType)) {
-//     MainTaskItemType.NOT_FINISH-> TaskViewHolder(TaskItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-//     MainTaskItemType.FINISHED_STATE->SepViewHolder(ItemSepBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-//    }
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
+    val binding = TaskItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+    return TaskViewHolder(binding)
   }
-
-
 
   override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
     val task: TaskModel = taskList.get(position)
@@ -51,18 +37,36 @@ class TaskAdapter(
     notifyDataSetChanged()
   }
 
- inner class TaskViewHolder(itemView: TaskItemBinding,): RecyclerView.ViewHolder(itemView.root) {
-   var binding: TaskItemBinding = itemView
+  inner class TaskViewHolder(itemView: TaskItemBinding): RecyclerView.ViewHolder(itemView.root) {
 
-   fun bind(model: TaskModel) {
-     binding.model = model
-     binding.root.imageView.setImageResource(
-       if (model.important) R.drawable.ic_baseline_star_24 else R.drawable.ic_baseline_star_outline_24
-     )
-     binding.root.imageView.setOnClickListener {
-       importantCallback.invoke(model)
-     }
-   }
- }
-//   inner class SepViewHolder(itemView: ItemSepBinding) : RecyclerView.ViewHolder(itemView.root)
- }
+    var binding: TaskItemBinding = itemView
+
+    fun bind(model: TaskModel) {
+      binding.model = model
+
+      binding.root.setOnClickListener {
+        val taskId = model.id ?: return@setOnClickListener
+
+        taskDetailCallback.invoke(taskId)
+      }
+
+      binding.root.importantImageView.setImageResource(
+        if (model.important) R.drawable.ic_important_blue else R.drawable.ic_important_gray
+      )
+
+      binding.root.importantImageView.setOnClickListener {
+        importantCallback.invoke(model)
+      }
+
+      binding.root.completeImageView.setImageResource(
+        if (model.finished) R.drawable.ic_finished else R.drawable.ic_not_finish
+      )
+
+      binding.root.taskTextView.paintFlags = if (model.finished) Paint.STRIKE_THRU_TEXT_FLAG else 0
+
+      binding.root.completeImageView.setOnClickListener {
+        finishedCallback.invoke(model)
+      }
+    }
+  }
+}
