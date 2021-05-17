@@ -1,14 +1,8 @@
 package vn.htv.fresher.todoapp.presentation.main
 
-import android.app.Activity
-import android.content.Intent
-import android.text.InputType
-import android.widget.Toast
 import androidx.lifecycle.Observer
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.input.input
 import kotlinx.android.synthetic.main.fragment_main.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.threeten.bp.LocalDateTime
 import vn.htv.fresher.todoapp.R
 import vn.htv.fresher.todoapp.databinding.FragmentMainBinding
@@ -16,7 +10,6 @@ import vn.htv.fresher.todoapp.domain.model.CategoryModel
 import vn.htv.fresher.todoapp.presentation.category.CategoryActivity
 import vn.htv.fresher.todoapp.presentation.common.BaseFragment
 import vn.htv.fresher.todoapp.presentation.common.decoration.DefaultItemDecoration
-import vn.htv.fresher.todoapp.presentation.taskdetail.TaskDetailActivity
 import vn.htv.fresher.todoapp.util.ext.showInputDialog
 
 class MainFragment : BaseFragment<FragmentMainBinding>() {
@@ -27,15 +20,21 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
   override val layoutId: Int
     get() = R.layout.fragment_main
 
-  private val viewModel by viewModel<MainViewModel>()
+  private val viewModel by sharedViewModel<MainViewModel>()
 
   private val categoryAdapter by lazy {
     CategoryAdapter(
         categoryCallback = {
-          CategoryActivity.start(safeActivity, it.toLong())
+          CategoryActivity.start(
+            activity  = safeActivity,
+            catId     = it.toLong()
+          )
         },
         taskGroupCallback = {
-          // navigate to Category Screen with TaskGroup
+          CategoryActivity.start(
+            activity  = safeActivity,
+            taskGroup = it
+          )
         }
     )
   }
@@ -51,6 +50,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
   override fun initUi() {
     super.initUi()
+
     categoryRecyclerView.apply {
       adapter = categoryAdapter
       addItemDecoration(DefaultItemDecoration(
@@ -61,13 +61,23 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
   override fun registerLiveDataListener() {
     super.registerLiveDataListener()
+
     viewModel.mainItemList.observe(this, Observer {
          categoryAdapter.setItems(it)
        })
 
     viewModel.addCategoryCompleted.observe(this@MainFragment, Observer {
-         CategoryActivity.start(safeActivity, it)
+         CategoryActivity.start(
+           activity = safeActivity,
+           catId    = it
+         )
        })
+  }
+
+  override fun onResume() {
+    super.onResume()
+
+    viewModel.loadData()
   }
 
   inner class EventListeners() {
@@ -86,11 +96,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         }
       )
     }
-  }
-
-  override fun onResume() {
-    super.onResume()
-    viewModel.loadData()
   }
 
   /**

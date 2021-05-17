@@ -13,14 +13,11 @@ import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 import vn.htv.fresher.todoapp.domain.model.SubTaskModel
 import vn.htv.fresher.todoapp.domain.model.TaskModel
-import vn.htv.fresher.todoapp.domain.usecase.subtask.GetSubTaskListUseCase
 import vn.htv.fresher.todoapp.domain.usecase.task.GetTaskUseCase
 import vn.htv.fresher.todoapp.presentation.common.BaseViewModel
 import io.reactivex.functions.BiFunction
 import vn.htv.fresher.todoapp.R
-import vn.htv.fresher.todoapp.domain.usecase.subtask.DeleteSubTaskUseCase
-import vn.htv.fresher.todoapp.domain.usecase.subtask.SaveSubTaskUseCase
-import vn.htv.fresher.todoapp.domain.usecase.subtask.UpdateSubTaskUseCase
+import vn.htv.fresher.todoapp.domain.usecase.subtask.*
 import vn.htv.fresher.todoapp.domain.usecase.task.DeleteTaskUseCase
 import vn.htv.fresher.todoapp.domain.usecase.task.UpdateTaskUseCase
 import vn.htv.fresher.todoapp.util.ext.taskCreatedAtString
@@ -97,13 +94,14 @@ sealed class TaskDetailItem(val type: SubItemType) {
 }
 
 class TaskDetailViewModel(
-  private val getTaskUseCase        : GetTaskUseCase,
-  private val getSubTaskListUseCase : GetSubTaskListUseCase,
-  private val updateTaskUseCase     : UpdateTaskUseCase,
-  private val deleteTaskUseCase     : DeleteTaskUseCase,
-  private val updateSubTaskUseCase  : UpdateSubTaskUseCase,
-  private val deleteSubTaskUseCase  : DeleteSubTaskUseCase,
-  private val saveSubTaskUseCase    : SaveSubTaskUseCase
+  private val getTaskUseCase                : GetTaskUseCase,
+  private val getSubTaskListUseCase         : GetSubTaskListUseCase,
+  private val updateTaskUseCase             : UpdateTaskUseCase,
+  private val deleteSubTaskByTaskIdUseCase  : DeleteSubTaskByTaskIdUseCase,
+  private val deleteTaskUseCase             : DeleteTaskUseCase,
+  private val updateSubTaskUseCase          : UpdateSubTaskUseCase,
+  private val deleteSubTaskUseCase          : DeleteSubTaskUseCase,
+  private val saveSubTaskUseCase            : SaveSubTaskUseCase
 ) : BaseViewModel() {
 
   val taskDetailItem: LiveData<List<TaskDetailItem>> get() = _taskDetailItem
@@ -230,6 +228,18 @@ class TaskDetailViewModel(
 
   fun deleteTask() {
     val task = _task.value ?: return
+
+    val taskId = task.id ?: return
+
+    disposables += deleteSubTaskByTaskIdUseCase(taskId)
+      .subscribeBy(
+        onComplete = {
+          Timber.i("Deleted all subtasks have taskId = $taskId")
+        },
+        onError = {
+          Timber.e(it.toString())
+        }
+      )
 
     disposables += deleteTaskUseCase(task)
       .subscribeBy (

@@ -1,11 +1,11 @@
 package vn.htv.fresher.todoapp.presentation.taskdetail
 
+import android.graphics.Paint
 import kotlinx.android.synthetic.main.fragment_task_detail.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.threeten.bp.LocalDateTime
 import vn.htv.fresher.todoapp.R
 import vn.htv.fresher.todoapp.databinding.FragmentTaskDetailBinding
-import vn.htv.fresher.todoapp.domain.model.SubTaskModel
 import vn.htv.fresher.todoapp.presentation.common.BaseFragment
 import vn.htv.fresher.todoapp.presentation.common.decoration.DefaultItemDecoration
 import vn.htv.fresher.todoapp.presentation.note.NoteActivity
@@ -107,7 +107,7 @@ class TaskDetailFragment : BaseFragment<FragmentTaskDetailBinding>() {
     })
 
     viewModel.task.observe(this, {
-
+      binding.taskNameTextView.paintFlags = if (it.finished) Paint.STRIKE_THRU_TEXT_FLAG else 0
     })
   }
 

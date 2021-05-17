@@ -45,12 +45,14 @@ val appModule = module {
   factory { SaveCategoryUseCase(get()) }
   factory { UpdateCategoryUseCase(get()) }
 
+  factory { DeleteTaskByCatIdUseCase(get()) }
   factory { DeleteTaskUseCase(get()) }
   factory { GetTaskListUseCase(get()) }
   factory { GetTaskUseCase(get()) }
   factory { SaveTaskUseCase(get()) }
   factory { UpdateTaskUseCase(get()) }
 
+  factory { DeleteSubTaskByTaskIdUseCase(get()) }
   factory { DeleteSubTaskUseCase(get()) }
   factory { GetSubTaskUseCase(get()) }
   factory { GetSubTaskListUseCase(get()) }
@@ -59,8 +61,8 @@ val appModule = module {
   // ViewModel
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  viewModel { CategoryViewModel(get(), get(), get(), get(), get(), get()) }
+  viewModel { CategoryViewModel(get(), get(), get(), get(), get(), get(), get()) }
   viewModel { MainViewModel(get(), get(), get(), get()) }
   viewModel { NoteViewModel() }
-  viewModel { TaskDetailViewModel(get(), get(), get(), get(), get(), get(), get()) }
+  viewModel { TaskDetailViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
 }

@@ -11,6 +11,9 @@ interface TaskDao {
   @Delete
   fun delete(entity: Task): Completable
 
+  @Query("DELETE FROM ${Task.NAME} WHERE ${Task.COLUMN_CAT_ID} = :catId")
+  fun deleteTaskByCatId(catId: Int): Completable
+
   @Query("SELECT * FROM ${Task.NAME} WHERE ${Task.COLUMN_ID} = :id")
   fun get(id: Int): Single<Task>
 

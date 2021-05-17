@@ -10,7 +10,6 @@ import io.reactivex.rxkotlin.subscribeBy
 import vn.htv.fresher.todoapp.presentation.common.BaseViewModel
 import timber.log.Timber
 import io.reactivex.rxkotlin.plusAssign
-import org.threeten.bp.LocalDateTime
 import vn.htv.fresher.todoapp.R
 import vn.htv.fresher.todoapp.domain.model.CategoryModel
 import vn.htv.fresher.todoapp.domain.model.TaskModel
@@ -108,7 +107,7 @@ class MainViewModel(
           _mainItemList.postValue(it)
         },
         onError = {
-          Timber.i("Cannot post value")
+          Timber.e(it.toString())
         }
       )
   }

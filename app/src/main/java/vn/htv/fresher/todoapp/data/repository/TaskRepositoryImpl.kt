@@ -22,6 +22,12 @@ class TaskRepositoryImpl(
       .subscribeOn(schedulerProvider.io())
   }
 
+  override fun deleteTaskByCatId(catId: Int): Completable {
+    return taskDao.deleteTaskByCatId(catId)
+      .observeOn(schedulerProvider.io())
+      .subscribeOn(schedulerProvider.io())
+  }
+
   override fun get(id: Int): Single<TaskModel> {
     return taskDao.get(id)
       .map { it.toModel() }

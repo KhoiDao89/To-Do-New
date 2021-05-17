@@ -9,6 +9,8 @@ import java.util.*
 interface TaskRepository {
   fun deleteTask(model: TaskModel): Completable
 
+  fun deleteTaskByCatId(catId: Int): Completable
+
   fun get(id: Int): Single<TaskModel>
 
   fun getTaskList(catId: Int?): Single<List<TaskModel>>
