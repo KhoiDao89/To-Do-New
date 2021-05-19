@@ -31,7 +31,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/large_margin"
-      android:backgroundTint="@color/white"
+      android:backgroundTint="@color/very_light_blue"
       android:onClick="@{()-> event.onNewTask()}"
       android:src="@drawable/ic_add"
       app:layout_constraintBottom_toBottomOf="parent"

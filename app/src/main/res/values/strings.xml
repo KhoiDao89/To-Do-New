@@ -7,6 +7,12 @@
   <string name="note">Thêm ghi chú</string>
   <string name="new_subtask_hint">Nhập tên bước tiếp theo</string>
   <string name="select_datetime">Chọn ngày và giờ</string>
+  <string name="button_create_task">Tạo tác vụ</string>
+  <string name="new_task_hint">Nhập tác vụ</string>
+  <string name="new_task">Thêm tác vụ</string>
+  <string name="new_name_category">Đổi tên danh sách</string>
+  <string name="delete_category">Xóa danh sách</string>
+  <string name="button_save">Lưu</string>
 
   <!-- Common -->
   <string name="cancel"><font color="#FF000000">Hủy bỏ</font></string>
@@ -35,15 +41,4 @@
 
   <!-- Delete Task -->
   <string name="delete_task_message">%s sẽ bị xóa vĩnh viễn</string>
-
-  <string name="button_create_task">Tạo tác vụ</string>
-  <string name="new_task_hint">Nhập tác vụ</string>
-  <string name="new_task">Thêm tác vụ</string>
-  <string name="deadline">Đặt ngày đến hạn</string>
-  <string name="reminder">Nhắc tôi</string>
-  <string name="repeat">Lặp lại</string>
-  <string name="new_name_category">Đổi tên danh sách</string>
-  <string name="delete_category">Xóa danh sách</string>
-  <string name="title_delete_category">Bạn có chắc không?</string>
-  <string name="button_save">Lưu</string>
 </resources>
