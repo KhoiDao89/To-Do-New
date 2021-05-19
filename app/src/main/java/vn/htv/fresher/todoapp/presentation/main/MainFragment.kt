@@ -1,6 +1,5 @@
 package vn.htv.fresher.todoapp.presentation.main
 
-import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.fragment_main.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.threeten.bp.LocalDateTime
@@ -62,11 +61,11 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
   override fun registerLiveDataListener() {
     super.registerLiveDataListener()
 
-    viewModel.mainItemList.observe(this, Observer {
+    viewModel.mainItemList.observe(this, {
          categoryAdapter.setItems(it)
        })
 
-    viewModel.addCategoryCompleted.observe(this@MainFragment, Observer {
+    viewModel.addCategoryCompleted.observe(this@MainFragment, {
          CategoryActivity.start(
            activity = safeActivity,
            catId    = it
@@ -80,7 +79,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     viewModel.loadData()
   }
 
-  inner class EventListeners() {
+  inner class EventListeners {
     fun onNewCategory() {
       this@MainFragment.showInputDialog(
         title                 = R.string.new_category,

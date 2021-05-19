@@ -44,9 +44,8 @@ class CategoryViewModel(
   val updateCategoryCompleted: LiveData<Boolean> get() = _updateCategoryCompleted
   private val _updateCategoryCompleted = MutableLiveData<Boolean>()
 
-  var categoryId: Long? = null
-
-  var taskGroup: String? = null
+  var categoryId  : Long?   = null
+  var taskGroup   : String? = null
 
   fun loadCategory() {
     val id = categoryId ?: return
@@ -124,11 +123,11 @@ class CategoryViewModel(
       )
   }
 
-  fun updateFinished(model: TaskModel) {
+  fun updateFinishStateTask(model: TaskModel) {
     updateTask(model.copy(finished = !model.finished))
   }
 
-  fun updateImportant(model: TaskModel) {
+  fun updateImportantTask(model: TaskModel) {
     updateTask(model.copy(important = !model.important))
   }
 
@@ -144,7 +143,15 @@ class CategoryViewModel(
       )
   }
 
-  fun updateCategory(model: CategoryModel) {
+  fun updateCategoryName(title: String) {
+    val catId = categoryId ?: return
+
+    val model = CategoryModel(
+      name       = title,
+      id         = catId.toInt(),
+      createdAt  = LocalDateTime.now()
+    )
+
     disposables += updateCategoryUseCase(model)
       .subscribeBy(
         onComplete = {

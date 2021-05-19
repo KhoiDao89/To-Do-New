@@ -1,19 +1,13 @@
 package vn.htv.fresher.todoapp.presentation.category
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.view.menu.MenuBuilder
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.input.input
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.threeten.bp.LocalDateTime
 import vn.htv.fresher.todoapp.R
-import vn.htv.fresher.todoapp.domain.model.CategoryModel
 import vn.htv.fresher.todoapp.presentation.common.BaseActivity
 import vn.htv.fresher.todoapp.presentation.main.TaskGroup
 
@@ -27,6 +21,9 @@ class CategoryActivity : BaseActivity() {
   override val layoutId  : Int
     get() = R.layout.activity_category
 
+  var deleteCategoryCallback      : (() -> Unit)? = null
+  var updateCategoryNameCallback  : (() -> Unit)? = null
+
   override fun init() {
     super.init()
 
@@ -39,19 +36,15 @@ class CategoryActivity : BaseActivity() {
     showBackButton()
   }
 
-  @SuppressLint("RestrictedApi")
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-    getMenuInflater().inflate(R.menu.menu, menu)
-    if (menu is MenuBuilder) {
-      menu.setOptionalIconsVisible(true)
-    }
+    if (viewModel.categoryId != null) menuInflater.inflate(R.menu.menu, menu)
     return true
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.getItemId()) {
-      R.id.updateName -> { onNewCategoryName() }
-      R.id.delete     -> { deleteCategory() }
+      R.id.changeCategoryNameMenu -> updateCategoryNameCallback?.invoke()
+      R.id.deleteCategoryMenu     -> deleteCategoryCallback?.invoke()
     }
 
     return super.onOptionsItemSelected(item)
@@ -71,12 +64,16 @@ class CategoryActivity : BaseActivity() {
       if (!it) return@Observer
       loadDataOnRecyclerView()
     })
+
+    viewModel.itemCategory.observe(this, {
+      setToolbarTitle(it.name)
+    })
   }
 
   fun loadDataOnRecyclerView() {
     viewModel.taskGroup = intent.getStringExtra(PARAM_EXTRA_TASK_GROUP)
 
-    when (intent.getStringExtra(PARAM_EXTRA_TASK_GROUP)) {
+    when (viewModel.taskGroup) {
       TaskGroup.MY_DAY.toString() -> {
         setToolbarTitle(getString(R.string.task_group_my_day))
         viewModel.loadAllTaskMyDay()
@@ -101,49 +98,6 @@ class CategoryActivity : BaseActivity() {
         viewModel.loadCategory()
         viewModel.loadTask()
       }
-    }
-  }
-
-  fun onNewCategoryName() {
-    MaterialDialog(this).show {
-      title(R.string.new_name_category)
-      input(
-        prefill = supportActionBar?.title.toString()
-      ) { _, title ->
-        val model = CategoryModel(
-          name       = title.toString(),
-          id         = viewModel.categoryId?.toInt(),
-          createdAt  = LocalDateTime.now()
-        )
-        viewModel.updateCategory(model)
-
-        setToolbarTitle(model.name)
-      }
-      positiveButton(R.string.button_save)
-      negativeButton(R.string.delete)
-    }
-  }
-
-  fun deleteCategory() {
-//    fragment.showConfirmDialog(
-//      title               = R.string.delete_title,
-//      message             = getString(R.string.delete_task_message, viewModel.itemCategory.value?.name),
-//      positiveName        = R.string.delete,
-//      positiveCallback    = {
-//        val model = viewModel.itemCategory.value ?: return@showConfirmDialog
-//
-//        viewModel.deleteCategory(model)
-//      }
-//    )
-    MaterialDialog(this).show {
-      title(R.string.delete_title)
-      message(text = getString(R.string.delete_task_message, viewModel.itemCategory.value?.name))
-      positiveButton(R.string.delete) {
-        val model = viewModel.itemCategory.value ?: return@positiveButton
-
-        viewModel.deleteCategory(model)
-      }
-      negativeButton(R.string.cancel)
     }
   }
 

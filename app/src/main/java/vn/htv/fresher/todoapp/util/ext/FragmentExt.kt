@@ -66,7 +66,8 @@ fun Fragment.showListDialog(
 
 fun Fragment.showInputDialog(
   title                 : Int? = null,
-  hint                  : Int,
+  hint                  : Int? = null,
+  prefill               : String? = null,
   positiveName          : Int,
   negativeName          : Int? = R.string.cancel,
   positiveTaskCallback  : ((name: String) -> Unit)
@@ -76,7 +77,8 @@ fun Fragment.showInputDialog(
   MaterialDialog(ctx).show {
     title(title)
     input(
-      hintRes = hint
+      hintRes = hint,
+      prefill = prefill
     ) { _, content ->
       positiveTaskCallback.invoke(content.toString())
     }

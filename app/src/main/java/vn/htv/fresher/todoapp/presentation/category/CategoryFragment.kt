@@ -5,7 +5,9 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import vn.htv.fresher.todoapp.R
 import vn.htv.fresher.todoapp.databinding.FragmentCategoryBinding
 import vn.htv.fresher.todoapp.presentation.common.BaseFragment
+import vn.htv.fresher.todoapp.presentation.common.decoration.DefaultItemDecoration
 import vn.htv.fresher.todoapp.presentation.taskdetail.TaskDetailActivity
+import vn.htv.fresher.todoapp.util.ext.showConfirmDialog
 import vn.htv.fresher.todoapp.util.ext.showInputDialog
 
 class CategoryFragment : BaseFragment<FragmentCategoryBinding>() {
@@ -17,15 +19,9 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding>() {
 
   private val taskAdapter by lazy {
     TaskAdapter(
-      importantCallback = {
-        viewModel.updateImportant(it)
-      },
-      finishedCallback = {
-        viewModel.updateFinished(it)
-      },
-      taskDetailCallback = {
-        TaskDetailActivity.start(safeActivity, it)
-      }
+      finishedCallback    = { viewModel.updateFinishStateTask(it) },
+      importantCallback   = { viewModel.updateImportantTask(it) },
+      taskDetailCallback  = { TaskDetailActivity.start(safeActivity, it) }
     )
   }
 
@@ -33,6 +29,29 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding>() {
     super.init()
 
     binding.event = EventAddTask()
+
+    (safeActivity as? CategoryActivity)?.let {
+      it.deleteCategoryCallback = {
+        this.showConfirmDialog(
+          title             = R.string.delete_title,
+          message           = getString(R.string.delete_task_message, viewModel.itemCategory.value?.name),
+          positiveName      = R.string.delete,
+          positiveCallback  = {
+            val model = viewModel.itemCategory.value ?: return@showConfirmDialog
+
+            viewModel.deleteCategory(model)
+          }
+        )
+      }
+      it.updateCategoryNameCallback = {
+        this.showInputDialog(
+          title                 = R.string.new_name_category,
+          prefill               = viewModel.itemCategory.value?.name,
+          positiveName          = R.string.button_save,
+          positiveTaskCallback  = { viewModel.updateCategoryName(it) }
+        )
+      }
+    }
   }
 
   override fun initUi() {
@@ -40,6 +59,9 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding>() {
 
     taskRecycleView.apply {
       adapter = taskAdapter
+      addItemDecoration(DefaultItemDecoration(
+        resources.getDimensionPixelSize(R.dimen.layout_margin_start_end),
+        resources.getDimensionPixelSize(R.dimen.layout_margin_top_bottom) ))
     }
   }
 
@@ -57,10 +79,6 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding>() {
     viewModel.deleteCategoryCompleted.observe(this, {
       safeActivity.onBackPressed()
       viewModel.loadCategory()
-    })
-
-    viewModel.itemCategory.observe(this, {
-      safeActivity.supportActionBar?.title = it.name
     })
   }
 

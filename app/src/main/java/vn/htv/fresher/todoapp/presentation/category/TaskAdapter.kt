@@ -50,21 +50,21 @@ class TaskAdapter(
         taskDetailCallback.invoke(taskId)
       }
 
-      binding.root.importantImageView.setImageResource(
+      binding.root.importantTaskImageView.setImageResource(
         if (model.important) R.drawable.ic_important_blue else R.drawable.ic_important_gray
       )
 
-      binding.root.importantImageView.setOnClickListener {
+      binding.root.importantTaskImageView.setOnClickListener {
         importantCallback.invoke(model)
       }
 
-      binding.root.completeImageView.setImageResource(
+      binding.root.finishStateTaskImageView.setImageResource(
         if (model.finished) R.drawable.ic_finished else R.drawable.ic_not_finish
       )
 
-      binding.root.taskTextView.paintFlags = if (model.finished) Paint.STRIKE_THRU_TEXT_FLAG else 0
+      binding.root.taskNameTextView.paintFlags = if (model.finished) Paint.STRIKE_THRU_TEXT_FLAG else 0
 
-      binding.root.completeImageView.setOnClickListener {
+      binding.root.finishStateTaskImageView.setOnClickListener {
         finishedCallback.invoke(model)
       }
     }
