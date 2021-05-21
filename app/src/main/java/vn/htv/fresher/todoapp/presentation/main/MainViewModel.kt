@@ -38,6 +38,11 @@ enum class TaskGroup {
       DEADLINE  -> R.drawable.ic_deadline
       ACTION    -> R.drawable.ic_action
     }
+
+
+  companion object {
+    fun from(type: String?) = values().find { it.name == type } ?: null
+  }
 }
 
 enum class MainItemType(val value: Int) {

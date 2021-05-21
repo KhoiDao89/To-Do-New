@@ -2,7 +2,6 @@ package vn.htv.fresher.todoapp.presentation.taskdetail
 
 import android.app.Activity
 import android.content.Intent
-import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -48,7 +47,7 @@ class TaskDetailActivity : BaseActivity() {
   }
 
   companion object {
-    private const val PARAM_EXTRA_TASK_ID = "TASKID"
+    private const val PARAM_EXTRA_TASK_ID = "TASK_ID"
 
     fun start(activity: AppCompatActivity, taskId: Int) {
       val intent = Intent(activity, TaskDetailActivity::class.java)

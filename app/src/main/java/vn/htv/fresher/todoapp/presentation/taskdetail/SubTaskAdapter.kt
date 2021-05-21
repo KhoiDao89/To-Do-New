@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_note.view.*
 import kotlinx.android.synthetic.main.item_subtask.view.*
 import kotlinx.android.synthetic.main.item_task_attribute.view.*
-import kotlinx.android.synthetic.main.task_item.view.*
 import vn.htv.fresher.todoapp.databinding.ItemNextStepBinding
 import vn.htv.fresher.todoapp.databinding.ItemNoteBinding
 import vn.htv.fresher.todoapp.databinding.ItemSubtaskBinding
@@ -74,7 +73,7 @@ class SubTaskAdapter(
 
       bindingSubTask.root.subTaskNameTextView.paintFlags = if (model.finished) Paint.STRIKE_THRU_TEXT_FLAG else 0
 
-      bindingSubTask.root.finisedSubTaskImageView.setOnClickListener {
+      bindingSubTask.root.finishStateSubTaskImageView.setOnClickListener {
         finishedSubTaskCallback.invoke(model)
       }
       bindingSubTask.root.deleteSubTaskImageView.setOnClickListener {

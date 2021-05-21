@@ -5,9 +5,7 @@ import io.reactivex.Single
 import vn.htv.fresher.todoapp.data.db.dao.SubTaskDao
 import vn.htv.fresher.todoapp.data.db.entity.SubTask
 import vn.htv.fresher.todoapp.data.mapper.toModel
-import vn.htv.fresher.todoapp.domain.model.CategoryModel
 import vn.htv.fresher.todoapp.domain.model.SubTaskModel
-import vn.htv.fresher.todoapp.domain.model.TaskModel
 import vn.htv.fresher.todoapp.domain.repository.SubTaskRepository
 import vn.htv.fresher.todoapp.util.rx.SchedulerProvider
 
@@ -23,8 +21,8 @@ class SubTaskRepositoryImpl(
       .subscribeOn(schedulerProvider.io())
   }
 
-  override fun deleteSubTaskByTaskId(taskId: Int): Completable {
-    return subTaskDao.deleteSubTaskByTaskId(taskId)
+  override fun deleteSubTaskList(taskId: Int): Completable {
+    return subTaskDao.deleteSubTaskList(taskId)
       .observeOn(schedulerProvider.io())
       .subscribeOn(schedulerProvider.io())
   }

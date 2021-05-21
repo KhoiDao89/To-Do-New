@@ -7,7 +7,7 @@ import vn.htv.fresher.todoapp.domain.model.SubTaskModel
 interface SubTaskRepository {
   fun deleteSubTask(model: SubTaskModel): Completable
 
-  fun deleteSubTaskByTaskId(taskId: Int): Completable
+  fun deleteSubTaskList(taskId: Int): Completable
 
   fun get(id: Int): Single<SubTaskModel>
 

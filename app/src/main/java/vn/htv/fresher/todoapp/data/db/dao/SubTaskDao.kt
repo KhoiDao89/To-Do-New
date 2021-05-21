@@ -12,7 +12,7 @@ interface SubTaskDao {
   fun delete(entity: SubTask): Completable
 
   @Query("DELETE FROM ${SubTask.NAME} WHERE ${SubTask.COLUMN_TASK_ID} = :taskId")
-  fun deleteSubTaskByTaskId(taskId: Int): Completable
+  fun deleteSubTaskList(taskId: Int): Completable
 
   @Insert
   fun insert(entity: SubTask): Completable

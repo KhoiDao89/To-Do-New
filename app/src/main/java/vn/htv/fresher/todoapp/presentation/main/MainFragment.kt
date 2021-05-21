@@ -85,7 +85,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         title                 = R.string.new_category,
         hint                  = R.string.new_category_hint,
         positiveName          = R.string.button_create_category,
-        positiveTaskCallback  = {
+        positiveCallback  = {
           val model = CategoryModel(
             name      = it,
             createdAt = LocalDateTime.now()

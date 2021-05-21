@@ -7,7 +7,7 @@ import vn.htv.fresher.todoapp.databinding.ItemCategoryBinding
 import vn.htv.fresher.todoapp.databinding.ItemSeparatorBinding
 
 class CategoryAdapter(
-    private val categoryCallback  : ((catId: Int) -> Unit),
+    private val categoryCallback  : ((catId: Int)       -> Unit),
     private val taskGroupCallback : ((group: TaskGroup) -> Unit)
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
   private val mainItemList = mutableListOf<MainItem>()

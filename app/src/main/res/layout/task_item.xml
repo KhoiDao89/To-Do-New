@@ -26,11 +26,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/large_margin"
+        android:contentDescription="@string/app_name"
         tools:src="@drawable/ic_not_finish" />
 
       <TextView
         android:id="@+id/taskNameTextView"
-        android:layout_width="@dimen/layout_width_height"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/large_margin"
         android:layout_weight="1"
@@ -42,6 +43,7 @@
         android:id="@+id/importantTaskImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/app_name"
         android:layout_marginEnd="@dimen/large_margin"
         tools:src="@drawable/ic_important_gray" />
     </LinearLayout>

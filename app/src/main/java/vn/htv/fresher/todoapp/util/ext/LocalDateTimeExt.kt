@@ -18,13 +18,15 @@ val LocalDateTime.taskCreatedAtString: String
     val hours   = duration.toHours()
     val day     = duration.toDays()
 
-    val yesterday: Long = 1
+    val ytd: Long = 1
 
-    return if (seconds <= 59) "Đã tạo $seconds giây trước"
-      else if (minutes <= 59) "Đã tạo $minutes phút trước"
-      else if (hours <= 23) "Đã tạo $hours giờ trước"
-      else if (day == yesterday) "Đã tạo hôm qua"
-      else "Đã tạo vào $dayOfMonth tháng $monthValue"
+    return when {
+      seconds <= 59   -> "Đã tạo $seconds giây trước"
+      minutes <= 59   -> "Đã tạo $minutes phút trước"
+      hours   <= 23   -> "Đã tạo $hours giờ trước"
+      day     == ytd  -> "Đã tạo hôm qua"
+      else            -> "Đã tạo vào $dayOfMonth tháng $monthValue"
+    }
   }
 
 val LocalDateTime.deadlineString: String

@@ -29,15 +29,16 @@
       app:layout_constraintTop_toTopOf="parent">
 
       <ImageView
-        android:id="@+id/finisedImageView"
+        android:id="@+id/finishStateImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="@{() -> subTaskViewModel.finishedTask()}"
+        android:contentDescription="@string/app_name"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         bind:imageResource="@{subTaskViewModel.taskFinishIcon}"
-        tools:src="@drawable/ic_finished" />
+        tools:src="@drawable/ic_finished"/>
 
       <TextView
         android:id="@+id/taskNameTextView"
@@ -48,9 +49,9 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@color/black"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/finisedImageView"
-        app:layout_constraintStart_toEndOf="@id/finisedImageView"
-        app:layout_constraintTop_toTopOf="@id/finisedImageView"
+        app:layout_constraintBottom_toBottomOf="@id/finishStateImageView"
+        app:layout_constraintStart_toEndOf="@id/finishStateImageView"
+        app:layout_constraintTop_toTopOf="@id/finishStateImageView"
         tools:text="Task Name" />
 
       <ImageView
@@ -58,6 +59,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/medium_margin"
+        android:contentDescription="@string/app_name"
         bind:imageResource="@{subTaskViewModel.taskImportantIcon}"
         android:onClick="@{() -> subTaskViewModel.importantTask()}"
         app:layout_constraintBottom_toBottomOf="@id/taskNameTextView"
@@ -102,6 +104,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_trash"
+        android:contentDescription="@string/app_name"
         android:onClick="@{() -> deleteEventListeners.deleteTask()}"
         app:layout_constraintBottom_toBottomOf="@id/createdAtTextView"
         app:layout_constraintEnd_toEndOf="parent"

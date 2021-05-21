@@ -8,7 +8,6 @@ import vn.htv.fresher.todoapp.data.mapper.toModel
 import vn.htv.fresher.todoapp.domain.model.TaskModel
 import vn.htv.fresher.todoapp.domain.repository.TaskRepository
 import vn.htv.fresher.todoapp.util.rx.SchedulerProvider
-import java.util.*
 
 class TaskRepositoryImpl(
   private val taskDao           : TaskDao,
@@ -22,8 +21,8 @@ class TaskRepositoryImpl(
       .subscribeOn(schedulerProvider.io())
   }
 
-  override fun deleteTaskByCatId(catId: Int): Completable {
-    return taskDao.deleteTaskByCatId(catId)
+  override fun deleteTaskList(catId: Int): Completable {
+    return taskDao.deleteTaskList(catId)
       .observeOn(schedulerProvider.io())
       .subscribeOn(schedulerProvider.io())
   }

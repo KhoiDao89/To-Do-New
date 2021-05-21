@@ -44,7 +44,7 @@ class NoteActivity : BaseActivity() {
 
   companion object {
     const val PARAM_EXTRA_NOTE       = "NOTE"
-    const val PARAM_EXTRA_TASK_NAME  = "TASKNAME"
+    const val PARAM_EXTRA_TASK_NAME  = "TASK_NAME"
 
     const val PARAM_REQUEST_CODE_TASK_DETAIL_ACTIVITY  = 100
 

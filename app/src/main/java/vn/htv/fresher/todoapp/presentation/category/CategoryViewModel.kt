@@ -9,7 +9,7 @@ import timber.log.Timber
 import vn.htv.fresher.todoapp.domain.model.CategoryModel
 import vn.htv.fresher.todoapp.domain.model.TaskModel
 import vn.htv.fresher.todoapp.domain.usecase.category.*
-import vn.htv.fresher.todoapp.domain.usecase.task.DeleteTaskByCatIdUseCase
+import vn.htv.fresher.todoapp.domain.usecase.task.DeleteTaskListUseCase
 import vn.htv.fresher.todoapp.domain.usecase.task.GetTaskListUseCase
 import vn.htv.fresher.todoapp.domain.usecase.task.SaveTaskUseCase
 import vn.htv.fresher.todoapp.domain.usecase.task.UpdateTaskUseCase
@@ -17,13 +17,13 @@ import vn.htv.fresher.todoapp.presentation.common.BaseViewModel
 import vn.htv.fresher.todoapp.presentation.main.TaskGroup
 
 class CategoryViewModel(
-  private val deleteCategoryUseCase     : DeleteCategoryUseCase,
-  private val deleteTaskByCatIdUseCase  : DeleteTaskByCatIdUseCase,
-  private val getCategoryUseCase        : GetCategoryUseCase,
-  private val getTaskListUseCase        : GetTaskListUseCase,
-  private val saveTaskUseCase           : SaveTaskUseCase,
-  private val updateTaskUseCase         : UpdateTaskUseCase,
-  private val updateCategoryUseCase     : UpdateCategoryUseCase
+  private val deleteCategoryUseCase  : DeleteCategoryUseCase,
+  private val deleteTaskListUseCase  : DeleteTaskListUseCase,
+  private val getCategoryUseCase     : GetCategoryUseCase,
+  private val getTaskListUseCase     : GetTaskListUseCase,
+  private val saveTaskUseCase        : SaveTaskUseCase,
+  private val updateTaskUseCase      : UpdateTaskUseCase,
+  private val updateCategoryUseCase  : UpdateCategoryUseCase
 ) : BaseViewModel() {
 
   val addTaskCompleted: LiveData<Boolean> get() = _addTaskCompleted
@@ -44,8 +44,8 @@ class CategoryViewModel(
   val updateCategoryCompleted: LiveData<Boolean> get() = _updateCategoryCompleted
   private val _updateCategoryCompleted = MutableLiveData<Boolean>()
 
-  var categoryId  : Long?   = null
-  var taskGroup   : String? = null
+  var categoryId  : Long?       = null
+  var taskGroup   : TaskGroup?  = null
 
   fun loadCategory() {
     val id = categoryId ?: return
@@ -61,7 +61,17 @@ class CategoryViewModel(
       )
   }
 
-  fun loadTask() {
+  fun loadData() {
+    when {
+      taskGroup   != null -> loadTaskAttribute()
+      categoryId  != null -> {
+        loadCategory()
+        loadTask()
+      }
+    }
+  }
+
+  private fun loadTask() {
     val id = categoryId ?: return
 
     disposables += getTaskListUseCase(id.toInt())
@@ -75,11 +85,19 @@ class CategoryViewModel(
       )
   }
 
-  fun loadAllTaskMyDay() {
+  private fun loadTaskAttribute() {
     disposables += getTaskListUseCase()
       .subscribeBy(
         onSuccess = {
-          _itemList.postValue(it.filter { it.myDay })
+          _itemList.postValue(it.filter { taskModel ->
+            when(taskGroup) {
+              TaskGroup.MY_DAY     -> taskModel.myDay
+              TaskGroup.IMPORTANT  -> taskModel.important
+              TaskGroup.DEADLINE   -> taskModel.deadline != null
+              TaskGroup.ACTION     -> taskModel.catId == null
+              else -> return@subscribeBy
+            }
+          })
         },
         onError = {
           Timber.e(it.toString())
@@ -87,67 +105,11 @@ class CategoryViewModel(
       )
   }
 
-  fun loadAllTaskImportant() {
-    disposables += getTaskListUseCase()
-      .subscribeBy(
-        onSuccess = {
-          _itemList.postValue(it.filter { it.important })
-        },
-        onError = {
-          Timber.e(it.toString())
-        }
-      )
-  }
-
-  fun loadAllTaskDeadline() {
-    disposables += getTaskListUseCase()
-      .subscribeBy(
-        onSuccess = {
-          _itemList.postValue(it.filter { it.deadline != null })
-        },
-        onError = {
-          Timber.e(it.toString())
-        }
-      )
-  }
-
-  fun loadAllTaskAction() {
-    disposables += getTaskListUseCase()
-      .subscribeBy(
-        onSuccess = {
-          _itemList.postValue(it.filter { it.catId == null })
-        },
-        onError = {
-          Timber.e(it.toString())
-        }
-      )
-  }
-
-  fun updateFinishStateTask(model: TaskModel) {
-    updateTask(model.copy(finished = !model.finished))
-  }
-
-  fun updateImportantTask(model: TaskModel) {
-    updateTask(model.copy(important = !model.important))
-  }
-
-  fun updateTask(model: TaskModel) {
-    disposables += updateTaskUseCase(model)
-      .subscribeBy(
-        onComplete = {
-          _updateTaskCompleted.postValue(true)
-        },
-        onError = {
-          Timber.e(it.toString())
-        }
-      )
-  }
-
-  fun updateCategoryName(title: String) {
+  fun updateCategory(categoryName: String) {
     val catId = categoryId ?: return
 
     val model = CategoryModel(
-      name       = title,
+      name       = categoryName,
       id         = catId.toInt(),
       createdAt  = LocalDateTime.now()
     )
@@ -163,23 +125,19 @@ class CategoryViewModel(
       )
   }
 
-  fun deleteCategory(model: CategoryModel) {
-    val id = model.id ?: return
+  fun updateFinishStateTask(model: TaskModel) {
+    updateTask(model.copy(finished = !model.finished))
+  }
 
-    disposables += deleteTaskByCatIdUseCase(id)
+  fun updateImportantTask(model: TaskModel) {
+    updateTask(model.copy(important = !model.important))
+  }
+
+  private fun updateTask(model: TaskModel) {
+    disposables += updateTaskUseCase(model)
       .subscribeBy(
         onComplete = {
-          Timber.i("Deleted all tasks have catId = $id")
-        },
-        onError = {
-          Timber.e(it.toString())
-        }
-      )
-
-    disposables += deleteCategoryUseCase(model)
-      .subscribeBy(
-        onComplete = {
-          _deleteCategoryCompleted.postValue(true)
+          _updateTaskCompleted.postValue(true)
         },
         onError = {
           Timber.e(it.toString())
@@ -187,88 +145,60 @@ class CategoryViewModel(
       )
   }
 
-  fun addNewTask(taskName: String) {
-    if (taskGroup != null) {
-      val model = TaskModel(
-        name      = taskName,
-        createdAt = LocalDateTime.now()
+  fun deleteCategory() {
+    val catId = categoryId ?: return
+    val model = itemCategory.value ?: return
+
+    disposables += deleteTaskListUseCase(catId.toInt())
+      .subscribeBy(
+        onComplete = {
+          disposables += deleteCategoryUseCase(model)
+            .subscribeBy(
+              onComplete = {
+                _deleteCategoryCompleted.postValue(true)
+              },
+              onError = {
+                Timber.e(it.toString())
+              }
+            )
+        },
+        onError = {
+          Timber.e(it.toString())
+        }
       )
 
-      when (taskGroup) {
-        TaskGroup.MY_DAY.toString() -> {
-          val myDayModel = model.copy( myDay = true )
 
-          disposables += saveTaskUseCase(myDayModel)
-            .subscribeBy(
-              onComplete = {
-                _addTaskCompleted.postValue(true)
-                Timber.i("saved task success $model")
-              },
-              onError = {
-                Timber.e(it.toString())
-              }
-            )
-        }
-        TaskGroup.IMPORTANT.toString() -> {
-          val importantModel = model.copy( important = true )
+  }
 
-          disposables += saveTaskUseCase(importantModel)
-            .subscribeBy(
-              onComplete = {
-                _addTaskCompleted.postValue(true)
-                Timber.i("saved task success $model")
-              },
-              onError = {
-                Timber.e(it.toString())
-              }
-            )
-        }
-        TaskGroup.DEADLINE.toString() -> {
-          val deadlineModel = model.copy( deadline = LocalDateTime.now() )
+  fun addNewTask(taskName: String) {
+    val model = TaskModel(
+      name      = taskName,
+      createdAt = LocalDateTime.now()
+    )
 
-          disposables += saveTaskUseCase(deadlineModel)
-            .subscribeBy(
-              onComplete = {
-                _addTaskCompleted.postValue(true)
-                Timber.i("saved task success $model")
-              },
-              onError = {
-                Timber.e(it.toString())
-              }
-            )
-        }
-        TaskGroup.ACTION.toString() -> {
-          disposables += saveTaskUseCase(model)
-            .subscribeBy(
-              onComplete = {
-                _addTaskCompleted.postValue(true)
-                Timber.i("saved task success $model")
-              },
-              onError = {
-                Timber.e(it.toString())
-              }
-            )
+    var groupTask = model.copy()
+
+    when {
+      taskGroup != null -> {
+        when(taskGroup) {
+          TaskGroup.MY_DAY    -> groupTask = model.copy(myDay = true)
+          TaskGroup.IMPORTANT -> groupTask = model.copy(important = true)
+          TaskGroup.DEADLINE  -> groupTask = model.copy(deadline = LocalDateTime.now())
+          TaskGroup.ACTION    -> groupTask = model.copy(catId = null)
         }
       }
+      categoryId != null -> groupTask = model.copy(catId = categoryId?.toInt())
     }
 
-    if (categoryId != null) {
-      val model = TaskModel(
-        catId     = categoryId?.toInt(),
-        name      = taskName,
-        createdAt = LocalDateTime.now()
+    disposables += saveTaskUseCase(groupTask)
+      .subscribeBy(
+        onComplete = {
+          _addTaskCompleted.postValue(true)
+          Timber.i("saved task success $model")
+        },
+        onError = {
+          Timber.e(it.toString())
+        }
       )
-
-      disposables += saveTaskUseCase(model)
-        .subscribeBy(
-          onComplete = {
-            _addTaskCompleted.postValue(true)
-            Timber.i("saved task success $model")
-          },
-          onError = {
-            Timber.e(it.toString())
-          }
-        )
-    }
   }
 }

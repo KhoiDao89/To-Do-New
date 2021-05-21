@@ -16,10 +16,11 @@
     android:layout_height="@dimen/task_attribute_height">
 
     <ImageView
-      android:id="@+id/finisedSubTaskImageView"
+      android:id="@+id/finishStateSubTaskImageView"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginStart="@dimen/large_margin"
+      android:contentDescription="@string/app_name"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
@@ -34,9 +35,9 @@
       android:text="@{model.name}"
       android:textAppearance="@style/TextAppearance.AppCompat.Medium"
       android:textColor="@color/black"
-      app:layout_constraintBottom_toBottomOf="@id/finisedSubTaskImageView"
-      app:layout_constraintStart_toEndOf="@id/finisedSubTaskImageView"
-      app:layout_constraintTop_toTopOf="@id/finisedSubTaskImageView"
+      app:layout_constraintBottom_toBottomOf="@id/finishStateSubTaskImageView"
+      app:layout_constraintStart_toEndOf="@id/finishStateSubTaskImageView"
+      app:layout_constraintTop_toTopOf="@id/finishStateSubTaskImageView"
       tools:text="Task Name" />
 
     <ImageView
@@ -45,6 +46,7 @@
       android:layout_height="wrap_content"
       android:layout_marginEnd="@dimen/large_margin"
       android:src="@drawable/ic_clear"
+      android:contentDescription="@string/app_name"
       app:layout_constraintBottom_toBottomOf="@id/subTaskNameTextView"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toTopOf="@id/subTaskNameTextView" />

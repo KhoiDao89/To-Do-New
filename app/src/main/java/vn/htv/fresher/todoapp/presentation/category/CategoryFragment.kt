@@ -30,27 +30,26 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding>() {
 
     binding.event = EventAddTask()
 
-    (safeActivity as? CategoryActivity)?.let {
-      it.deleteCategoryCallback = {
-        this.showConfirmDialog(
-          title             = R.string.delete_title,
-          message           = getString(R.string.delete_task_message, viewModel.itemCategory.value?.name),
-          positiveName      = R.string.delete,
-          positiveCallback  = {
-            val model = viewModel.itemCategory.value ?: return@showConfirmDialog
+    val categoryActivity = safeActivity as? CategoryActivity ?: return
 
-            viewModel.deleteCategory(model)
-          }
-        )
-      }
-      it.updateCategoryNameCallback = {
-        this.showInputDialog(
-          title                 = R.string.new_name_category,
-          prefill               = viewModel.itemCategory.value?.name,
-          positiveName          = R.string.button_save,
-          positiveTaskCallback  = { viewModel.updateCategoryName(it) }
-        )
-      }
+    categoryActivity.deleteCategoryCallback = {
+      this.showConfirmDialog(
+        title             = R.string.delete_title,
+        message           = getString(R.string.delete_task_message, viewModel.itemCategory.value?.name),
+        positiveName      = R.string.delete,
+        positiveCallback  = { viewModel.deleteCategory() }
+      )
+    }
+
+    categoryActivity.updateCategoryCallback = {
+      this.showInputDialog(
+        title                 = R.string.new_name_category,
+        text                  = viewModel.itemCategory.value?.name,
+        positiveName          = R.string.button_save,
+        positiveCallback  = { categoryName ->
+          viewModel.updateCategory(categoryName)
+        }
+      )
     }
   }
 
@@ -65,20 +64,41 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding>() {
     }
   }
 
+  override fun onResume() {
+    super.onResume()
+
+    viewModel.loadData()
+  }
+
   override fun registerLiveDataListener() {
     super.registerLiveDataListener()
 
-    viewModel.itemList.observe(this, {
-        taskAdapter.setItems(it)
-    })
-
-    viewModel.updateCategoryCompleted.observe(this, {
-      viewModel.loadCategory()
+    viewModel.addTaskCompleted.observe(this,{
+      if (!it) return@observe
+      viewModel.loadData()
     })
 
     viewModel.deleteCategoryCompleted.observe(this, {
       safeActivity.onBackPressed()
       viewModel.loadCategory()
+    })
+
+    viewModel.itemList.observe(this, {
+      taskAdapter.setItems(it)
+    })
+
+    viewModel.updateCategoryCompleted.observe(this, {
+      if (!it) return@observe
+      viewModel.loadCategory()
+    })
+
+    viewModel.updateTaskCompleted.observe(this, {
+      if (!it) return@observe
+      viewModel.loadData()
+    })
+
+    viewModel.itemCategory.observe(this, {
+      (safeActivity as? CategoryActivity)?.setToolbarTitle(it.name)
     })
   }
 
@@ -88,7 +108,7 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding>() {
         title                = R.string.new_task,
         hint                 = R.string.new_task_hint,
         positiveName         = R.string.button_create_task,
-        positiveTaskCallback = { viewModel.addNewTask(it) }
+        positiveCallback = { viewModel.addNewTask(it) }
       )
     }
   }

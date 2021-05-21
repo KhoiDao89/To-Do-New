@@ -23,7 +23,7 @@ class TaskAdapter(
   }
 
   override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
-    val task: TaskModel = taskList.get(position)
+    val task: TaskModel = taskList[position]
     holder.bind(task)
   }
 
