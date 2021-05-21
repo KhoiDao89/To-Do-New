@@ -2,7 +2,6 @@ package vn.htv.fresher.todoapp.domain.usecase.subtask
 
 import io.reactivex.Single
 import vn.htv.fresher.todoapp.domain.model.SubTaskModel
-import vn.htv.fresher.todoapp.domain.model.TaskModel
 import vn.htv.fresher.todoapp.domain.repository.SubTaskRepository
 
 class GetSubTaskUseCase(

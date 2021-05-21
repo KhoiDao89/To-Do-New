@@ -64,12 +64,12 @@ fun Fragment.showListDialog(
 }
 
 fun Fragment.showInputDialog(
-  title             : Int? = null,
-  hint              : Int? = null,
-  text              : String? = null,
-  positiveName      : Int,
-  negativeName      : Int? = R.string.cancel,
-  positiveCallback  : ((name: String) -> Unit)
+  title         : Int? = null,
+  hint          : Int? = null,
+  text          : String? = null,
+  positiveName  : Int,
+  negativeName  : Int? = R.string.cancel,
+  saveCallback  : ((name: String) -> Unit)
 ) {
   val ctx = context ?: return
 
@@ -79,7 +79,7 @@ fun Fragment.showInputDialog(
       hintRes = hint,
       prefill = text
     ) { _, content ->
-      positiveCallback.invoke(content.toString())
+      saveCallback.invoke(content.toString())
     }
     positiveButton(positiveName)
     negativeButton(negativeName)

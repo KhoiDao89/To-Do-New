@@ -7,7 +7,7 @@ import vn.htv.fresher.todoapp.domain.repository.SubTaskRepository
 class GetSubTaskListUseCase(
   private val subTaskRepository: SubTaskRepository
 ) {
-  operator fun invoke(id: Int? = null): Single<List<SubTaskModel>> {
-    return subTaskRepository.getSubTaskList(id)
+  operator fun invoke(taskId: Int): Single<List<SubTaskModel>> {
+    return subTaskRepository.getSubTaskList(taskId)
   }
 }

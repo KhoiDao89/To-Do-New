@@ -15,6 +15,7 @@ import vn.htv.fresher.todoapp.domain.usecase.task.SaveTaskUseCase
 import vn.htv.fresher.todoapp.domain.usecase.task.UpdateTaskUseCase
 import vn.htv.fresher.todoapp.presentation.common.BaseViewModel
 import vn.htv.fresher.todoapp.presentation.main.TaskGroup
+import java.security.InvalidParameterException
 
 class CategoryViewModel(
   private val deleteCategoryUseCase  : DeleteCategoryUseCase,
@@ -95,7 +96,7 @@ class CategoryViewModel(
               TaskGroup.IMPORTANT  -> taskModel.important
               TaskGroup.DEADLINE   -> taskModel.deadline != null
               TaskGroup.ACTION     -> taskModel.catId == null
-              else                 -> return@subscribeBy
+              else                 -> throw InvalidParameterException("It is not TaskGroup")
             }
           })
         },
@@ -106,13 +107,7 @@ class CategoryViewModel(
   }
 
   fun updateCategory(categoryName: String) {
-    val catId = categoryId ?: return
-
-    val model = CategoryModel(
-      name       = categoryName,
-      id         = catId.toInt(),
-      createdAt  = LocalDateTime.now()
-    )
+    val model = itemCategory.value?.copy(name = categoryName) ?: return
 
     disposables += updateCategoryUseCase(model)
       .subscribeBy(
@@ -146,21 +141,16 @@ class CategoryViewModel(
   }
 
   fun deleteCategory() {
-    val catId = categoryId ?: return
-    val model = itemCategory.value ?: return
+    val catId = categoryId          ?: return
+    val model = itemCategory.value  ?: return
 
-    disposables += deleteTaskListUseCase(catId.toInt())
+    val deleteCategoryObservable = deleteCategoryUseCase(model)
+    val deleteTaskListObservable = deleteTaskListUseCase(catId.toInt())
+
+    disposables += deleteTaskListObservable.andThen(deleteCategoryObservable)
       .subscribeBy(
         onComplete = {
-          disposables += deleteCategoryUseCase(model)
-            .subscribeBy(
-              onComplete = {
-                _deleteCategoryCompleted.postValue(true)
-              },
-              onError = {
-                Timber.e(it.toString())
-              }
-            )
+          _deleteCategoryCompleted.postValue(true)
         },
         onError = {
           Timber.e(it.toString())
@@ -168,27 +158,24 @@ class CategoryViewModel(
       )
   }
 
-  fun addNewTask(taskName: String) {
-    val model = TaskModel(
-      name      = taskName,
-      createdAt = LocalDateTime.now()
-    )
+  fun addTask(taskName: String) {
+    val model = TaskModel(name = taskName)
 
-    var taskGroupModel = model.copy()
+    var taskModel = model.copy()
 
     when {
       taskGroup != null -> {
         when(taskGroup) {
-          TaskGroup.MY_DAY    -> taskGroupModel = model.copy(myDay = true)
-          TaskGroup.IMPORTANT -> taskGroupModel = model.copy(important = true)
-          TaskGroup.DEADLINE  -> taskGroupModel = model.copy(deadline = LocalDateTime.now())
-          TaskGroup.ACTION    -> taskGroupModel = model.copy(catId = null)
+          TaskGroup.MY_DAY    -> taskModel = model.copy(myDay = true)
+          TaskGroup.IMPORTANT -> taskModel = model.copy(important = true)
+          TaskGroup.DEADLINE  -> taskModel = model.copy(deadline = LocalDateTime.now())
+          TaskGroup.ACTION    -> {}
         }
       }
-      categoryId != null -> taskGroupModel = model.copy(catId = categoryId?.toInt())
+      categoryId != null -> taskModel = model.copy(catId = categoryId?.toInt())
     }
 
-    disposables += saveTaskUseCase(taskGroupModel)
+    disposables += saveTaskUseCase(taskModel)
       .subscribeBy(
         onComplete = {
           _addTaskCompleted.postValue(true)

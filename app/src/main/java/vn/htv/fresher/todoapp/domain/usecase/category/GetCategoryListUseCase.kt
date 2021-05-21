@@ -2,7 +2,6 @@ package vn.htv.fresher.todoapp.domain.usecase.category
 
 import io.reactivex.Single
 import vn.htv.fresher.todoapp.domain.model.CategoryModel
-import vn.htv.fresher.todoapp.domain.model.SubTaskModel
 import vn.htv.fresher.todoapp.domain.repository.CategoryRepository
 
 class GetCategoryListUseCase(

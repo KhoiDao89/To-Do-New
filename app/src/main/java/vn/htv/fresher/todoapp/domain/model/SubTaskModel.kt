@@ -8,7 +8,7 @@ data class SubTaskModel(
   val taskId     : Int,
   val name       : String,
   val finished   : Boolean = false,
-  val createdAt  : LocalDateTime
+  val createdAt  : LocalDateTime = LocalDateTime.now()
 ) {
   val finishedSubTask: Int = if (finished) R.drawable.ic_finished else R.drawable.ic_not_finish
 }

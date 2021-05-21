@@ -1,11 +1,13 @@
 package vn.htv.fresher.todoapp.presentation.category
 
+import kotlinx.android.synthetic.main.activity_category.*
 import kotlinx.android.synthetic.main.fragment_category.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import vn.htv.fresher.todoapp.R
 import vn.htv.fresher.todoapp.databinding.FragmentCategoryBinding
 import vn.htv.fresher.todoapp.presentation.common.BaseFragment
 import vn.htv.fresher.todoapp.presentation.common.decoration.DefaultItemDecoration
+import vn.htv.fresher.todoapp.presentation.main.TaskGroup
 import vn.htv.fresher.todoapp.presentation.taskdetail.TaskDetailActivity
 import vn.htv.fresher.todoapp.util.ext.showConfirmDialog
 import vn.htv.fresher.todoapp.util.ext.showInputDialog
@@ -43,10 +45,10 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding>() {
 
     categoryActivity.updateCategoryCallback = {
       this.showInputDialog(
-        title             = R.string.new_name_category,
-        text              = viewModel.itemCategory.value?.name,
-        positiveName      = R.string.button_save,
-        positiveCallback  = { categoryName ->
+        title         = R.string.new_name_category,
+        text          = viewModel.itemCategory.value?.name,
+        positiveName  = R.string.button_save,
+        saveCallback  = { categoryName ->
           viewModel.updateCategory(categoryName)
         }
       )
@@ -60,7 +62,7 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding>() {
       adapter = taskAdapter
       addItemDecoration(DefaultItemDecoration(
         resources.getDimensionPixelSize(R.dimen.layout_margin_start_end),
-        resources.getDimensionPixelSize(R.dimen.layout_margin_top_bottom) ))
+        resources.getDimensionPixelSize(R.dimen.layout_margin_top_bottom)))
     }
   }
 
@@ -80,7 +82,6 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding>() {
 
     viewModel.deleteCategoryCompleted.observe(this, {
       safeActivity.onBackPressed()
-      viewModel.loadCategory()
     })
 
     viewModel.itemList.observe(this, {
@@ -105,10 +106,10 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding>() {
   inner class EventAddTask {
     fun onNewTask() {
       this@CategoryFragment.showInputDialog(
-        title             = R.string.new_task,
-        hint              = R.string.new_task_hint,
-        positiveName      = R.string.button_create_task,
-        positiveCallback  = { viewModel.addNewTask(it) }
+        title         = R.string.new_task,
+        hint          = R.string.new_task_hint,
+        positiveName  = R.string.button_create_task,
+        saveCallback  = { viewModel.addTask(it) }
       )
     }
   }

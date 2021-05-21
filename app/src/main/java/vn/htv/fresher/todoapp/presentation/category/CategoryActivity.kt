@@ -4,7 +4,9 @@ import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import kotlinx.android.synthetic.main.activity_category.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import vn.htv.fresher.todoapp.R
 import vn.htv.fresher.todoapp.presentation.common.BaseActivity
@@ -31,7 +33,7 @@ class CategoryActivity : BaseActivity() {
     when {
       viewModel.taskGroup != null -> {
         val taskAttributeId = viewModel.taskGroup?.groupName ?: return
-        setToolbarTitle(getString(taskAttributeId))
+        setToolbarTitleRes(taskAttributeId)
       }
       else -> viewModel.categoryId = intent.getLongExtra(PARAM_EXTRA_CATEGORY_ID, 0)
     }
@@ -43,6 +45,17 @@ class CategoryActivity : BaseActivity() {
     super.initUi()
 
     showBackButton()
+
+    setBackground()
+  }
+
+  private fun setBackground() {
+    when (viewModel.taskGroup) {
+      TaskGroup.MY_DAY    -> content.setBackgroundResource(R.color.bg_my_day)
+      TaskGroup.IMPORTANT -> content.setBackgroundResource(R.color.bg_important)
+      TaskGroup.DEADLINE  -> content.setBackgroundResource(R.color.bg_deadline)
+      else                -> content.setBackgroundResource(R.color.bg_action)
+    }
   }
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -52,7 +65,7 @@ class CategoryActivity : BaseActivity() {
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
-      R.id.changeCategoryNameMenu -> updateCategoryCallback?.invoke()
+      R.id.updateCategoryNameMenu -> updateCategoryCallback?.invoke()
       R.id.deleteCategoryMenu     -> deleteCategoryCallback?.invoke()
     }
 

@@ -36,13 +36,13 @@ class TaskDetailFragment : BaseFragment<FragmentTaskDetailBinding>() {
       removeRepeatTaskCallback    = { viewModel.removeRepeatTask(it) },
       saveNewSubtaskCallback      = {
         this.showInputDialog(
-          title             = R.string.next_step,
-          hint              = R.string.new_subtask_hint,
-          positiveName      = R.string.next_step,
-          positiveCallback  = { subTaskName ->
+          title         = R.string.next_step,
+          hint          = R.string.new_subtask_hint,
+          positiveName  = R.string.next_step,
+          saveCallback  = { subTaskName ->
             val taskId = viewModel.task.value?.id ?: return@showInputDialog
 
-            viewModel.saveNewSubTask(taskId, subTaskName)
+            viewModel.addSubTask(taskId, subTaskName)
           }
         )
       },

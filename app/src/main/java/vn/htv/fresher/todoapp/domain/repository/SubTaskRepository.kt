@@ -11,7 +11,7 @@ interface SubTaskRepository {
 
   fun get(id: Int): Single<SubTaskModel>
 
-  fun getSubTaskList(taskId: Int? = null): Single<List<SubTaskModel>>
+  fun getSubTaskList(taskId: Int): Single<List<SubTaskModel>>
 
   fun saveSubTask(model: SubTaskModel): Completable
 

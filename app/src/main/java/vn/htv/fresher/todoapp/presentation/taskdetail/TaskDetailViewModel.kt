@@ -164,18 +164,17 @@ class TaskDetailViewModel(
   private fun generateTaskAttribute(taskAttribute: TaskModel): List<TaskDetailItem> {
     val list = mutableListOf<TaskDetailItem>()
 
-    val items = TaskAttributeEnum.values().map { attributes ->
-      TaskDetailItem.TaskAttribute(taskAttribute, attributes)
+    val items = TaskAttributeEnum.values().map { attribute ->
+      TaskDetailItem.TaskAttribute(taskAttribute, attribute)
     }
     list.addAll(items)
     return list
   }
 
-  fun saveNewSubTask(taskId: Int, subTaskName: String) {
+  fun addSubTask(taskId: Int, subTaskName: String) {
     val model = SubTaskModel(
       taskId    = taskId,
-      name      = subTaskName,
-      createdAt = LocalDateTime.now()
+      name      = subTaskName
     )
 
     disposables += saveSubTaskUseCase(model)
@@ -227,22 +226,16 @@ class TaskDetailViewModel(
   }
 
   fun deleteTask() {
-    val task = _task.value ?: return
+    val task    = _task.value ?: return
+    val taskId  = task.id     ?: return
 
-    val taskId = task.id ?: return
+    val deleteSubTaskListObservable = deleteSubTaskListUseCase(taskId)
+    val deleteTaskObservable        = deleteTaskUseCase(task)
 
-    disposables += deleteSubTaskListUseCase(taskId)
+    disposables += deleteSubTaskListObservable.andThen(deleteTaskObservable)
       .subscribeBy(
         onComplete = {
-          disposables += deleteTaskUseCase(task)
-            .subscribeBy (
-              onComplete = {
-                Timber.i("Deleted $task from Database")
-              },
-              onError = {
-                Timber.e(it.toString())
-              }
-            )
+          Timber.i("Deleted $task from Database")
         },
         onError = {
           Timber.e(it.toString())

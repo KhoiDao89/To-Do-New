@@ -41,7 +41,7 @@ enum class TaskGroup {
 
 
   companion object {
-    fun from(type: String?) = values().find { it.name == type } ?: null
+    fun from(type: String?) = values().find { it.name == type }
   }
 }
 
@@ -143,7 +143,9 @@ class MainViewModel(
     return list
   }
 
-  fun addNewCategory(model: CategoryModel) {
+  fun addCategory(name: String) {
+    val model = CategoryModel(name = name)
+
     disposables += saveCategoryUseCase(model)
       .subscribeBy(
         onSuccess = {
