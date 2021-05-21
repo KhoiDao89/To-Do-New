@@ -24,10 +24,10 @@ class TaskDetailFragment : BaseFragment<FragmentTaskDetailBinding>() {
     SubTaskAdapter(
       deleteSubTaskCallback = {
         this.showConfirmDialog(
-          title            = R.string.delete_title,
-          message          = getString(R.string.delete_task_message, it.name),
-          positiveName     = R.string.delete,
-          positiveCallback = { viewModel.deleteSubTask(it) }
+          title             = R.string.delete_title,
+          message           = getString(R.string.delete_task_message, it.name),
+          positiveName      = R.string.delete,
+          positiveCallback  = { viewModel.deleteSubTask(it) }
         )
       },
       finishedSubTaskCallback     = { viewModel.updateFinishStateSubTask(it) },
@@ -36,9 +36,9 @@ class TaskDetailFragment : BaseFragment<FragmentTaskDetailBinding>() {
       removeRepeatTaskCallback    = { viewModel.removeRepeatTask(it) },
       saveNewSubtaskCallback      = {
         this.showInputDialog(
-          title                 = R.string.next_step,
-          hint                  = R.string.new_subtask_hint,
-          positiveName          = R.string.next_step,
+          title             = R.string.next_step,
+          hint              = R.string.new_subtask_hint,
+          positiveName      = R.string.next_step,
           positiveCallback  = { subTaskName ->
             val taskId = viewModel.task.value?.id ?: return@showInputDialog
 
@@ -114,10 +114,10 @@ class TaskDetailFragment : BaseFragment<FragmentTaskDetailBinding>() {
   inner class DeleteEventListeners {
     fun deleteTask() {
       this@TaskDetailFragment.showConfirmDialog(
-        title               = R.string.delete_title,
-        message             = getString(R.string.delete_task_message, viewModel.task.value?.name),
-        positiveName        = R.string.delete,
-        positiveCallback    = {
+        title             = R.string.delete_title,
+        message           = getString(R.string.delete_task_message, viewModel.task.value?.name),
+        positiveName      = R.string.delete,
+        positiveCallback  = {
           viewModel.deleteTask()
           safeActivity.onBackPressed()
         }

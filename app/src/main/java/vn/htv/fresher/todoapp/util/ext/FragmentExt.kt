@@ -64,11 +64,11 @@ fun Fragment.showListDialog(
 }
 
 fun Fragment.showInputDialog(
-  title                 : Int? = null,
-  hint                  : Int? = null,
+  title             : Int? = null,
+  hint              : Int? = null,
   text              : String? = null,
-  positiveName          : Int,
-  negativeName          : Int? = R.string.cancel,
+  positiveName      : Int,
+  negativeName      : Int? = R.string.cancel,
   positiveCallback  : ((name: String) -> Unit)
 ) {
   val ctx = context ?: return

@@ -43,9 +43,9 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding>() {
 
     categoryActivity.updateCategoryCallback = {
       this.showInputDialog(
-        title                 = R.string.new_name_category,
-        text                  = viewModel.itemCategory.value?.name,
-        positiveName          = R.string.button_save,
+        title             = R.string.new_name_category,
+        text              = viewModel.itemCategory.value?.name,
+        positiveName      = R.string.button_save,
         positiveCallback  = { categoryName ->
           viewModel.updateCategory(categoryName)
         }
@@ -105,10 +105,10 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding>() {
   inner class EventAddTask {
     fun onNewTask() {
       this@CategoryFragment.showInputDialog(
-        title                = R.string.new_task,
-        hint                 = R.string.new_task_hint,
-        positiveName         = R.string.button_create_task,
-        positiveCallback = { viewModel.addNewTask(it) }
+        title             = R.string.new_task,
+        hint              = R.string.new_task_hint,
+        positiveName      = R.string.button_create_task,
+        positiveCallback  = { viewModel.addNewTask(it) }
       )
     }
   }

@@ -95,7 +95,7 @@ class CategoryViewModel(
               TaskGroup.IMPORTANT  -> taskModel.important
               TaskGroup.DEADLINE   -> taskModel.deadline != null
               TaskGroup.ACTION     -> taskModel.catId == null
-              else -> return@subscribeBy
+              else                 -> return@subscribeBy
             }
           })
         },
@@ -166,8 +166,6 @@ class CategoryViewModel(
           Timber.e(it.toString())
         }
       )
-
-
   }
 
   fun addNewTask(taskName: String) {
@@ -176,21 +174,21 @@ class CategoryViewModel(
       createdAt = LocalDateTime.now()
     )
 
-    var groupTask = model.copy()
+    var taskGroupModel = model.copy()
 
     when {
       taskGroup != null -> {
         when(taskGroup) {
-          TaskGroup.MY_DAY    -> groupTask = model.copy(myDay = true)
-          TaskGroup.IMPORTANT -> groupTask = model.copy(important = true)
-          TaskGroup.DEADLINE  -> groupTask = model.copy(deadline = LocalDateTime.now())
-          TaskGroup.ACTION    -> groupTask = model.copy(catId = null)
+          TaskGroup.MY_DAY    -> taskGroupModel = model.copy(myDay = true)
+          TaskGroup.IMPORTANT -> taskGroupModel = model.copy(important = true)
+          TaskGroup.DEADLINE  -> taskGroupModel = model.copy(deadline = LocalDateTime.now())
+          TaskGroup.ACTION    -> taskGroupModel = model.copy(catId = null)
         }
       }
-      categoryId != null -> groupTask = model.copy(catId = categoryId?.toInt())
+      categoryId != null -> taskGroupModel = model.copy(catId = categoryId?.toInt())
     }
 
-    disposables += saveTaskUseCase(groupTask)
+    disposables += saveTaskUseCase(taskGroupModel)
       .subscribeBy(
         onComplete = {
           _addTaskCompleted.postValue(true)

@@ -23,18 +23,18 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
   private val categoryAdapter by lazy {
     CategoryAdapter(
-        categoryCallback = {
-          CategoryActivity.start(
-            activity  = safeActivity,
-            catId     = it.toLong()
-          )
-        },
-        taskGroupCallback = {
-          CategoryActivity.start(
-            activity  = safeActivity,
-            taskGroup = it
-          )
-        }
+      categoryCallback = {
+        CategoryActivity.start(
+          activity  = safeActivity,
+          catId     = it.toLong()
+        )
+      },
+      taskGroupCallback = {
+        CategoryActivity.start(
+          activity  = safeActivity,
+          taskGroup = it
+        )
+      }
     )
   }
 
@@ -62,15 +62,15 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     super.registerLiveDataListener()
 
     viewModel.mainItemList.observe(this, {
-         categoryAdapter.setItems(it)
-       })
+      categoryAdapter.setItems(it)
+    })
 
     viewModel.addCategoryCompleted.observe(this@MainFragment, {
-         CategoryActivity.start(
-           activity = safeActivity,
-           catId    = it
-         )
-       })
+      CategoryActivity.start(
+        activity  = safeActivity,
+        catId     = it
+      )
+    })
   }
 
   override fun onResume() {
@@ -82,9 +82,9 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
   inner class EventListeners {
     fun onNewCategory() {
       this@MainFragment.showInputDialog(
-        title                 = R.string.new_category,
-        hint                  = R.string.new_category_hint,
-        positiveName          = R.string.button_create_category,
+        title             = R.string.new_category,
+        hint              = R.string.new_category_hint,
+        positiveName      = R.string.button_create_category,
         positiveCallback  = {
           val model = CategoryModel(
             name      = it,
