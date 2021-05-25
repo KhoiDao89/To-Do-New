@@ -1,6 +1,7 @@
 package vn.htv.fresher.todoapp.presentation.main
 
 import android.content.Context
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -32,7 +33,7 @@ enum class TaskGroup {
     }
 
   val groupIcon: Int
-    @StringRes get() = when (this) {
+    @DrawableRes get() = when (this) {
       MY_DAY    -> R.drawable.ic_my_day
       IMPORTANT -> R.drawable.ic_important
       DEADLINE  -> R.drawable.ic_deadline

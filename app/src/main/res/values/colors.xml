@@ -19,7 +19,13 @@
 
   <!-- Background -->
   <color name="bg_my_day">#FABFFAD5</color>
-  <color name="bg_important">#FAF2B7FA</color>
+  <color name="bg_important">#FAEFC9F4</color>
   <color name="bg_deadline">#FABDF0F4</color>
   <color name="bg_action">#FA246FF3</color>
+
+  <!-- Background Button -->
+  <color name="bg_my_day_button">#FA06AF6A</color>
+  <color name="bg_important_button">#FAD620B7</color>
+  <color name="bg_deadline_button">#FA38C6C1</color>
+  <color name="bg_action_button">#FA789DE1</color>
 </resources>

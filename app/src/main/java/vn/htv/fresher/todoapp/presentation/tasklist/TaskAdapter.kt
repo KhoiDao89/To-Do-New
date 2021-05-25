@@ -1,4 +1,4 @@
-package vn.htv.fresher.todoapp.presentation.category
+package vn.htv.fresher.todoapp.presentation.tasklist
 
 import android.graphics.Paint
 import android.view.LayoutInflater

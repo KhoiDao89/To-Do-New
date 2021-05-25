@@ -6,8 +6,8 @@
   <data>
 
     <variable
-      name="event"
-      type="vn.htv.fresher.todoapp.presentation.category.CategoryFragment.EventAddTask" />
+        name="viewModel"
+        type="vn.htv.fresher.todoapp.presentation.tasklist.TaskListViewModel" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout
@@ -30,9 +30,8 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/large_margin"
-      android:backgroundTint="@color/very_light_blue"
-      android:onClick="@{()-> event.onNewTask()}"
       android:src="@drawable/ic_add"
+      app:tint="@color/white"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       android:contentDescription="@string/app_name" />

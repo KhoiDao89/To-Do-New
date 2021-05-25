@@ -17,9 +17,10 @@
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
-    <activity android:name=".presentation.category.CategoryActivity" />
+    <activity android:name=".presentation.tasklist.category.CategoryActivity" />
     <activity android:name=".presentation.note.NoteActivity" />
     <activity android:name=".presentation.taskdetail.TaskDetailActivity" />
+    <activity android:name=".presentation.tasklist.taskgroup.TaskGroupActivity" />
   </application>
 
 </manifest>

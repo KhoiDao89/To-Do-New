@@ -4,9 +4,10 @@ import kotlinx.android.synthetic.main.fragment_main.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import vn.htv.fresher.todoapp.R
 import vn.htv.fresher.todoapp.databinding.FragmentMainBinding
-import vn.htv.fresher.todoapp.presentation.category.CategoryActivity
+import vn.htv.fresher.todoapp.presentation.tasklist.category.CategoryActivity
 import vn.htv.fresher.todoapp.presentation.common.BaseFragment
 import vn.htv.fresher.todoapp.presentation.common.decoration.DefaultItemDecoration
+import vn.htv.fresher.todoapp.presentation.tasklist.taskgroup.TaskGroupActivity
 import vn.htv.fresher.todoapp.util.ext.showInputDialog
 
 class MainFragment : BaseFragment<FragmentMainBinding>() {
@@ -24,13 +25,13 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
       categoryCallback = {
         CategoryActivity.start(
           activity  = safeActivity,
-          catId     = it.toLong()
+          catId     = it
         )
       },
       taskGroupCallback = {
-        CategoryActivity.start(
+        TaskGroupActivity.start(
           activity  = safeActivity,
-          taskGroup = it
+          group     = it
         )
       }
     )
@@ -66,7 +67,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     viewModel.addCategoryCompleted.observe(this@MainFragment, {
       CategoryActivity.start(
         activity  = safeActivity,
-        catId     = it
+        catId     = it.toInt()
       )
     })
   }
