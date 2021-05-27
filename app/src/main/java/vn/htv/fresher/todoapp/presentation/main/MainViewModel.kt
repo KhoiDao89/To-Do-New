@@ -1,6 +1,7 @@
 package vn.htv.fresher.todoapp.presentation.main
 
 import android.content.Context
+import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
@@ -40,6 +41,21 @@ enum class TaskGroup {
       ACTION    -> R.drawable.ic_action
     }
 
+  val backgroundResId: Int
+    @ColorRes get() = when (this) {
+      MY_DAY    -> R.color.bg_my_day
+      IMPORTANT -> R.color.bg_important
+      DEADLINE  -> R.color.bg_deadline
+      ACTION    -> R.color.bg_action
+    }
+
+  val backgroundTintResId: Int
+    @ColorRes get() = when (this) {
+      MY_DAY    -> R.color.bg_my_day_button
+      IMPORTANT -> R.color.bg_important_button
+      DEADLINE  -> R.color.bg_deadline_button
+      ACTION    -> R.color.bg_action_button
+    }
 
   companion object {
     fun from(type: String?) = values().find { it.name == type }

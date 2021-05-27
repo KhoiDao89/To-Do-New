@@ -4,20 +4,12 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import vn.htv.fresher.todoapp.R
 import vn.htv.fresher.todoapp.presentation.main.TaskGroup
 import vn.htv.fresher.todoapp.presentation.tasklist.TaskListActivity
-import java.security.InvalidParameterException
 
 class TaskGroupActivity : TaskListActivity<TaskGroupViewModel>() {
   override val backgroundResId: Int
-    get() = when (viewModel.taskGroup) {
-      TaskGroup.MY_DAY    -> R.color.bg_my_day
-      TaskGroup.IMPORTANT -> R.color.bg_important
-      TaskGroup.DEADLINE  -> R.color.bg_deadline
-      TaskGroup.ACTION    -> R.color.bg_action
-      else -> throw InvalidParameterException("Unexpected task group [${viewModel.taskGroup}]")
-    }
+    get() = viewModel.taskGroup?.backgroundResId ?: 0
 
   override val fragment: Fragment
     get() = TaskGroupFragment.newInstance()
