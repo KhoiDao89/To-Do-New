@@ -21,7 +21,7 @@
   <color name="bg_my_day">#FABFFAD5</color>
   <color name="bg_important">#FAEFC9F4</color>
   <color name="bg_deadline">#FABDF0F4</color>
-  <color name="bg_action">#FA246FF3</color>
+  <color name="bg_action">#FA528CF3</color>
 
   <!-- Background Button -->
   <color name="bg_my_day_button">#FA06AF6A</color>

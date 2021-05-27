@@ -21,7 +21,11 @@ abstract class TaskListFragment<VM : TaskListViewModel> : BaseFragment<FragmentT
     TaskAdapter(
       finishedCallback    = { viewModel.updateFinishStateTask(it) },
       importantCallback   = { viewModel.updateImportantTask(it) },
-      taskDetailCallback  = { TaskDetailActivity.start(safeActivity, it) }
+      taskDetailCallback  = {
+        val title = viewModel.title.value ?: return@TaskAdapter
+
+        TaskDetailActivity.start(safeActivity, it, title)
+      }
     )
   }
 

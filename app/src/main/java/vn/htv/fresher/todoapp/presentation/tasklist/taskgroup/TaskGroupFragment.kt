@@ -5,7 +5,7 @@ import vn.htv.fresher.todoapp.presentation.tasklist.TaskListFragment
 
 class TaskGroupFragment : TaskListFragment<TaskGroupViewModel>() {
   override val backgroundTintResId: Int
-    get() = viewModel.taskGroup?.backgroundTintResId ?: 0
+    get() = viewModel.taskGroup?.backgroundTintResId ?: throw NullPointerException("backgroundTintResId has not value")
 
   override val viewModel by sharedViewModel<TaskGroupViewModel>()
 

@@ -9,7 +9,7 @@ import vn.htv.fresher.todoapp.presentation.tasklist.TaskListActivity
 
 class TaskGroupActivity : TaskListActivity<TaskGroupViewModel>() {
   override val backgroundResId: Int
-    get() = viewModel.taskGroup?.backgroundResId ?: 0
+    get() = viewModel.taskGroup?.backgroundResId ?: throw NullPointerException("backgroundResId has not value")
 
   override val fragment: Fragment
     get() = TaskGroupFragment.newInstance()

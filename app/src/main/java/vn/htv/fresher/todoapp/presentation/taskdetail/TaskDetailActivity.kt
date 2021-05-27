@@ -25,7 +25,9 @@ class TaskDetailActivity : BaseActivity() {
   override fun init() {
     super.init()
 
-    val taskId = intent.getIntExtra(PARAM_EXTRA_TASK_ID, 0)
+    val taskId  = intent.getIntExtra(PARAM_EXTRA_TASK_ID, 0)
+    val title   = intent.getStringExtra(PARAM_EXTRA_TITLE) ?: return
+    setToolbarTitle(title)
 
     if (taskId == 0) onBackPressed()
     viewModel.taskId = taskId
@@ -48,12 +50,14 @@ class TaskDetailActivity : BaseActivity() {
 
   companion object {
     private const val PARAM_EXTRA_TASK_ID = "TASK_ID"
+    private const val PARAM_EXTRA_TITLE   = "TITLE"
 
-    fun start(activity: AppCompatActivity, taskId: Int) {
+    fun start(activity: AppCompatActivity, taskId: Int, title: String) {
       val intent = Intent(activity, TaskDetailActivity::class.java)
 
       intent.apply {
         putExtra(PARAM_EXTRA_TASK_ID, taskId)
+        putExtra(PARAM_EXTRA_TITLE, title)
       }
 
       activity.startActivity(intent)

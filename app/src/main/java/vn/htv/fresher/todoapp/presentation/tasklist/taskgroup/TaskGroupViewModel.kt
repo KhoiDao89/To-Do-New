@@ -40,7 +40,7 @@ class TaskGroupViewModel(
       TaskGroup.MY_DAY    -> taskModel = model.copy(myDay = true)
       TaskGroup.IMPORTANT -> taskModel = model.copy(important = true)
       TaskGroup.DEADLINE  -> taskModel = model.copy(deadline = LocalDateTime.now())
-      TaskGroup.ACTION    -> {}
+      TaskGroup.ACTION    -> { /* taskModel not be changing */ }
     }
 
     saveTask(taskModel)
