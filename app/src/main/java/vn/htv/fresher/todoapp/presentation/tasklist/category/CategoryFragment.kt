@@ -8,7 +8,7 @@ import vn.htv.fresher.todoapp.util.ext.showConfirmDialog
 import vn.htv.fresher.todoapp.util.ext.showInputDialog
 
 class CategoryFragment : TaskListFragment<CategoryViewModel>() {
-  override var backgroundTintResId: Int = 0
+  override val backgroundTintResId = R.color.bg_action_button
 
   override val viewModel by sharedViewModel<CategoryViewModel>()
 
@@ -36,12 +36,6 @@ class CategoryFragment : TaskListFragment<CategoryViewModel>() {
         }
       )
     }
-  }
-
-  override fun setBackgroundTintButton() {
-    backgroundTintResId = R.color.bg_action_button
-
-    super.setBackgroundTintButton()
   }
 
   override fun registerLiveDataListener() {

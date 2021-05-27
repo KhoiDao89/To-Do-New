@@ -12,7 +12,7 @@ import vn.htv.fresher.todoapp.util.ext.showInputDialog
 abstract class TaskListFragment<VM : TaskListViewModel> : BaseFragment<FragmentTaskListBinding>() {
   protected abstract val viewModel: VM
 
-  protected abstract var backgroundTintResId: Int
+  protected abstract val backgroundTintResId: Int
 
   override val layoutId: Int
     get() = R.layout.fragment_task_list
@@ -44,11 +44,6 @@ abstract class TaskListFragment<VM : TaskListViewModel> : BaseFragment<FragmentT
     }
 
     setBackgroundTintButton()
-  }
-
-  open fun setBackgroundTintButton() {
-    taskFloatingActionButton.backgroundTintList = ContextCompat.getColorStateList(safeContext,
-      backgroundTintResId)
   }
 
   override fun registerListeners() {
@@ -86,5 +81,10 @@ abstract class TaskListFragment<VM : TaskListViewModel> : BaseFragment<FragmentT
       if (!it) return@observe
       viewModel.loadData()
     })
+  }
+
+  private fun setBackgroundTintButton() {
+    taskFloatingActionButton.backgroundTintList =
+      ContextCompat.getColorStateList(safeContext, backgroundTintResId)
   }
 }

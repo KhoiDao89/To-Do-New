@@ -5,7 +5,7 @@ import vn.htv.fresher.todoapp.R
 import vn.htv.fresher.todoapp.presentation.common.BaseActivity
 
 abstract class TaskListActivity<VM : TaskListViewModel> : BaseActivity() {
-  protected abstract var backgroundResId: Int
+  protected abstract val backgroundResId: Int
 
   protected abstract val viewModel: VM
 
@@ -22,11 +22,11 @@ abstract class TaskListActivity<VM : TaskListViewModel> : BaseActivity() {
     setBackground()
   }
 
-  open fun setBackground() {
+  private fun setBackground() {
     content.setBackgroundResource(backgroundResId)
   }
 
-  fun registerLiveDataListener() {
+  private fun registerLiveDataListener() {
     viewModel.title.observe(this,{
       setToolbarTitle(title = it)
     })

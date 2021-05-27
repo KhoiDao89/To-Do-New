@@ -10,7 +10,7 @@ import vn.htv.fresher.todoapp.R
 import vn.htv.fresher.todoapp.presentation.tasklist.TaskListActivity
 
 class CategoryActivity : TaskListActivity<CategoryViewModel>() {
-  override var backgroundResId: Int = 0
+  override val backgroundResId = R.color.bg_action
 
   override val fragment: Fragment
     get() = CategoryFragment.newInstance()
@@ -25,12 +25,6 @@ class CategoryActivity : TaskListActivity<CategoryViewModel>() {
     viewModel.categoryId = catId
 
     super.init()
-  }
-
-  override fun setBackground() {
-    backgroundResId = R.color.bg_action
-
-    super.setBackground()
   }
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {

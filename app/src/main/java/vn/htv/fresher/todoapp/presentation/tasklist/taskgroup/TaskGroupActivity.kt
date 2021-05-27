@@ -7,9 +7,17 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import vn.htv.fresher.todoapp.R
 import vn.htv.fresher.todoapp.presentation.main.TaskGroup
 import vn.htv.fresher.todoapp.presentation.tasklist.TaskListActivity
+import java.security.InvalidParameterException
 
 class TaskGroupActivity : TaskListActivity<TaskGroupViewModel>() {
-  override var backgroundResId: Int = 0
+  override val backgroundResId: Int
+    get() = when (viewModel.taskGroup) {
+      TaskGroup.MY_DAY    -> R.color.bg_my_day
+      TaskGroup.IMPORTANT -> R.color.bg_important
+      TaskGroup.DEADLINE  -> R.color.bg_deadline
+      TaskGroup.ACTION    -> R.color.bg_action
+      else -> throw InvalidParameterException("Unexpected task group [${viewModel.taskGroup}]")
+    }
 
   override val fragment: Fragment
     get() = TaskGroupFragment.newInstance()
@@ -21,17 +29,6 @@ class TaskGroupActivity : TaskListActivity<TaskGroupViewModel>() {
     viewModel.taskGroup = group
 
     super.init()
-  }
-
-  override fun setBackground() {
-    when (viewModel.taskGroup) {
-      TaskGroup.MY_DAY    -> backgroundResId = R.color.bg_my_day
-      TaskGroup.IMPORTANT -> backgroundResId = R.color.bg_important
-      TaskGroup.DEADLINE  -> backgroundResId = R.color.bg_deadline
-      TaskGroup.ACTION    -> backgroundResId = R.color.bg_action
-    }
-
-    super.setBackground()
   }
 
   companion object {
