@@ -1,5 +1,6 @@
 package vn.htv.fresher.todoapp.presentation.taskdetail
 
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -70,7 +71,9 @@ class SubTaskAdapter(
     fun bind(model: SubTaskModel) {
       bindingSubTask.model = model
 
-      bindingSubTask.root.finisedSubTaskImageView.setOnClickListener {
+      bindingSubTask.root.subTaskNameTextView.paintFlags = if (model.finished) Paint.STRIKE_THRU_TEXT_FLAG else 0
+
+      bindingSubTask.root.finishStateSubTaskImageView.setOnClickListener {
         finishedSubTaskCallback.invoke(model)
       }
       bindingSubTask.root.deleteSubTaskImageView.setOnClickListener {

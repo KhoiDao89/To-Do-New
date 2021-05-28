@@ -13,7 +13,7 @@ data class TaskModel(
   val important  : Boolean = false,
   val reminder   : LocalDateTime? = null,
   val repeat     : Int? = null,
-  val createdAt  : LocalDateTime,
+  val createdAt  : LocalDateTime = LocalDateTime.now(),
   val note       : String? = null
 ) {
   fun getAttributeState(attribute: TaskAttributeEnum): Boolean {

@@ -13,14 +13,11 @@ import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 import vn.htv.fresher.todoapp.domain.model.SubTaskModel
 import vn.htv.fresher.todoapp.domain.model.TaskModel
-import vn.htv.fresher.todoapp.domain.usecase.subtask.GetSubTaskListUseCase
 import vn.htv.fresher.todoapp.domain.usecase.task.GetTaskUseCase
 import vn.htv.fresher.todoapp.presentation.common.BaseViewModel
 import io.reactivex.functions.BiFunction
 import vn.htv.fresher.todoapp.R
-import vn.htv.fresher.todoapp.domain.usecase.subtask.DeleteSubTaskUseCase
-import vn.htv.fresher.todoapp.domain.usecase.subtask.SaveSubTaskUseCase
-import vn.htv.fresher.todoapp.domain.usecase.subtask.UpdateSubTaskUseCase
+import vn.htv.fresher.todoapp.domain.usecase.subtask.*
 import vn.htv.fresher.todoapp.domain.usecase.task.DeleteTaskUseCase
 import vn.htv.fresher.todoapp.domain.usecase.task.UpdateTaskUseCase
 import vn.htv.fresher.todoapp.util.ext.taskCreatedAtString
@@ -33,7 +30,7 @@ enum class TaskAttributeEnum {
   DEADLINE,
   REPEAT;
 
-  val attributeName: Int
+  private val attributeName: Int
     @StringRes get() = when (this) {
       MY_DAY    -> R.string.task_attribute_my_day
       REMINDER  -> R.string.task_attribute_reminder
@@ -55,7 +52,7 @@ enum class TaskAttributeEnum {
     return getNameInSetState(model, context)
   }
 
-  fun getNameInSetState(model: TaskModel, context: Context): String {
+  private fun getNameInSetState(model: TaskModel, context: Context): String {
     return when(this) {
       MY_DAY    -> context.getString(R.string.task_attribute_set_my_day)
       REMINDER  -> context.getString(R.string.task_attribute_set_reminder, model.reminder?.reminderTimeString)
@@ -97,13 +94,14 @@ sealed class TaskDetailItem(val type: SubItemType) {
 }
 
 class TaskDetailViewModel(
-  private val getTaskUseCase        : GetTaskUseCase,
-  private val getSubTaskListUseCase : GetSubTaskListUseCase,
-  private val updateTaskUseCase     : UpdateTaskUseCase,
-  private val deleteTaskUseCase     : DeleteTaskUseCase,
-  private val updateSubTaskUseCase  : UpdateSubTaskUseCase,
-  private val deleteSubTaskUseCase  : DeleteSubTaskUseCase,
-  private val saveSubTaskUseCase    : SaveSubTaskUseCase
+  private val deleteSubTaskListUseCase  : DeleteSubTaskListUseCase,
+  private val deleteSubTaskUseCase      : DeleteSubTaskUseCase,
+  private val deleteTaskUseCase         : DeleteTaskUseCase,
+  private val getSubTaskListUseCase     : GetSubTaskListUseCase,
+  private val getTaskUseCase            : GetTaskUseCase,
+  private val saveSubTaskUseCase        : SaveSubTaskUseCase,
+  private val updateSubTaskUseCase      : UpdateSubTaskUseCase,
+  private val updateTaskUseCase         : UpdateTaskUseCase
 ) : BaseViewModel() {
 
   val taskDetailItem: LiveData<List<TaskDetailItem>> get() = _taskDetailItem
@@ -163,28 +161,27 @@ class TaskDetailViewModel(
       )
   }
 
-  private fun generateTaskAttribute(taskAttribure: TaskModel): List<TaskDetailItem> {
+  private fun generateTaskAttribute(taskAttribute: TaskModel): List<TaskDetailItem> {
     val list = mutableListOf<TaskDetailItem>()
 
-    val items = TaskAttributeEnum.values().map { attribites ->
-      TaskDetailItem.TaskAttribute(taskAttribure, attribites)
+    val items = TaskAttributeEnum.values().map { attribute ->
+      TaskDetailItem.TaskAttribute(taskAttribute, attribute)
     }
     list.addAll(items)
     return list
   }
 
-  fun saveNewSubTask(taskId: Int, subTaskName: String) {
+  fun addSubTask(taskId: Int, subTaskName: String) {
     val model = SubTaskModel(
       taskId    = taskId,
-      name      = subTaskName,
-      createdAt = LocalDateTime.now()
+      name      = subTaskName
     )
 
     disposables += saveSubTaskUseCase(model)
       .subscribeBy(
         onComplete = {
           loadData()
-          Timber.i("Saved ${model} from Database")
+          Timber.i("Saved $model from Database")
         },
         onError = {
           Timber.e(it.toString())
@@ -229,12 +226,16 @@ class TaskDetailViewModel(
   }
 
   fun deleteTask() {
-    val task = _task.value ?: return
+    val task    = _task.value ?: return
+    val taskId  = task.id     ?: return
 
-    disposables += deleteTaskUseCase(task)
-      .subscribeBy (
+    val deleteSubTaskListObservable = deleteSubTaskListUseCase(taskId)
+    val deleteTaskObservable        = deleteTaskUseCase(task)
+
+    disposables += deleteSubTaskListObservable.andThen(deleteTaskObservable)
+      .subscribeBy(
         onComplete = {
-          Timber.i("Deleted ${task} from Database")
+          Timber.i("Deleted $task from Database")
         },
         onError = {
           Timber.e(it.toString())
@@ -251,7 +252,7 @@ class TaskDetailViewModel(
       .subscribeBy(
         onComplete = {
           loadData()
-          Timber.i("Updated myday ${model}")
+          Timber.i("Updated my day $model")
         },
         onError = {
           Timber.e(it.toString())
@@ -268,7 +269,7 @@ class TaskDetailViewModel(
       .subscribeBy(
         onComplete = {
           loadData()
-          Timber.i("Updated reminder ${model}")
+          Timber.i("Updated reminder $model")
         },
         onError = {
           Timber.e(it.toString())
@@ -285,7 +286,7 @@ class TaskDetailViewModel(
       .subscribeBy(
         onComplete = {
           loadData()
-          Timber.i("Remove reminder ${model}")
+          Timber.i("Remove reminder $model")
         },
         onError = {
           Timber.e(it.toString())
@@ -302,7 +303,7 @@ class TaskDetailViewModel(
       .subscribeBy(
         onComplete = {
           loadData()
-          Timber.i("Updated deadline ${model}")
+          Timber.i("Updated deadline $model")
         },
         onError = {
           Timber.e(it.toString())
@@ -320,7 +321,7 @@ class TaskDetailViewModel(
       .subscribeBy(
         onComplete = {
           loadData()
-          Timber.i("Remove deadline ${model}")
+          Timber.i("Remove deadline $model")
         },
         onError = {
           Timber.e(it.toString())
@@ -338,7 +339,7 @@ class TaskDetailViewModel(
       .subscribeBy(
         onComplete = {
           loadData()
-          Timber.i("Updated repeat ${model}")
+          Timber.i("Updated repeat $model")
         },
         onError = {
           Timber.e(it.toString())
@@ -355,7 +356,7 @@ class TaskDetailViewModel(
       .subscribeBy(
         onComplete = {
           loadData()
-          Timber.i("Remove repeat ${model}")
+          Timber.i("Remove repeat $model")
         },
         onError = {
           Timber.e(it.toString())
@@ -374,7 +375,7 @@ class TaskDetailViewModel(
       .subscribeBy(
         onComplete = {
           loadData()
-          Timber.i("Updated note ${model}")
+          Timber.i("Updated note $model")
         },
         onError = {
           Timber.e(it.toString())
@@ -391,7 +392,7 @@ class TaskDetailViewModel(
       .subscribeBy (
         onComplete = {
           loadData()
-          Timber.i("Updated finished ${model}")
+          Timber.i("Updated finished $model")
         },
         onError = {
           Timber.e(it.toString())
@@ -404,7 +405,7 @@ class TaskDetailViewModel(
       .subscribeBy (
         onComplete = {
           loadData()
-          Timber.i("Deleted ${model}")
+          Timber.i("Deleted $model")
         },
         onError = {
           Timber.e(it.toString())

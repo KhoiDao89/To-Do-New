@@ -4,10 +4,10 @@ import io.reactivex.Single
 import vn.htv.fresher.todoapp.domain.model.CategoryModel
 import vn.htv.fresher.todoapp.domain.repository.CategoryRepository
 
-class GetCategoryListUseCase(
+class GetCategoryUseCase(
   private val categoryRepository: CategoryRepository
 ) {
-    operator fun invoke(): Single<List<CategoryModel>> {
-      return categoryRepository.getCategoryList()
-    }
+  operator fun invoke(id: Long): Single<CategoryModel> {
+    return categoryRepository.getCategory(id.toInt())
+  }
 }

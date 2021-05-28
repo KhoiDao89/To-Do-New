@@ -3,6 +3,7 @@ package vn.htv.fresher.todoapp.presentation.common
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import vn.htv.fresher.todoapp.presentation.taskdetail.TaskDetailActivity
@@ -31,6 +32,10 @@ abstract class BaseActivity : AppCompatActivity() {
 
   open fun setToolbarTitle(title: String) {
     supportActionBar?.apply { this.title = title }
+  }
+
+  open fun setToolbarTitleRes(@StringRes title: Int) {
+    supportActionBar?.apply { this.title = getString(title) }
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {

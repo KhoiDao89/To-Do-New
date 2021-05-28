@@ -7,10 +7,25 @@
   <color name="teal_700">#FF018786</color>
   <color name="black">#FF000000</color>
   <color name="white">#FFFFFFFF</color>
+  <color name="very_light_blue">#E2E5F8</color>
   <color name="dark_blue">#2554CF</color>
   <color name="dark_gray">#8A8787</color>
   <color name="gray">#c0c0c0</color>
   <color name="dark_red">#EC0F1E</color>
   <color name="light_green">#1EBAAF</color>
   <color name="light_blue">#1D8EBA</color>
+  <color name="blue">#FA3F6AB5</color>
+  <color name="mtrl_filled_background_color">#FFFFFFFF</color>
+
+  <!-- Background -->
+  <color name="bg_my_day">#FABFFAD5</color>
+  <color name="bg_important">#FAEFC9F4</color>
+  <color name="bg_deadline">#FABDF0F4</color>
+  <color name="bg_action">#FA528CF3</color>
+
+  <!-- Background Button -->
+  <color name="bg_my_day_button">#FA06AF6A</color>
+  <color name="bg_important_button">#FAD620B7</color>
+  <color name="bg_deadline_button">#FA38C6C1</color>
+  <color name="bg_action_button">#FA789DE1</color>
 </resources>

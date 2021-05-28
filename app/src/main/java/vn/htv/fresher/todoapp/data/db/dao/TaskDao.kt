@@ -4,12 +4,14 @@ import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Single
 import vn.htv.fresher.todoapp.data.db.entity.Task
-import java.util.*
 
 @Dao
 interface TaskDao {
   @Delete
   fun delete(entity: Task): Completable
+
+  @Query("DELETE FROM ${Task.NAME} WHERE ${Task.COLUMN_CAT_ID} = :catId")
+  fun deleteTaskList(catId: Int): Completable
 
   @Query("SELECT * FROM ${Task.NAME} WHERE ${Task.COLUMN_ID} = :id")
   fun get(id: Int): Single<Task>
@@ -17,7 +19,7 @@ interface TaskDao {
   @Query("SELECT * FROM ${Task.NAME}")
   fun getAll(): Single<List<Task>>
 
-  @Query("SELECT * FROM ${Task.NAME} WHERE ${Task.COLUMN_ID} = :catId")
+  @Query("SELECT * FROM ${Task.NAME} WHERE ${Task.COLUMN_CAT_ID} = :catId")
   fun getByCatId(catId: Int): Single<List<Task>>
 
   @Insert

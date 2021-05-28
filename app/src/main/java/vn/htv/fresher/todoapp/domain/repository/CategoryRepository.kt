@@ -7,6 +7,8 @@ import vn.htv.fresher.todoapp.domain.model.CategoryModel
 interface CategoryRepository {
   fun deleteCategory(model: CategoryModel): Completable
 
+  fun getCategory(id: Int): Single<CategoryModel>
+
   fun getCategoryList(): Single<List<CategoryModel>>
 
   fun saveCategory(model: CategoryModel): Single<Long>

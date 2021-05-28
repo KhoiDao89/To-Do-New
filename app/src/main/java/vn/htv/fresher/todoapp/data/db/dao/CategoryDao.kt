@@ -14,6 +14,9 @@ interface CategoryDao {
   @Insert
   fun insert(entity: Category): Single<Long>
 
+  @Query("SELECT * FROM ${Category.NAME} WHERE ${Category.COLUMN_ID} = :id")
+  fun getCategory(id: Int): Single<Category>
+
   @Query("SELECT * FROM ${Category.NAME}")
   fun getAll(): Single<List<Category>>
 

@@ -1,6 +1,8 @@
 package vn.htv.fresher.todoapp.presentation.main
 
 import android.content.Context
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,13 +12,12 @@ import io.reactivex.rxkotlin.subscribeBy
 import vn.htv.fresher.todoapp.presentation.common.BaseViewModel
 import timber.log.Timber
 import io.reactivex.rxkotlin.plusAssign
-import org.threeten.bp.LocalDateTime
 import vn.htv.fresher.todoapp.R
 import vn.htv.fresher.todoapp.domain.model.CategoryModel
 import vn.htv.fresher.todoapp.domain.model.TaskModel
 import vn.htv.fresher.todoapp.domain.usecase.category.GetCategoryListUseCase
 import vn.htv.fresher.todoapp.domain.usecase.category.SaveCategoryUseCase
-import vn.htv.fresher.todoapp.domain.usecase.task.*
+import vn.htv.fresher.todoapp.domain.usecase.task.GetTaskListUseCase
 
 enum class TaskGroup {
   MY_DAY,
@@ -33,12 +34,32 @@ enum class TaskGroup {
     }
 
   val groupIcon: Int
-    @StringRes get() = when (this) {
+    @DrawableRes get() = when (this) {
       MY_DAY    -> R.drawable.ic_my_day
       IMPORTANT -> R.drawable.ic_important
       DEADLINE  -> R.drawable.ic_deadline
       ACTION    -> R.drawable.ic_action
     }
+
+  val backgroundResId: Int
+    @ColorRes get() = when (this) {
+      MY_DAY    -> R.color.bg_my_day
+      IMPORTANT -> R.color.bg_important
+      DEADLINE  -> R.color.bg_deadline
+      ACTION    -> R.color.bg_action
+    }
+
+  val backgroundTintResId: Int
+    @ColorRes get() = when (this) {
+      MY_DAY    -> R.color.bg_my_day_button
+      IMPORTANT -> R.color.bg_important_button
+      DEADLINE  -> R.color.bg_deadline_button
+      ACTION    -> R.color.bg_action_button
+    }
+
+  companion object {
+    fun from(type: String?) = values().find { it.name == type }
+  }
 }
 
 enum class MainItemType(val value: Int) {
@@ -108,7 +129,7 @@ class MainViewModel(
           _mainItemList.postValue(it)
         },
         onError = {
-          Timber.i("Cannot post value")
+          Timber.e(it.toString())
         }
       )
   }
@@ -139,7 +160,9 @@ class MainViewModel(
     return list
   }
 
-  fun addNewCategory(model: CategoryModel) {
+  fun addCategory(name: String) {
+    val model = CategoryModel(name = name)
+
     disposables += saveCategoryUseCase(model)
       .subscribeBy(
         onSuccess = {

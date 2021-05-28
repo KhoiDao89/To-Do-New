@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import org.threeten.bp.LocalDateTime
 import vn.htv.fresher.todoapp.domain.model.CategoryModel
 
-@Entity (tableName = Category.NAME)
+@Entity(tableName = Category.NAME)
 data class Category(
   @PrimaryKey(autoGenerate = true)
   @ColumnInfo(name = COLUMN_ID)          val id         : Int? = null,
@@ -29,4 +29,3 @@ data class Category(
     )
   }
 }
-

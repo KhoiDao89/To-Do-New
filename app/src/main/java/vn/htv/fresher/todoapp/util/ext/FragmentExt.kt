@@ -6,7 +6,6 @@ import com.afollestad.materialdialogs.datetime.datePicker
 import com.afollestad.materialdialogs.datetime.dateTimePicker
 import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.list.listItems
-import org.threeten.bp.LocalDateTime
 import vn.htv.fresher.todoapp.R
 import java.util.*
 
@@ -58,27 +57,29 @@ fun Fragment.showListDialog(
   val ctx = context ?: return
 
   MaterialDialog(ctx).show {
-    listItems(listItems) { _, index, text ->
+    listItems(listItems) { _, index, _ ->
       positionCallback(index)
     }
   }
 }
 
 fun Fragment.showInputDialog(
-  title                 : Int? = null,
-  hint                  : Int,
-  positiveName          : Int,
-  negativeName          : Int? = R.string.cancel,
-  positiveTaskCallback  : ((name: String) -> Unit)
+  title         : Int? = null,
+  hint          : Int? = null,
+  text          : String? = null,
+  positiveName  : Int,
+  negativeName  : Int? = R.string.cancel,
+  saveCallback  : ((name: String) -> Unit)
 ) {
   val ctx = context ?: return
 
   MaterialDialog(ctx).show {
     title(title)
     input(
-      hintRes = hint
+      hintRes = hint,
+      prefill = text
     ) { _, content ->
-      positiveTaskCallback.invoke(content.toString())
+      saveCallback.invoke(content.toString())
     }
     positiveButton(positiveName)
     negativeButton(negativeName)

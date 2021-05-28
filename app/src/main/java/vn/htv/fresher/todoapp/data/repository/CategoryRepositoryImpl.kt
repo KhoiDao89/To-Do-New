@@ -4,10 +4,8 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import vn.htv.fresher.todoapp.data.db.dao.CategoryDao
 import vn.htv.fresher.todoapp.data.db.entity.Category
-import vn.htv.fresher.todoapp.data.db.entity.SubTask
 import vn.htv.fresher.todoapp.data.mapper.toModel
 import vn.htv.fresher.todoapp.domain.model.CategoryModel
-import vn.htv.fresher.todoapp.domain.model.SubTaskModel
 import vn.htv.fresher.todoapp.domain.repository.CategoryRepository
 import vn.htv.fresher.todoapp.util.rx.SchedulerProvider
 
@@ -19,6 +17,13 @@ class CategoryRepositoryImpl(
     val entity = Category.fromModel(model)
 
     return categoryDao.delete(entity)
+      .observeOn(schedulerProvider.io())
+      .subscribeOn(schedulerProvider.io())
+  }
+
+  override fun getCategory(id: Int): Single<CategoryModel> {
+    return categoryDao.getCategory(id)
+      .map { it.toModel() }
       .observeOn(schedulerProvider.io())
       .subscribeOn(schedulerProvider.io())
   }
