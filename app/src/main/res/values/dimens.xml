@@ -10,7 +10,6 @@
   <dimen name="separator_height">1dp</dimen>
   <dimen name="task_attribute_height">40dp</dimen>
   <dimen name="layout_height">65dp</dimen>
-  <dimen name="recyclerview_item_horizontal_margin">12dp</dimen>
-  <dimen name="recyclerview_item_vertical_margin">22dp</dimen>
+  <dimen name="recyclerview_item_padding">12dp</dimen>
   <dimen name="note_textview_height">105dp</dimen>
 </resources>

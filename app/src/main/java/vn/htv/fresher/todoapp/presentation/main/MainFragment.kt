@@ -6,7 +6,6 @@ import vn.htv.fresher.todoapp.R
 import vn.htv.fresher.todoapp.databinding.FragmentMainBinding
 import vn.htv.fresher.todoapp.presentation.tasklist.category.CategoryActivity
 import vn.htv.fresher.todoapp.presentation.common.BaseFragment
-import vn.htv.fresher.todoapp.presentation.common.decoration.DefaultItemDecoration
 import vn.htv.fresher.todoapp.presentation.tasklist.taskgroup.TaskGroupActivity
 import vn.htv.fresher.todoapp.util.ext.showInputDialog
 
@@ -51,9 +50,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
     categoryRecyclerView.apply {
       adapter = categoryAdapter
-      addItemDecoration(DefaultItemDecoration(
-        resources.getDimensionPixelSize(R.dimen.recyclerview_item_horizontal_margin),
-        resources.getDimensionPixelSize(R.dimen.recyclerview_item_vertical_margin)))
     }
   }
 

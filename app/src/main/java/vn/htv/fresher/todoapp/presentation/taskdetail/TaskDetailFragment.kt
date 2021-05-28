@@ -94,7 +94,7 @@ class TaskDetailFragment : BaseFragment<FragmentTaskDetailBinding>() {
     subTaskRecyclerView.apply {
       adapter = subTaskAdapter
       addItemDecoration(DefaultItemDecoration(
-        resources.getDimensionPixelSize(R.dimen.recyclerview_item_horizontal_margin),
+        resources.getDimensionPixelSize(R.dimen.recyclerview_item_padding),
         resources.getDimensionPixelSize(R.dimen.small_margin)))
     }
   }
